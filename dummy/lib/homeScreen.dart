@@ -1,4 +1,4 @@
-import 'package:dummy/data_list.dart';
+import 'package:dummy/doctor_list.dart';
 import 'package:dummy/diagnosisList.dart';
 import 'package:flutter/material.dart';
 

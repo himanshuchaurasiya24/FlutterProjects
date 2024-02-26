@@ -1,5 +1,5 @@
 import 'package:dummy/addDiagnosis.dart';
-import 'package:dummy/database_helper.dart';
+import 'package:dummy/database/database_helper.dart';
 import 'package:flutter/material.dart';
 
 class DiagnosisList extends StatefulWidget {

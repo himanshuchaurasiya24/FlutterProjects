@@ -61,8 +61,8 @@
 //     );
 //   }
 // }
-import 'package:dummy/data_model.dart';
-import 'package:dummy/database_helper.dart';
+import 'package:dummy/model/data_model.dart';
+import 'package:dummy/database/database_helper.dart';
 import 'package:flutter/material.dart';
 
 class AddDoctor extends StatelessWidget {

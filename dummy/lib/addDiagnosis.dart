@@ -1,6 +1,6 @@
 import 'package:dummy/add_doctor.dart';
-import 'package:dummy/database_helper.dart';
-import 'package:dummy/diagnosisModel.dart';
+import 'package:dummy/database/database_helper.dart';
+import 'package:dummy/model/diagnosisModel.dart';
 import 'package:flutter/material.dart';
 
 class AddDiagnosis extends StatelessWidget {

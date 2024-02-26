@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:dummy/data_model.dart';
-import 'package:dummy/diagnosisModel.dart';
+import 'package:dummy/model/data_model.dart';
+import 'package:dummy/model/diagnosisModel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -10,7 +10,7 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 Database? _database;
 
 class DatabaseHelper {
-  final databaseName = 'abcdefgh.db';
+  final databaseName = 'abcdefghi.db';
   String query = '''
 CREATE TABLE IF NOT EXISTS doctorrrr(
   id INTEGER PRIMARY KEY AUTOINCREMENT,
