@@ -1,0 +1,29 @@
+diagnosisHistory{
+int id,
+PatientDetails patientDetails;
+DoctorDetails doctorDetails;
+// incentive details to be shown after
+}
+class PatientDetails{
+int id;
+String Date;
+String patientName;
+String patientAge;
+String patientSex;
+
+String refBy;
+
+String dignosisType;
+String diagnosisRemarks;
+String totalAmount;
+String paidAmount;
+String doctorIncentive;// to be autoCalculated based on the incentive percentage of the doctor after selection of the doctor in billingPage;
+}
+class DoctorDetails{
+int id;
+String doctorName;
+String doctorAge;
+String doctorSex;
+String doctorPhoneNumber;
+String incentivePercentage;
+}
