@@ -1,19 +1,21 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:vyawasaay/database/database_helper.dart';
 import 'package:vyawasaay/models/diagnosis_type.dart';
 import 'package:vyawasaay/models/doctor_model.dart';
+import 'package:vyawasaay/models/patient_sex.dart';
 import 'package:vyawasaay/widgets/custom_elevated_button.dart';
 import 'package:vyawasaay/widgets/custom_text_form_field.dart';
 
 final dateProvider = StateProvider<String>((ref) => 'No date Selected');
 final diagnosisTypeProvider = StateProvider<String>((ref) => 'Diagnosis Type');
-
+final patientSexProvider = StateProvider<String>((ref) => 'Male');
 final doctorNameProvider = StateProvider<String>((ref) => 'Select Doctor');
 final doctorIdProvider = StateProvider<String>((ref) => 'null');
+final doctorPerIncentiveProvider = StateProvider<String>((ref) => '50');
+final incentiveAmountProvider = StateProvider<String>((ref) => '0');
 
 class NewDiagnosis extends ConsumerStatefulWidget {
   const NewDiagnosis({super.key});
@@ -62,12 +64,46 @@ class _NewDiagnosisState extends ConsumerState<NewDiagnosis> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController searchController = TextEditingController();
   var selectedDiagnosisType = type[DiagnosisType.ultrasound]!;
+  var selectedPatientSex = sex[PatientSex.male]!;
+  bool viewIncentive = false;
+  String calculateIncentive({
+    required String paidAmount,
+    required String totalAmount,
+    required String doctorIncentivePercentage,
+  }) {
+    int incentiveOut = 0;
+    try {
+      int? paidAmountInt = int.tryParse(paidAmount);
+      int? totalAmountInt = int.tryParse(totalAmount);
+      int? doctorPercentageInt = int.tryParse(doctorIncentivePercentage);
+
+      if (paidAmountInt != null &&
+          totalAmountInt != null &&
+          doctorPercentageInt != null) {
+        if (totalAmountInt > paidAmountInt) {
+          int discount = totalAmountInt - paidAmountInt;
+          int incentive =
+              (((paidAmountInt / doctorPercentageInt) * 100) - discount)
+                  .toInt();
+          incentiveOut = incentive;
+          return incentiveOut.toString();
+        }
+      }
+    } catch (e) {
+      return e.toString();
+    }
+    return incentiveOut.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
+    ref.watch(doctorPerIncentiveProvider);
+    incentiveController.text = ref.watch(incentiveAmountProvider);
     dateController.text = ref.watch(dateProvider);
     doctorNameController.text = ref.watch(doctorNameProvider);
     diagnosisTypeController.text = ref.watch(diagnosisTypeProvider);
     doctorIdController.text = ref.watch(doctorIdProvider);
+    patientSexController.text = ref.watch(patientSexProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Enter Patient Information'),
@@ -80,9 +116,28 @@ class _NewDiagnosisState extends ConsumerState<NewDiagnosis> {
             key: _formKey,
             child: Column(
               children: [
-                CustomTextFormField(
-                  controller: patientNameController,
-                  labelText: 'Patient Name',
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: CustomTextFormField(
+                        controller: patientNameController,
+                        labelText: 'Patient Name',
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: DoctorSelectorWidget(
+                          providerDoctor: ref.watch(doctorNameProvider),
+                          database: database,
+                          ref: ref,
+                          doctorNameController: doctorNameController,
+                          doctorIdController: doctorIdController),
+                    ),
+                  ],
                 ),
                 const SizedBox(
                   height: 10,
@@ -102,10 +157,8 @@ class _NewDiagnosisState extends ConsumerState<NewDiagnosis> {
                     ),
                     Expanded(
                       flex: 1,
-                      child: CustomTextFormField(
-                        controller: patientSexController,
-                        labelText: 'Patient Sex',
-                      ),
+                      child: PatientSexSelector(
+                          selectedPatientSex: selectedPatientSex, ref: ref),
                     ),
                     const SizedBox(
                       width: 10,
@@ -113,8 +166,27 @@ class _NewDiagnosisState extends ConsumerState<NewDiagnosis> {
                     DateSelector(
                         providerDate: ref.watch(dateProvider),
                         ref: ref,
-                        dateController: dateController)
+                        dateController: dateController),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: SizedBox(
+                        height: 54,
+                        child: DiagnosisTypeSelector(
+                            selectedDiagnosisType: selectedDiagnosisType,
+                            ref: ref),
+                      ),
+                    ),
                   ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                CustomTextFormField(
+                  controller: diagnosisRemarksController,
+                  labelText: 'Diagnosis Remarks',
                 ),
                 const SizedBox(
                   height: 10,
@@ -122,27 +194,35 @@ class _NewDiagnosisState extends ConsumerState<NewDiagnosis> {
                 Row(
                   children: [
                     Expanded(
-                      flex: 1,
-                      child: DoctorSelectorWidget(
-                          providerDoctor: ref.watch(doctorNameProvider),
-                          database: database,
-                          ref: ref,
-                          doctorNameController: doctorNameController,
-                          doctorIdController: doctorIdController),
+                      flex: 2,
+                      child: CustomTextFormField(
+                          controller: totalAmountController,
+                          labelText: 'Total Amount'),
                     ),
                     const SizedBox(
                       width: 10,
                     ),
                     Expanded(
-                      flex: 1,
-                      child: DiagnosisTypeSelector(
-                          selectedDiagnosisType: selectedDiagnosisType,
-                          ref: ref),
+                      flex: 2,
+                      child: CustomTextFormField(
+                          controller: paidAmountController,
+                          onChanged: (p0) {
+                            ref.read(incentiveAmountProvider.notifier).state =
+                                calculateIncentive(
+                                    paidAmount: p0,
+                                    totalAmount: totalAmountController.text,
+                                    doctorIncentivePercentage:
+                                        incentiveController.text);
+                          },
+                          labelText: 'Paid Amount'),
                     ),
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        incentiveController.text.toString(),
+                      ),
+                    )
                   ],
-                ),
-                const SizedBox(
-                  height: 10,
                 ),
                 CustomElevatedButton(
                   btnName: 'Save Record',
@@ -153,6 +233,41 @@ class _NewDiagnosisState extends ConsumerState<NewDiagnosis> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class PatientSexSelector extends StatelessWidget {
+  const PatientSexSelector({
+    super.key,
+    required this.selectedPatientSex,
+    required this.ref,
+  });
+
+  final CategorySex selectedPatientSex;
+  final WidgetRef ref;
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButtonFormField(
+      decoration: const InputDecoration(border: OutlineInputBorder()),
+      value: selectedPatientSex,
+      items: [
+        for (final typ in sex.entries)
+          DropdownMenuItem(
+            value: typ.value,
+            child: Text(
+              typ.value.sex,
+              style: TextStyle(
+                fontSize: 17,
+                color: Colors.black.withOpacity(0.6),
+              ),
+            ),
+          )
+      ],
+      onChanged: (value) {
+        ref.read(patientSexProvider.notifier).state = value!.sex;
+      },
     );
   }
 }
@@ -207,15 +322,16 @@ class DateSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
+      flex: 2,
       child: Container(
+        height: 54,
         decoration: BoxDecoration(
             color: Colors.red[40],
             borderRadius: BorderRadius.circular(
               4,
             ),
             border: Border.all(
-                width: 1.5,
-                color: Colors.grey,
+                color: Colors.black.withOpacity(0.5),
                 strokeAlign: BorderSide.strokeAlignCenter,
                 style: BorderStyle.solid)),
         child: Row(
@@ -277,16 +393,18 @@ class DoctorSelectorWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 54,
       decoration: BoxDecoration(
-          color: Colors.red[40],
-          borderRadius: BorderRadius.circular(
-            4,
-          ),
-          border: Border.all(
-              width: 1.5,
-              color: Colors.grey,
-              strokeAlign: BorderSide.strokeAlignCenter,
-              style: BorderStyle.solid)),
+        color: Colors.red[40],
+        borderRadius: BorderRadius.circular(
+          4,
+        ),
+        border: Border.all(
+          color: Colors.black.withOpacity(0.5),
+          strokeAlign: BorderSide.strokeAlignCenter,
+          style: BorderStyle.solid,
+        ),
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -336,6 +454,13 @@ class DoctorSelectorWidget extends StatelessWidget {
                                           return GestureDetector(
                                             onTap: () {
                                               ref
+                                                      .read(
+                                                          doctorPerIncentiveProvider
+                                                              .notifier)
+                                                      .state =
+                                                  snapshot.data![index]
+                                                      .incentivePercentage;
+                                              ref
                                                       .read(doctorIdProvider
                                                           .notifier)
                                                       .state =
@@ -347,11 +472,7 @@ class DoctorSelectorWidget extends StatelessWidget {
                                                       .state =
                                                   snapshot
                                                       .data![index].doctorName;
-                                              doctorNameController.text =
-                                                  ref.watch(doctorNameProvider);
-                                              doctorIdController.text = snapshot
-                                                  .data![index].id!
-                                                  .toString();
+
                                               Navigator.pop(dialogContext);
                                             },
                                             child: Card(

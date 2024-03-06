@@ -12,7 +12,7 @@ import 'package:vyawasaay/models/patient_model.dart';
 Database? _database;
 
 class DatabaseHelper {
-  final databaseName = 'abcdef.db';
+  final databaseName = 'abcdefg.db';
   String doctorTable = 'doctor';
   String diagnosisTable = 'diagnosis';
   String diagnosisQuery = '''
@@ -22,7 +22,6 @@ CREATE TABLE IF NOT EXISTS firstdia(
   patientAge TEXT,
   patientSex TEXT,
   date TEXT,
-  refBy TEXT,
   dignosisType TEXT,
   diagnosisRemarks TEXT,
   totalAmount TEXT,

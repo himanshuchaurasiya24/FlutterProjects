@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vyawasaay/database/database_helper.dart';
 import 'package:vyawasaay/models/doctor_model.dart';
+import 'package:vyawasaay/models/patient_sex.dart';
+import 'package:vyawasaay/screens/diagnosis/new_diagnosis.dart';
 import 'package:vyawasaay/widgets/custom_elevated_button.dart';
 import 'package:vyawasaay/widgets/custom_text_form_field.dart';
 
-class AddDoctor extends StatefulWidget {
+class AddDoctor extends ConsumerStatefulWidget {
   const AddDoctor({super.key});
 
   @override
-  State<AddDoctor> createState() => _AddDoctorState();
+  ConsumerState<AddDoctor> createState() => _AddDoctorState();
 }
 
-class _AddDoctorState extends State<AddDoctor> {
+class _AddDoctorState extends ConsumerState<AddDoctor> {
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController doctorNameController = TextEditingController();
@@ -30,6 +33,7 @@ class _AddDoctorState extends State<AddDoctor> {
   final db = DatabaseHelper();
   @override
   Widget build(BuildContext context) {
+    doctorSexController.text = ref.watch(patientSexProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -67,10 +71,8 @@ class _AddDoctorState extends State<AddDoctor> {
                     ),
                     Expanded(
                       flex: 1,
-                      child: CustomTextFormField(
-                        controller: doctorSexController,
-                        labelText: 'Doctor Sex',
-                      ),
+                      child: PatientSexSelector(
+                          selectedPatientSex: sex[PatientSex.male]!, ref: ref),
                     ),
                     const SizedBox(
                       width: 20,
