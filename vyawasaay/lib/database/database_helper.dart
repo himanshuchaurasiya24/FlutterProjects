@@ -5,14 +5,12 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:vyawasaay/models/diagnosis_info.dart';
-import 'package:vyawasaay/models/doctor_diag.dart';
 import 'package:vyawasaay/models/doctor_model.dart';
-import 'package:vyawasaay/models/patient_model.dart';
 
 Database? _database;
 
 class DatabaseHelper {
-  final databaseName = 'abcdefg.db';
+  final databaseName = 'abcdefghi.db';
   String doctorTable = 'doctor';
   String diagnosisTable = 'diagnosis';
   String diagnosisQuery = '''
@@ -26,9 +24,9 @@ CREATE TABLE IF NOT EXISTS firstdia(
   diagnosisRemarks TEXT,
   totalAmount TEXT,
   paidAmount TEXT,
+  incentiveAmount TEXT,
   doctorId INTEGER,
-  doctorName TEXT,
-  incentive TEXT
+  doctorName TEXT
 )''';
   String doctorQuery = '''
 CREATE TABLE IF NOT EXISTS firstdoc(
@@ -71,23 +69,17 @@ CREATE TABLE IF NOT EXISTS firstdoc(
     return List.generate(
       maps.length,
       (index) => DiagnosisInfo(
-        id: maps[index]['id'] as int,
-        patientDetails: PatientModel(
-          patientName: maps[index]['patientName'] as String,
-          patientAge: maps[index]['patientAge'] as String,
-          patientSex: maps[index]['patientSex'] as String,
-          date: maps[index]['date'] as String,
-          refBy: maps[index]['refBy'] as String,
-          dignosisType: maps[index]['dignosisType'] as String,
-          diagnosisRemarks: maps[index]['diagnosisRemarks'] as String,
-          totalAmount: maps[index]['totalAmount'] as String,
-          paidAmount: maps[index]['paidAmount'] as String,
-        ),
-        doctorDiagModel: DoctorDiagModel(
-          doctorId: maps[index]['doctorId'] as int,
-          doctorName: maps[index]['doctorName'] as String,
-          incentive: maps[index]['incentive'] as String,
-        ),
+        patientName: maps[index]['patientName'] as String,
+        patientAge: maps[index]['patientAge'] as String,
+        patientSex: maps[index]['patientSex'] as String,
+        date: maps[index]['date'] as String,
+        dignosisType: maps[index]['dignosisType'] as String,
+        diagnosisRemarks: maps[index]['diagnosisRemarks'] as String,
+        totalAmount: maps[index]['totalAmount'] as String,
+        paidAmount: maps[index]['paidAmount'] as String,
+        incentiveAmount: maps[index]['incentiveAmount'] as String,
+        doctorId: maps[index]['doctorId'] as int,
+        doctorName: maps[index]['doctorName'] as String,
       ),
     ).toList();
   }
@@ -116,6 +108,7 @@ CREATE TABLE IF NOT EXISTS firstdoc(
       'firstdia',
       diagnosisInfo.toMap(),
     );
+    debugPrint('added');
   }
 
   Future<void> insertDoctor({required DoctorModel doctorModel}) async {

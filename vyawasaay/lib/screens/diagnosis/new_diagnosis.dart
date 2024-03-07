@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:vyawasaay/database/database_helper.dart';
+import 'package:vyawasaay/models/diagnosis_info.dart';
 import 'package:vyawasaay/models/diagnosis_type.dart';
 import 'package:vyawasaay/models/doctor_model.dart';
 import 'package:vyawasaay/models/patient_sex.dart';
@@ -66,6 +67,7 @@ class _NewDiagnosisState extends ConsumerState<NewDiagnosis> {
   var selectedDiagnosisType = type[DiagnosisType.ultrasound]!;
   var selectedPatientSex = sex[PatientSex.male]!;
   bool viewIncentive = false;
+
   String calculateIncentive({
     required String paidAmount,
     required String totalAmount,
@@ -74,19 +76,24 @@ class _NewDiagnosisState extends ConsumerState<NewDiagnosis> {
     int incentiveOut = 0;
     try {
       int? paidAmountInt = int.tryParse(paidAmount);
+
       int? totalAmountInt = int.tryParse(totalAmount);
+
       int? doctorPercentageInt = int.tryParse(doctorIncentivePercentage);
 
       if (paidAmountInt != null &&
           totalAmountInt != null &&
           doctorPercentageInt != null) {
-        if (totalAmountInt > paidAmountInt) {
+        if (totalAmountInt >= paidAmountInt) {
           int discount = totalAmountInt - paidAmountInt;
+
           int incentive =
-              (((paidAmountInt / doctorPercentageInt) * 100) - discount)
+              (((totalAmountInt / 100) * doctorPercentageInt) - discount)
                   .toInt();
           incentiveOut = incentive;
           return incentiveOut.toString();
+        } else {
+          return 'Paid Amount > Total Amount';
         }
       }
     } catch (e) {
@@ -97,7 +104,7 @@ class _NewDiagnosisState extends ConsumerState<NewDiagnosis> {
 
   @override
   Widget build(BuildContext context) {
-    ref.watch(doctorPerIncentiveProvider);
+    var doctorPer = ref.watch(doctorPerIncentiveProvider);
     incentiveController.text = ref.watch(incentiveAmountProvider);
     dateController.text = ref.watch(dateProvider);
     doctorNameController.text = ref.watch(doctorNameProvider);
@@ -131,11 +138,15 @@ class _NewDiagnosisState extends ConsumerState<NewDiagnosis> {
                     Expanded(
                       flex: 1,
                       child: DoctorSelectorWidget(
-                          providerDoctor: ref.watch(doctorNameProvider),
-                          database: database,
-                          ref: ref,
-                          doctorNameController: doctorNameController,
-                          doctorIdController: doctorIdController),
+                        providerDoctor: ref.watch(doctorNameProvider),
+                        database: database,
+                        ref: ref,
+                        doctorNameController: doctorNameController,
+                        doctorIdController: doctorIdController,
+                        totalAmountController: totalAmountController,
+                        paidController: paidAmountController,
+                        incentiveController: incentiveController,
+                      ),
                     ),
                   ],
                 ),
@@ -207,26 +218,116 @@ class _NewDiagnosisState extends ConsumerState<NewDiagnosis> {
                       child: CustomTextFormField(
                           controller: paidAmountController,
                           onChanged: (p0) {
+                            debugPrint(p0);
                             ref.read(incentiveAmountProvider.notifier).state =
                                 calculateIncentive(
                                     paidAmount: p0,
                                     totalAmount: totalAmountController.text,
-                                    doctorIncentivePercentage:
-                                        incentiveController.text);
+                                    doctorIncentivePercentage: doctorPer);
                           },
                           labelText: 'Paid Amount'),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: CustomTextFormField(
+                        controller: incentiveController,
+                        labelText: 'Calculated Incentive',
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 20,
                     ),
                     Expanded(
                       flex: 1,
                       child: Text(
-                        incentiveController.text.toString(),
+                        '$doctorPer%',
+                        textAlign: TextAlign.end,
+                        style: TextStyle(
+                          fontSize: 30,
+                          color: Colors.green[400],
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    )
+                    ),
                   ],
+                ),
+                const SizedBox(
+                  height: 10,
                 ),
                 CustomElevatedButton(
                   btnName: 'Save Record',
-                  function: () {},
+                  function: () async {
+                    int? patientAge = int.tryParse(patientAgeController.text);
+                    int? totalAmount = int.tryParse(totalAmountController.text);
+                    int? paidAmount = int.tryParse(paidAmountController.text);
+                    int? doctorId = int.tryParse(doctorIdController.text);
+                    int? calculatedIncentive =
+                        int.tryParse(incentiveController.text);
+
+                    if (_formKey.currentState!.validate()) {
+                      if (patientAge != null &&
+                          totalAmount != null &&
+                          paidAmount != null &&
+                          doctorId != null &&
+                          calculatedIncentive != null) {
+                        if (doctorId.isEven ||
+                            doctorId.isOdd ||
+                            patientAge.isEven ||
+                            patientAge.isOdd ||
+                            totalAmount.isEven ||
+                            totalAmount.isOdd ||
+                            paidAmount.isEven ||
+                            paidAmount.isOdd ||
+                            calculatedIncentive.isEven ||
+                            calculatedIncentive.isOdd ||
+                            !calculatedIncentive.isNegative) {
+                          await db
+                              .insertDiagnosisInfo(
+                            diagnosisInfo: DiagnosisInfo(
+                              patientName: patientNameController.text,
+                              patientAge: patientAge.toString(),
+                              patientSex: patientSexController.text,
+                              date: dateController.text,
+                              dignosisType: diagnosisTypeController.text,
+                              diagnosisRemarks: diagnosisRemarksController.text,
+                              totalAmount: totalAmount.toString(),
+                              paidAmount: paidAmount.toString(),
+                              incentiveAmount: calculatedIncentive.toString(),
+                              doctorId: doctorId,
+                              doctorName: doctorNameController.text,
+                            ),
+                          )
+                              .then((value) {
+                            Navigator.pop(context);
+                          });
+                        }
+                      } else {
+                        showAdaptiveDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text('Error'),
+                              content: const Text(
+                                  'Some of the values are incorrect, Fill it again'),
+                              actions: [
+                                IconButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  icon: const Text(
+                                    'Okay',
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
+                    }
+                  },
                 ),
               ],
             ),
@@ -382,6 +483,9 @@ class DoctorSelectorWidget extends StatelessWidget {
     required this.ref,
     required this.doctorNameController,
     required this.doctorIdController,
+    required this.totalAmountController,
+    required this.paidController,
+    required this.incentiveController,
   });
 
   final String providerDoctor;
@@ -389,6 +493,9 @@ class DoctorSelectorWidget extends StatelessWidget {
   final WidgetRef ref;
   final TextEditingController doctorNameController;
   final TextEditingController doctorIdController;
+  final TextEditingController totalAmountController;
+  final TextEditingController paidController;
+  final TextEditingController incentiveController;
 
   @override
   Widget build(BuildContext context) {
@@ -472,7 +579,9 @@ class DoctorSelectorWidget extends StatelessWidget {
                                                       .state =
                                                   snapshot
                                                       .data![index].doctorName;
-
+                                              totalAmountController.text = '0';
+                                              paidController.text = '0';
+                                              incentiveController.text = '0';
                                               Navigator.pop(dialogContext);
                                             },
                                             child: Card(
