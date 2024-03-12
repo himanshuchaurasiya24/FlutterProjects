@@ -8,7 +8,24 @@ import 'package:vyawasaay/widgets/custom_elevated_button.dart';
 import 'package:vyawasaay/widgets/custom_text_form_field.dart';
 
 class AddDoctor extends ConsumerStatefulWidget {
-  const AddDoctor({super.key});
+  const AddDoctor(
+      {this.isUpdate = false,
+      this.id,
+      this.doctorName,
+      this.doctorAddress,
+      this.doctorAge,
+      this.doctorPhoneNumber,
+      this.doctorSex,
+      this.doctorIncentivePercentage,
+      super.key});
+  final String? doctorName;
+  final String? doctorAddress;
+  final String? doctorAge;
+  final int? id;
+  final String? doctorPhoneNumber;
+  final String? doctorSex;
+  final String? doctorIncentivePercentage;
+  final bool isUpdate;
 
   @override
   ConsumerState<AddDoctor> createState() => _AddDoctorState();
@@ -32,16 +49,43 @@ class _AddDoctorState extends ConsumerState<AddDoctor> {
       TextEditingController();
   final db = DatabaseHelper();
   @override
+  void initState() {
+    doctorNameController.text = widget.doctorName ?? '';
+    doctorAgeController.text = widget.doctorAge ?? '';
+    doctorSexController.text = widget.doctorSex ?? '';
+    doctorPhoneNumberController.text = widget.doctorPhoneNumber ?? '';
+    doctorAddressController.text = widget.doctorAddress ?? '';
+    incentivePercentageController.text = widget.doctorIncentivePercentage ?? '';
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     doctorSexController.text = ref.watch(patientSexProvider);
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Enter Doctor Details',
-          style: TextStyle(
+        title: Text(
+          widget.isUpdate ? 'Update Doctor Details' : 'Add Doctor Details',
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
           ),
         ),
+        actions: [
+          widget.isUpdate
+              ? IconButton(
+                  onPressed: () async {
+                    await db.deleteDoctorInfo(id: widget.id).then(
+                      (value) {
+                        Navigator.pop(context);
+                      },
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.delete,
+                  ),
+                )
+              : const SizedBox(),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),
@@ -113,25 +157,44 @@ class _AddDoctorState extends ConsumerState<AddDoctor> {
                   height: 20,
                 ),
                 CustomElevatedButton(
-                  btnName: 'Add Doctor',
+                  btnName: widget.isUpdate ? 'Update Doctor' : 'Add Doctor',
                   function: () async {
                     if (_formKey.currentState!.validate()) {
-                      await db
-                          .insertDoctor(
-                            doctorModel: DoctorModel(
-                              doctorName: doctorNameController.text,
-                              doctorAge: doctorAgeController.text,
-                              doctorSex: doctorSexController.text,
-                              doctorPhoneNumber:
-                                  doctorPhoneNumberController.text,
-                              address: doctorAddressController.text,
-                              incentivePercentage:
-                                  incentivePercentageController.text,
-                            ),
-                          )
-                          .then(
-                            (value) => Navigator.pop(context),
-                          );
+                      if (widget.isUpdate) {
+                        await db
+                            .updateDoctorInfo(
+                          model: DoctorModel(
+                            id: widget.id,
+                            doctorName: doctorNameController.text,
+                            doctorAge: doctorAgeController.text,
+                            doctorSex: doctorSexController.text,
+                            doctorPhoneNumber: doctorPhoneNumberController.text,
+                            address: doctorAddressController.text,
+                            incentivePercentage:
+                                incentivePercentageController.text,
+                          ),
+                        )
+                            .then((value) {
+                          Navigator.pop(context);
+                        });
+                      } else {
+                        await db
+                            .insertDoctor(
+                              doctorModel: DoctorModel(
+                                doctorName: doctorNameController.text,
+                                doctorAge: doctorAgeController.text,
+                                doctorSex: doctorSexController.text,
+                                doctorPhoneNumber:
+                                    doctorPhoneNumberController.text,
+                                address: doctorAddressController.text,
+                                incentivePercentage:
+                                    incentivePercentageController.text,
+                              ),
+                            )
+                            .then(
+                              (value) => Navigator.pop(context),
+                            );
+                      }
                     }
                   },
                 ),

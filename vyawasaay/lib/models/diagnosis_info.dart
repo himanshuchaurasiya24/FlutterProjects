@@ -15,6 +15,7 @@ class DiagnosisInfo {
 
   int doctorId;
   String doctorName;
+  int? id;
   DiagnosisInfo({
     required this.patientName,
     required this.patientAge,
@@ -27,6 +28,7 @@ class DiagnosisInfo {
     required this.incentiveAmount,
     required this.doctorId,
     required this.doctorName,
+    this.id,
   });
 
   DiagnosisInfo copyWith({
@@ -41,6 +43,7 @@ class DiagnosisInfo {
     String? incentiveAmount,
     int? doctorId,
     String? doctorName,
+    int? id,
   }) {
     return DiagnosisInfo(
       patientName: patientName ?? this.patientName,
@@ -54,6 +57,7 @@ class DiagnosisInfo {
       incentiveAmount: incentiveAmount ?? this.incentiveAmount,
       doctorId: doctorId ?? this.doctorId,
       doctorName: doctorName ?? this.doctorName,
+      id: id ?? this.id,
     );
   }
 
@@ -70,6 +74,7 @@ class DiagnosisInfo {
       'incentiveAmount': incentiveAmount,
       'doctorId': doctorId,
       'doctorName': doctorName,
+      'id': id,
     };
   }
 
@@ -86,6 +91,7 @@ class DiagnosisInfo {
       incentiveAmount: map['incentiveAmount'] as String,
       doctorId: map['doctorId'] as int,
       doctorName: map['doctorName'] as String,
+      id: map['id'] != null ? map['id'] as int : null,
     );
   }
 
@@ -96,7 +102,7 @@ class DiagnosisInfo {
 
   @override
   String toString() {
-    return 'DiagnosisInfo(patientName: $patientName, patientAge: $patientAge, patientSex: $patientSex, date: $date, dignosisType: $dignosisType, diagnosisRemarks: $diagnosisRemarks, totalAmount: $totalAmount, paidAmount: $paidAmount, incentiveAmount: $incentiveAmount, doctorId: $doctorId, doctorName: $doctorName)';
+    return 'DiagnosisInfo(patientName: $patientName, patientAge: $patientAge, patientSex: $patientSex, date: $date, dignosisType: $dignosisType, diagnosisRemarks: $diagnosisRemarks, totalAmount: $totalAmount, paidAmount: $paidAmount, incentiveAmount: $incentiveAmount, doctorId: $doctorId, doctorName: $doctorName, id: $id)';
   }
 
   @override
@@ -113,7 +119,8 @@ class DiagnosisInfo {
         other.paidAmount == paidAmount &&
         other.incentiveAmount == incentiveAmount &&
         other.doctorId == doctorId &&
-        other.doctorName == doctorName;
+        other.doctorName == doctorName &&
+        other.id == id;
   }
 
   @override
@@ -128,6 +135,7 @@ class DiagnosisInfo {
         paidAmount.hashCode ^
         incentiveAmount.hashCode ^
         doctorId.hashCode ^
-        doctorName.hashCode;
+        doctorName.hashCode ^
+        id.hashCode;
   }
 }

@@ -62,72 +62,116 @@ class _DiagnosisInformationState extends State<DiagnosisInformation> {
                 return ListView.builder(
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) {
-                    return Card(
-                      color: Colors.blue[40],
-                      child: Column(
-                        children: [
-                          Text(snapshot.data![index].patientName),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            snapshot.data![index].patientAge,
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            snapshot.data![index].patientSex,
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            snapshot.data![index].date,
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            snapshot.data![index].dignosisType,
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            snapshot.data![index].diagnosisRemarks,
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            snapshot.data![index].totalAmount,
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            snapshot.data![index].paidAmount,
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            snapshot.data![index].incentiveAmount,
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            snapshot.data![index].doctorId.toString(),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            snapshot.data![index].doctorName,
-                          ),
-                        ],
+                    return GestureDetector(
+                      onTap: () async {
+                        BuildContext dialogContext;
+                        await showDialog(
+                          barrierDismissible: true,
+                          context: context,
+                          // barrierColor: Colors.amber,
+                          builder: (context) {
+                            dialogContext = context;
+                            return AlertDialog(
+                              title: const Text(
+                                'Delete entry',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              content: const Text(
+                                  'Are you sure you want to delete this entry?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('No, Go Back'),
+                                ),
+                                TextButton(
+                                  onPressed: () async {
+                                    await db.deleteDiagnosisEntry(
+                                        id: snapshot.data![index].id!);
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text(
+                                    'Yes, Delete this entry',
+                                    style: TextStyle(
+                                      color: Colors.red[400],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: Card(
+                        color: Colors.blue[40],
+                        child: Column(
+                          children: [
+                            Text(snapshot.data![index].patientName),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              snapshot.data![index].patientAge,
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              snapshot.data![index].patientSex,
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              snapshot.data![index].date,
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              snapshot.data![index].dignosisType,
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              snapshot.data![index].diagnosisRemarks,
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              snapshot.data![index].totalAmount,
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              snapshot.data![index].paidAmount,
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              snapshot.data![index].incentiveAmount,
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              snapshot.data![index].doctorId.toString(),
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              snapshot.data![index].doctorName,
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },

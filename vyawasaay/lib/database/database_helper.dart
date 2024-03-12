@@ -63,12 +63,30 @@ CREATE TABLE IF NOT EXISTS firstdoc(
     return _database!;
   }
 
+  Future<void> deleteDoctorInfo({required id}) async {
+    final db = await initDB();
+    await db.delete('firstdoc', where: 'id = ?', whereArgs: [id]);
+    await db.delete('firstdia', where: 'doctorId = ?', whereArgs: [id]);
+  }
+
+  Future<void> updateDoctorInfo({required DoctorModel model}) async {
+    final db = await initDB();
+    await db.update('firstdoc', model.toMap(),
+        where: 'id = ?', whereArgs: [model.id]);
+  }
+
+  Future<void> deleteDiagnosisEntry({required int id}) async {
+    final db = await initDB();
+    await db.delete('firstdia', where: 'id = ?', whereArgs: [id]);
+  }
+
   Future<List<DiagnosisInfo>> getDiagnosisHistory() async {
     final db = await initDB();
     final maps = await db.query('firstdia');
     return List.generate(
       maps.length,
       (index) => DiagnosisInfo(
+        id: maps[index]['id'] as int,
         patientName: maps[index]['patientName'] as String,
         patientAge: maps[index]['patientAge'] as String,
         patientSex: maps[index]['patientSex'] as String,
@@ -108,7 +126,6 @@ CREATE TABLE IF NOT EXISTS firstdoc(
       'firstdia',
       diagnosisInfo.toMap(),
     );
-    debugPrint('added');
   }
 
   Future<void> insertDoctor({required DoctorModel doctorModel}) async {

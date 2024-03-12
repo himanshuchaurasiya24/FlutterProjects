@@ -64,42 +64,67 @@ class _DoctorsScreenState extends State<DoctorsScreen> {
                 return ListView.builder(
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) {
-                    return Card(
-                      color: Colors.blue[40],
-                      child: Column(
-                        children: [
-                          Text(snapshot.data![index].doctorName),
-                          const SizedBox(
-                            height: 10,
+                    return GestureDetector(
+                      onTap: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return AddDoctor(
+                                isUpdate: true,
+                                id: snapshot.data![index].id,
+                                doctorName: snapshot.data![index].doctorName,
+                                doctorAddress: snapshot.data![index].address,
+                                doctorAge: snapshot.data![index].doctorAge,
+                                doctorIncentivePercentage:
+                                    snapshot.data![index].incentivePercentage,
+                                doctorPhoneNumber:
+                                    snapshot.data![index].doctorPhoneNumber,
+                                doctorSex: snapshot.data![index].doctorSex,
+                              );
+                            },
                           ),
-                          Text(
-                            snapshot.data![index].doctorAge,
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            snapshot.data![index].doctorSex,
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            snapshot.data![index].doctorPhoneNumber,
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            snapshot.data![index].address,
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            snapshot.data![index].incentivePercentage,
-                          ),
-                        ],
+                        ).then((value) {
+                          setState(() {});
+                        });
+                      },
+                      child: Card(
+                        color: Colors.blue[40],
+                        child: Column(
+                          children: [
+                            Text(snapshot.data![index].doctorName),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              snapshot.data![index].doctorAge,
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              snapshot.data![index].doctorSex,
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              snapshot.data![index].doctorPhoneNumber,
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              snapshot.data![index].address,
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              snapshot.data![index].incentivePercentage,
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },
