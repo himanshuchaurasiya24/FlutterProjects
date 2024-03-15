@@ -456,8 +456,10 @@ class DateSelector extends StatelessWidget {
                 );
 
                 if (date != null) {
-                  final parsedDate = DateFormat('d MMMM y');
+                  // final parsedDate = DateFormat('d MMMM y');
+                  final parsedDate = DateFormat('MMMM y d');
                   final formatDate = parsedDate.format(date);
+                  debugPrint(formatDate);
 
                   ref.read(dateProvider.notifier).state = formatDate;
                   dateController.text = ref.read(dateProvider);

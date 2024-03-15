@@ -102,6 +102,44 @@ CREATE TABLE IF NOT EXISTS firstdoc(
     ).toList();
   }
 
+  Future<List<DiagnosisInfo>> getDiagnosticHistoryByDoctorId(
+      {required int id}) async {
+    final db = await initDB();
+    var res = await db
+        .rawQuery("SELECT * FROM firstdia WHERE doctorId LIKE ?", ["%$id%"]);
+    return res
+        .map(
+          (e) => DiagnosisInfo.fromMap(e),
+        )
+        .toList();
+  }
+
+  Future<List<DiagnosisInfo>> getDiagnosticHistoryByDoctorIdAndMonth(
+      {required int id, required String date}) async {
+    final db = await initDB();
+    var res = await db.rawQuery(
+        "SELECT * FROM firstdia WHERE doctorId LIKE ? AND date LIKE ?",
+        ['$id%', '$date%']);
+    return res
+        .map(
+          (e) => DiagnosisInfo.fromMap(e),
+        )
+        .toList();
+  }
+
+  Future<List<DiagnosisInfo>> getDiagnosisHistorySearch(
+      {required String date}) async {
+    final db = await initDB();
+
+    var result = await db
+        .rawQuery("SELECT * FROM firstdia WHERE date LIKE ?", ["%$date%"]);
+    return result
+        .map(
+          (e) => DiagnosisInfo.fromMap(e),
+        )
+        .toList();
+  }
+
   Future<List<DoctorModel>> getDoctorsList() async {
     final db = await initDB();
     final maps = await db.query('firstdoc');

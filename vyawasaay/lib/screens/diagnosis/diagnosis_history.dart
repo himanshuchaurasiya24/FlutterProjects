@@ -68,7 +68,6 @@ class _DiagnosisInformationState extends State<DiagnosisInformation> {
                         await showDialog(
                           barrierDismissible: true,
                           context: context,
-                          // barrierColor: Colors.amber,
                           builder: (context) {
                             dialogContext = context;
                             return AlertDialog(
