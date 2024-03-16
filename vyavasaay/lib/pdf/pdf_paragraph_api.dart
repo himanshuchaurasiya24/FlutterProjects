@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
@@ -68,9 +67,6 @@ class PdfParagraphApi {
       return parsedDate.format(tempDate);
     }
 
-    final font = await rootBundle.load("assets/OpenSans-Regular.ttf");
-    final ttf = Font.ttf(font);
-
     pdf.addPage(
       MultiPage(
         build: (context) {
@@ -84,7 +80,9 @@ class PdfParagraphApi {
                   Row(children: [
                     Text(
                       'Dr. ${model[index].doctorName}',
-                      style: TextStyle(fontWeight: FontWeight.bold, font: ttf),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ]),
                   Row(
@@ -94,7 +92,6 @@ class PdfParagraphApi {
                           'Date',
                           textAlign: TextAlign.start,
                           style: TextStyle(
-                            font: ttf,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -104,7 +101,6 @@ class PdfParagraphApi {
                           'Name',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            font: ttf,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -114,7 +110,6 @@ class PdfParagraphApi {
                           'Diagnosis',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            font: ttf,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -124,7 +119,6 @@ class PdfParagraphApi {
                           'Total',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            font: ttf,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -134,7 +128,6 @@ class PdfParagraphApi {
                           'Paid',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            font: ttf,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -144,7 +137,6 @@ class PdfParagraphApi {
                           'Discount',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            font: ttf,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -154,7 +146,6 @@ class PdfParagraphApi {
                           'Percent',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            font: ttf,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -164,7 +155,6 @@ class PdfParagraphApi {
                           'Share',
                           textAlign: TextAlign.end,
                           style: TextStyle(
-                            font: ttf,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -183,72 +173,48 @@ class PdfParagraphApi {
                               child: Text(
                                 getDate(patient.date),
                                 textAlign: TextAlign.start,
-                                style: TextStyle(
-                                  font: ttf,
-                                ),
                               ),
                             ),
                             Expanded(
                               child: Text(
                                 patient.patientName,
                                 maxLines: 1,
-                                style: TextStyle(
-                                  font: ttf,
-                                ),
                                 textAlign: TextAlign.center,
                               ),
                             ),
                             Expanded(
                               child: Text(
                                 patient.remarks,
-                                style: TextStyle(
-                                  font: ttf,
-                                ),
                                 textAlign: TextAlign.center,
                               ),
                             ),
                             Expanded(
                               child: Text(
                                 patient.totalAmount,
-                                style: TextStyle(
-                                  font: ttf,
-                                ),
                                 textAlign: TextAlign.center,
                               ),
                             ),
                             Expanded(
                               child: Text(
                                 patient.paidAmount,
-                                style: TextStyle(
-                                  font: ttf,
-                                ),
                                 textAlign: TextAlign.center,
                               ),
                             ),
                             Expanded(
                               child: Text(
                                 patient.discount,
-                                style: TextStyle(
-                                  font: ttf,
-                                ),
                                 textAlign: TextAlign.center,
                               ),
                             ),
                             Expanded(
                               child: Text(
                                 patient.percent,
-                                style: TextStyle(
-                                  font: ttf,
-                                ),
                                 textAlign: TextAlign.center,
                               ),
                             ),
                             Expanded(
                               child: Text(
                                 patient.incentiveAmount,
-                                style: TextStyle(
-                                  font: ttf,
-                                ),
                                 textAlign: TextAlign.end,
                               ),
                             ),
@@ -264,20 +230,15 @@ class PdfParagraphApi {
                         Text('Total Incentive',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              font: ttf,
                             )),
                         Text(incentiveCount.toString(),
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              font: ttf,
                             )),
                       ]),
                   Text(
                     '---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------',
                     maxLines: 1,
-                    style: TextStyle(
-                      font: ttf,
-                    ),
                   ),
                 ],
               );
@@ -288,6 +249,102 @@ class PdfParagraphApi {
     );
     return PdfApi.saveDocument(name: 'list_incentive.pdf', pdf: pdf);
   }
+
+  // static Future<File> calculator({required IncentiveGenModel model}) async {
+  //   final pdf = Document();
+  //   pdf.addPage(
+  //     MultiPage(
+  //       build: (context) {
+  //         return <Widget>[
+  //           // buildCustomHeader(),
+  //           Header(
+  //             child: Expanded(
+  //               child: Text(
+  //                 model.doctorName,
+  //                 style: TextStyle(
+  //                   fontWeight: FontWeight.bold,
+  //                 ),
+  //               ),
+  //             ),
+  //           ),
+  //           Row(children: [
+  //             Expanded(
+  //               child: Text(
+  //                 'Date',
+  //                 style: TextStyle(
+  //                   fontWeight: FontWeight.bold,
+  //                 ),
+  //               ),
+  //             ),
+  //             Expanded(
+  //               child: Text(
+  //                 'Patient Name',
+  //                 style: TextStyle(
+  //                   fontWeight: FontWeight.bold,
+  //                 ),
+  //               ),
+  //             ),
+  //             Expanded(
+  //               child: Text(
+  //                 'Diagnosis',
+  //                 style: TextStyle(
+  //                   fontWeight: FontWeight.bold,
+  //                 ),
+  //               ),
+  //             ),
+  //             Expanded(
+  //               child: Text(
+  //                 'Total Amt',
+  //                 style: TextStyle(
+  //                   fontWeight: FontWeight.bold,
+  //                 ),
+  //               ),
+  //             ),
+  //             Expanded(
+  //               child: Text(
+  //                 'Incentive',
+  //                 textAlign: TextAlign.end,
+  //                 style: TextStyle(
+  //                   fontWeight: FontWeight.bold,
+  //                 ),
+  //               ),
+  //             ),
+  //           ]),
+  //           Row(children: [
+  //             Expanded(
+  //               child: Text(
+  //                 model.date,
+  //               ),
+  //             ),
+  //             Expanded(
+  //               child: Text(
+  //                 model.patientName,
+  //               ),
+  //             ),
+  //             Expanded(
+  //               child: Text(
+  //                 model.doctorName,
+  //               ),
+  //             ),
+  //             Expanded(
+  //               child: Text(
+  //                 model.totalAmount,
+  //                 textAlign: TextAlign.center,
+  //               ),
+  //             ),
+  //             Expanded(
+  //               child: Text(
+  //                 model.incentiveAmount,
+  //                 textAlign: TextAlign.end,
+  //               ),
+  //             ),
+  //           ])
+  //         ];
+  //       },
+  //     ),
+  //   );
+  //   return PdfApi.saveDocument(name: 'incentive_calculator.pdf', pdf: pdf);
+  // }
 
   static List<Widget> buildBulletPoints() {
     return [
