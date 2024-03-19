@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 Color primaryColor = Colors.red[200]!;
 Color primaryColorDark = Colors.red[300]!;
+Color primaryColorDarker = Colors.red[400]!;
 double defaultSize = 20;
 double titleLargeTextSize = 50;
 Color titleLargeTextColor = Colors.white70;
