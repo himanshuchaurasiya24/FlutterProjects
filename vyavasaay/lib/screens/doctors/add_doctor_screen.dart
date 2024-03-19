@@ -107,6 +107,7 @@ class _AddDoctorState extends ConsumerState<AddDoctor> {
                       flex: 1,
                       child: CustomTextFormField(
                         controller: doctorAgeController,
+                        inputType: TextInputType.number,
                         labelText: 'Doctor Age',
                       ),
                     ),
@@ -125,6 +126,7 @@ class _AddDoctorState extends ConsumerState<AddDoctor> {
                       flex: 2,
                       child: CustomTextFormField(
                         controller: doctorPhoneNumberController,
+                        inputType: TextInputType.number,
                         labelText: 'Phone Number',
                       ),
                     ),
@@ -148,6 +150,7 @@ class _AddDoctorState extends ConsumerState<AddDoctor> {
                       flex: 1,
                       child: CustomTextFormField(
                         controller: incentivePercentageController,
+                        inputType: TextInputType.number,
                         labelText: 'Incentive in percentage',
                       ),
                     ),

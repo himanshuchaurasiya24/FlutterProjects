@@ -1,0 +1,22 @@
+import 'package:flutter/material.dart';
+
+class IntroductionScreen extends StatefulWidget {
+  const IntroductionScreen({super.key});
+
+  @override
+  State<IntroductionScreen> createState() => _IntroductionScreenState();
+}
+
+class _IntroductionScreenState extends State<IntroductionScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {},
+        label: const Icon(
+          Icons.arrow_right_alt_outlined,
+        ),
+      ),
+    );
+  }
+}

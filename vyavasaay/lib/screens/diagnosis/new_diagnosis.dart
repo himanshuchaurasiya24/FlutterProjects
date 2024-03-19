@@ -161,6 +161,7 @@ class _NewDiagnosisState extends ConsumerState<NewDiagnosis> {
                       child: CustomTextFormField(
                         controller: patientAgeController,
                         labelText: 'Patient Age',
+                        inputType: TextInputType.number,
                       ),
                     ),
                     const SizedBox(
@@ -208,6 +209,7 @@ class _NewDiagnosisState extends ConsumerState<NewDiagnosis> {
                       flex: 2,
                       child: CustomTextFormField(
                           controller: totalAmountController,
+                          inputType: TextInputType.number,
                           labelText: 'Total Amount'),
                     ),
                     const SizedBox(
@@ -217,6 +219,7 @@ class _NewDiagnosisState extends ConsumerState<NewDiagnosis> {
                       flex: 2,
                       child: CustomTextFormField(
                           controller: paidAmountController,
+                          inputType: TextInputType.number,
                           onChanged: (p0) {
                             debugPrint(p0);
                             ref.read(incentiveAmountProvider.notifier).state =
@@ -234,6 +237,7 @@ class _NewDiagnosisState extends ConsumerState<NewDiagnosis> {
                       flex: 2,
                       child: CustomTextFormField(
                         controller: incentiveController,
+                        inputType: TextInputType.number,
                         labelText: 'Calculated Incentive',
                       ),
                     ),

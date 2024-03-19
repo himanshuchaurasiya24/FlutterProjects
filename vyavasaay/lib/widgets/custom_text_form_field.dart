@@ -6,16 +6,18 @@ class CustomTextFormField extends StatelessWidget {
     this.onChanged,
     required this.controller,
     required this.labelText,
+    this.inputType,
   });
   final String labelText;
   final Function(String)? onChanged;
   final TextEditingController controller;
-
+  final TextInputType? inputType;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
       onChanged: onChanged,
+      keyboardType: inputType,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return '$labelText can\'nt be empty';
