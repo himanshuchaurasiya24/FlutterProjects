@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:vyavasaay_redesigned/database/database_helper.dart';
+import 'package:vyavasaay_redesigned/screens/dummy.dart';
 import 'package:vyavasaay_redesigned/screens/login_signup_screens/login_screen.dart';
+import 'package:vyavasaay_redesigned/screens/model/admin_model.dart';
 
 import 'package:vyavasaay_redesigned/utils/constants.dart';
 import 'package:vyavasaay_redesigned/widgets/default_container.dart';
@@ -19,6 +23,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
       TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   Color containerColor = primaryColor;
+  DatabaseHelper database = DatabaseHelper();
+  late Future<List<AdminModel>> adminList;
+
+  @override
+  void initState() {
+    adminList = database.getAllAdminAccount();
+    database.initDB().whenComplete(() {
+      adminList = database.getAllAdminAccount();
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,6 +73,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       CustomTextField(
                         controller: passwordController,
+                        isObscure: true,
                         hintText: 'Password',
                       ),
                       SizedBox(
@@ -64,6 +81,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       CustomTextField(
                         controller: confirmPasswordController,
+                        isObscure: true,
                         hintText: 'Confirm Password',
                       ),
                       SizedBox(
@@ -77,33 +95,54 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       SizedBox(
                         height: defaultSize,
                       ),
-                      MouseRegion(
-                        onEnter: (event) {
-                          setState(() {
-                            containerColor = primaryColorDarker;
-                          });
+                      GestureDetector(
+                        onTap: () async {
+                          await database
+                              .createAdminAccount(
+                                model: AdminModel(
+                                  name: nameController.text,
+                                  phoneNumber: int.tryParse(
+                                    phoneController.text,
+                                  )!,
+                                  password: passwordController.text,
+                                ),
+                              )
+                              .then((value) => {
+                                    Navigator.push(context, MaterialPageRoute(
+                                      builder: (context) {
+                                        return DummyScreen(name: value);
+                                      },
+                                    ))
+                                  });
                         },
-                        onExit: (event) {
-                          setState(() {
-                            containerColor = primaryColor;
-                          });
-                        },
-                        child: Container(
-                          height: getDeviceHeight(context: context) * 0.1,
-                          width: getDeviceWidth(context: context) * 0.55,
-                          decoration: BoxDecoration(
-                            color: containerColor,
-                            borderRadius: BorderRadius.circular(
-                              defaultSize,
+                        child: MouseRegion(
+                          onEnter: (event) {
+                            setState(() {
+                              containerColor = primaryColorDarker;
+                            });
+                          },
+                          onExit: (event) {
+                            setState(() {
+                              containerColor = primaryColor;
+                            });
+                          },
+                          child: Container(
+                            height: getDeviceHeight(context: context) * 0.1,
+                            width: getDeviceWidth(context: context) * 0.55,
+                            decoration: BoxDecoration(
+                              color: containerColor,
+                              borderRadius: BorderRadius.circular(
+                                defaultSize,
+                              ),
                             ),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'Sign Up',
-                              style: TextStyle(
-                                color: titleLargeTextColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: titleLargeTextSize - 15,
+                            child: Center(
+                              child: Text(
+                                'Sign Up',
+                                style: TextStyle(
+                                  color: titleLargeTextColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: titleLargeTextSize - 15,
+                                ),
                               ),
                             ),
                           ),

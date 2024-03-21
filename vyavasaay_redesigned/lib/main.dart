@@ -1,9 +1,21 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:vyavasaay_redesigned/screens/introduction_screen.dart';
 import 'package:vyavasaay_redesigned/utils/constants.dart';
 
 void main() {
-  runApp(const MyApp());
+  if (Platform.isWindows) {
+    sqfliteFfiInit();
+    databaseFactoryOrNull = databaseFactoryFfi;
+  }
+  runApp(
+    const ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
