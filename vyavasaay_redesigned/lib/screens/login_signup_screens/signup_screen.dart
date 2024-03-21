@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:vyavasaay_redesigned/screens/login_signup_screens/signup_screen.dart';
+import 'package:vyavasaay_redesigned/screens/login_signup_screens/login_screen.dart';
+
 import 'package:vyavasaay_redesigned/utils/constants.dart';
 import 'package:vyavasaay_redesigned/widgets/default_container.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
   Color containerColor = primaryColor;
   @override
   Widget build(BuildContext context) {
@@ -35,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Log In',
+                        'Sign Up',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: titleLargeTextSize,
@@ -55,6 +58,21 @@ class _LoginScreenState extends State<LoginScreen> {
                       CustomTextField(
                         controller: passwordController,
                         hintText: 'Password',
+                      ),
+                      SizedBox(
+                        height: defaultSize,
+                      ),
+                      CustomTextField(
+                        controller: confirmPasswordController,
+                        hintText: 'Confirm Password',
+                      ),
+                      SizedBox(
+                        height: defaultSize,
+                      ),
+                      CustomTextField(
+                        controller: phoneController,
+                        keyboardType: TextInputType.number,
+                        hintText: 'Phone Number',
                       ),
                       SizedBox(
                         height: defaultSize,
@@ -81,7 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           child: Center(
                             child: Text(
-                              'Log In',
+                              'Sign Up',
                               style: TextStyle(
                                 color: titleLargeTextColor,
                                 fontWeight: FontWeight.bold,
@@ -103,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   child: SizedBox(),
                                 ),
                                 Text(
-                                  'Don\'t have an account?',
+                                  'Already have an account?',
                                   style: TextStyle(
                                     color: titleLargeTextColor,
                                     fontSize: 20,
@@ -115,13 +133,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) {
-                                          return const SignUpScreen();
+                                          return const LoginScreen();
                                         },
                                       ),
                                     );
                                   },
                                   child: Text(
-                                    'Sign up instead',
+                                    'Log in instead',
                                     style: TextStyle(
                                       color: titleLargeTextColor,
                                       fontSize: 20,
@@ -142,6 +160,47 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             )
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class CustomTextField extends StatelessWidget {
+  const CustomTextField({
+    super.key,
+    required this.controller,
+    this.isObscure,
+    required this.hintText,
+    this.keyboardType,
+  });
+
+  final TextEditingController controller;
+  final bool? isObscure;
+  final String hintText;
+  final TextInputType? keyboardType;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: keyboardType,
+      obscureText: isObscure ?? false,
+      style: TextStyle(
+        color: titleLargeTextColor,
+      ),
+      decoration: InputDecoration(
+        filled: true,
+        hintText: hintText,
+        hintStyle: TextStyle(
+          color: titleLargeTextColor,
+        ),
+        fillColor: primaryColor,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(
+            defaultSize,
+          ),
+          borderSide: BorderSide.none,
         ),
       ),
     );

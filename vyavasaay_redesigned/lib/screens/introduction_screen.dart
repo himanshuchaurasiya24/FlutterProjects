@@ -3,7 +3,7 @@ import 'package:vyavasaay_redesigned/screens/introduction_screens/intro_1.dart';
 import 'package:vyavasaay_redesigned/screens/introduction_screens/intro_2.dart';
 import 'package:vyavasaay_redesigned/screens/introduction_screens/intro_3.dart';
 import 'package:vyavasaay_redesigned/screens/introduction_screens/intro_4.dart';
-import 'package:vyavasaay_redesigned/screens/login_signup_screens/login_screen.dart';
+import 'package:vyavasaay_redesigned/screens/login_signup_screens/signup_screen.dart';
 
 class IntroductionScreen extends StatefulWidget {
   const IntroductionScreen({super.key});
@@ -35,7 +35,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return const LoginSignUpScreen();
+                      return const SignUpScreen();
                     },
                   ),
                 );

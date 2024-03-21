@@ -24,7 +24,7 @@ class IntroScreenWidget extends StatelessWidget {
           Text(
             description,
             style: TextStyle(
-              color: Colors.white70,
+              color: titleLargeTextColor,
               fontSize: titleLargeTextSize,
               fontWeight: FontWeight.bold,
             ),
