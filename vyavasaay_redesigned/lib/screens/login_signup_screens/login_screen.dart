@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vyavasaay_redesigned/database/database_helper.dart';
-import 'package:vyavasaay_redesigned/screens/dummy.dart';
+import 'package:vyavasaay_redesigned/screens/main_screen/home_screen.dart';
 import 'package:vyavasaay_redesigned/screens/login_signup_screens/signup_screen.dart';
 import 'package:vyavasaay_redesigned/utils/constants.dart';
 import 'package:vyavasaay_redesigned/widgets/custom_textfield.dart';
@@ -50,6 +51,21 @@ class _LoginScreenState extends State<LoginScreen> {
         ],
       ),
     );
+  }
+
+  void loggedIn() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isLoggedIn', true);
+  }
+
+  void loggedInName({required String name}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('loggedInName', name);
+  }
+
+  void logInType({required String type}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('logInType', type);
   }
 
   @override
@@ -151,11 +167,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                         final model = await database.getAdmin(
                                             name: nameController.text);
                                         final name = model!.name;
+                                        loggedIn();
+                                        loggedInName(name: name);
+                                        logInType(type: 'admin');
                                         Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) {
-                                              return DummyScreen(name: name);
+                                              return HomeScreen(
+                                                name: name,
+                                                logInType: 'admin',
+                                              );
                                             },
                                           ),
                                         );
@@ -172,11 +194,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                         final model = await database.getUser(
                                             name: nameController.text);
                                         final name = model!.name;
+                                        loggedIn();
+                                        loggedInName(name: name);
+                                        logInType(type: 'user');
                                         Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) {
-                                              return DummyScreen(name: name);
+                                              return HomeScreen(
+                                                name: name,
+                                                logInType: 'user',
+                                              );
                                             },
                                           ),
                                         );

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:vyavasaay_redesigned/screens/splash_screen.dart';
+import 'package:vyavasaay_redesigned/screens/introduction_screens/splash_screen.dart';
 import 'package:vyavasaay_redesigned/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
