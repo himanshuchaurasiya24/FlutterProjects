@@ -3,10 +3,15 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:vyavasaay_redesigned/screens/introduction_screen.dart';
+import 'package:vyavasaay_redesigned/screens/splash_screen.dart';
 import 'package:vyavasaay_redesigned/utils/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+late SharedPreferences pref;
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  pref = await SharedPreferences.getInstance();
+
   if (Platform.isWindows) {
     sqfliteFfiInit();
     databaseFactoryOrNull = databaseFactoryFfi;
@@ -39,9 +44,9 @@ class MyApp extends StatelessWidget {
         hintColor: primaryColor,
         colorScheme: ColorScheme.fromSeed(
           seedColor: primaryColor,
-        ).copyWith(error: Colors.red),
+        ).copyWith(error: Colors.red).copyWith(error: titleLargeTextColor),
       ),
-      home: const IntroductionScreen(),
+      home: const SplashScreen(),
     );
   }
 }

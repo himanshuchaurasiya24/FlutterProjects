@@ -65,6 +65,46 @@ class DatabaseHelper {
     return model.name;
   }
 
+  Future<bool> authAdmin({
+    required String name,
+    required String password,
+  }) async {
+    final db = await initDB();
+    var res = await db.query(adminTable,
+        where: 'name = ? AND password = ?', whereArgs: [name, password]);
+    if (res.isNotEmpty) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<AdminModel?> getAdmin({required String name}) async {
+    final db = await initDB();
+    var res = await db.query(adminTable, where: 'name = ?', whereArgs: [name]);
+    return res.isNotEmpty ? AdminModel.fromMap(res.first) : null;
+  }
+
+  Future<UserModel?> getUser({required String name}) async {
+    final db = await initDB();
+    var res = await db.query(userTable, where: 'name = ?', whereArgs: [name]);
+    return res.isNotEmpty ? UserModel.fromMap(res.first) : null;
+  }
+
+  Future<bool> authUser({
+    required String name,
+    required String password,
+  }) async {
+    final db = await initDB();
+    var res = await db.query(userTable,
+        where: 'name = ? AND password = ?', whereArgs: [name, password]);
+    if (res.isNotEmpty) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   Future<void> createUserAccount({required UserModel model}) async {
     final db = await initDB();
     await db.insert(
@@ -78,6 +118,13 @@ class DatabaseHelper {
     final List<Map<String, Object?>> result =
         await db.rawQuery('SELECT * FROM $adminTable');
     return result.map((e) => AdminModel.fromMap(e)).toList();
+  }
+
+  Future<int> getAdminAccountLength() async {
+    final db = await initDB();
+    final List<Map<String, Object?>> result =
+        await db.rawQuery('SELECT * FROM $adminTable');
+    return result.length;
   }
 
   Future<List<UserModel>> getAllUserAccount() async {

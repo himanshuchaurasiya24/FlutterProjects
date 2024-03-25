@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:vyavasaay_redesigned/database/database_helper.dart';
-import 'package:vyavasaay_redesigned/screens/dummy.dart';
 import 'package:vyavasaay_redesigned/screens/login_signup_screens/login_screen.dart';
 import 'package:vyavasaay_redesigned/screens/model/admin_model.dart';
 
 import 'package:vyavasaay_redesigned/utils/constants.dart';
+import 'package:vyavasaay_redesigned/widgets/custom_textfield.dart';
 import 'package:vyavasaay_redesigned/widgets/default_container.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -25,14 +24,53 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Color containerColor = primaryColor;
   DatabaseHelper database = DatabaseHelper();
   late Future<List<AdminModel>> adminList;
-
+  late int adminAccountLength;
   @override
   void initState() {
     adminList = database.getAllAdminAccount();
-    database.initDB().whenComplete(() {
+    database.initDB().whenComplete(() async {
       adminList = database.getAllAdminAccount();
+      adminAccountLength = await database.getAdminAccountLength();
     });
     super.initState();
+  }
+
+  void showBanner(BuildContext context) {
+    ScaffoldMessenger.of(context).showMaterialBanner(
+      MaterialBanner(
+        padding: EdgeInsets.only(
+          left: defaultSize + 10,
+          right: defaultSize - 10,
+        ),
+        backgroundColor: primaryColor,
+        dividerColor: primaryColor,
+        contentTextStyle: TextStyle(
+          color: titleLargeTextColor,
+          fontSize: defaultSize,
+          fontWeight: FontWeight.w600,
+        ),
+        forceActionsBelow: false,
+        overflowAlignment: OverflowBarAlignment.end,
+        content: const Text(
+          'An Admin Account is Already Created.\nContact Admin For Your Account Creation.',
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              ScaffoldMessenger.of(context).clearMaterialBanners();
+            },
+            icon: Text(
+              'Okay',
+              style: TextStyle(
+                color: titleLargeTextColor,
+                fontSize: defaultSize,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -50,196 +88,165 @@ class _SignUpScreenState extends State<SignUpScreen> {
               child: Expanded(
                 child: Padding(
                   padding: EdgeInsets.all(defaultSize),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Sign Up',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: titleLargeTextSize,
-                          color: titleLargeTextColor,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Sign Up',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: titleLargeTextSize,
+                            color: titleLargeTextColor,
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: defaultSize,
-                      ),
-                      CustomTextField(
-                        controller: nameController,
-                        hintText: 'Name',
-                      ),
-                      SizedBox(
-                        height: defaultSize,
-                      ),
-                      CustomTextField(
-                        controller: passwordController,
-                        isObscure: true,
-                        hintText: 'Password',
-                      ),
-                      SizedBox(
-                        height: defaultSize,
-                      ),
-                      CustomTextField(
-                        controller: confirmPasswordController,
-                        isObscure: true,
-                        hintText: 'Confirm Password',
-                      ),
-                      SizedBox(
-                        height: defaultSize,
-                      ),
-                      CustomTextField(
-                        controller: phoneController,
-                        keyboardType: TextInputType.number,
-                        hintText: 'Phone Number',
-                      ),
-                      SizedBox(
-                        height: defaultSize,
-                      ),
-                      GestureDetector(
-                        onTap: () async {
-                          await database
-                              .createAdminAccount(
-                                model: AdminModel(
-                                  name: nameController.text,
-                                  phoneNumber: int.tryParse(
-                                    phoneController.text,
-                                  )!,
-                                  password: passwordController.text,
+                        SizedBox(
+                          height: defaultSize,
+                        ),
+                        CustomTextField(
+                          controller: nameController,
+                          hintText: 'Name',
+                        ),
+                        SizedBox(
+                          height: defaultSize,
+                        ),
+                        CustomTextField(
+                          controller: passwordController,
+                          isObscure: true,
+                          hintText: 'Password',
+                        ),
+                        SizedBox(
+                          height: defaultSize,
+                        ),
+                        CustomTextField(
+                          controller: confirmPasswordController,
+                          isObscure: true,
+                          hintText: 'Confirm Password',
+                        ),
+                        SizedBox(
+                          height: defaultSize,
+                        ),
+                        CustomTextField(
+                          controller: phoneController,
+                          keyboardType: TextInputType.number,
+                          hintText: 'Phone Number',
+                        ),
+                        SizedBox(
+                          height: defaultSize,
+                        ),
+                        GestureDetector(
+                          onTap: () async {
+                            if (_formKey.currentState!.validate()) {
+                              if (adminAccountLength > 0) {
+                                showBanner(context);
+                                return;
+                              } else {
+                                await database
+                                    .createAdminAccount(
+                                      model: AdminModel(
+                                        name: nameController.text,
+                                        phoneNumber: int.tryParse(
+                                          phoneController.text,
+                                        )!,
+                                        password: passwordController.text,
+                                      ),
+                                    )
+                                    .then((value) => {
+                                          Navigator.pushReplacement(context,
+                                              MaterialPageRoute(
+                                            builder: (context) {
+                                              return const LoginScreen();
+                                            },
+                                          ))
+                                        });
+                              }
+                            }
+                          },
+                          child: MouseRegion(
+                            onEnter: (event) {
+                              setState(() {
+                                containerColor = primaryColorDarker;
+                              });
+                            },
+                            onExit: (event) {
+                              setState(() {
+                                containerColor = primaryColor;
+                              });
+                            },
+                            child: Container(
+                              height: getDeviceHeight(context: context) * 0.1,
+                              width: getDeviceWidth(context: context) * 0.55,
+                              decoration: BoxDecoration(
+                                color: containerColor,
+                                borderRadius: BorderRadius.circular(
+                                  defaultSize,
                                 ),
-                              )
-                              .then((value) => {
-                                    Navigator.push(context, MaterialPageRoute(
-                                      builder: (context) {
-                                        return DummyScreen(name: value);
-                                      },
-                                    ))
-                                  });
-                        },
-                        child: MouseRegion(
-                          onEnter: (event) {
-                            setState(() {
-                              containerColor = primaryColorDarker;
-                            });
-                          },
-                          onExit: (event) {
-                            setState(() {
-                              containerColor = primaryColor;
-                            });
-                          },
-                          child: Container(
-                            height: getDeviceHeight(context: context) * 0.1,
-                            width: getDeviceWidth(context: context) * 0.55,
-                            decoration: BoxDecoration(
-                              color: containerColor,
-                              borderRadius: BorderRadius.circular(
-                                defaultSize,
                               ),
-                            ),
-                            child: Center(
-                              child: Text(
-                                'Sign Up',
-                                style: TextStyle(
-                                  color: titleLargeTextColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: titleLargeTextSize - 15,
+                              child: Center(
+                                child: Text(
+                                  'Sign Up',
+                                  style: TextStyle(
+                                    color: titleLargeTextColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: titleLargeTextSize - 15,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: defaultSize,
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Row(
-                              children: [
-                                const Expanded(
-                                  child: SizedBox(),
-                                ),
-                                Text(
-                                  'Already have an account?',
-                                  style: TextStyle(
-                                    color: titleLargeTextColor,
-                                    fontSize: 20,
+                        SizedBox(
+                          height: defaultSize,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Row(
+                                children: [
+                                  const Expanded(
+                                    child: SizedBox(),
                                   ),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) {
-                                          return const LoginScreen();
-                                        },
-                                      ),
-                                    );
-                                  },
-                                  child: Text(
-                                    'Log in instead',
+                                  Text(
+                                    'Already have an account?',
                                     style: TextStyle(
                                       color: titleLargeTextColor,
                                       fontSize: 20,
                                     ),
                                   ),
-                                ),
-                                const Expanded(
-                                  child: SizedBox(),
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      )
-                    ],
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) {
+                                            return const LoginScreen();
+                                          },
+                                        ),
+                                      );
+                                    },
+                                    child: Text(
+                                      'Log in instead',
+                                      style: TextStyle(
+                                        color: titleLargeTextColor,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ),
+                                  const Expanded(
+                                    child: SizedBox(),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
             )
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class CustomTextField extends StatelessWidget {
-  const CustomTextField({
-    super.key,
-    required this.controller,
-    this.isObscure,
-    required this.hintText,
-    this.keyboardType,
-  });
-
-  final TextEditingController controller;
-  final bool? isObscure;
-  final String hintText;
-  final TextInputType? keyboardType;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      keyboardType: keyboardType,
-      obscureText: isObscure ?? false,
-      style: TextStyle(
-        color: titleLargeTextColor,
-      ),
-      decoration: InputDecoration(
-        filled: true,
-        hintText: hintText,
-        hintStyle: TextStyle(
-          color: titleLargeTextColor,
-        ),
-        fillColor: primaryColor,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(
-            defaultSize,
-          ),
-          borderSide: BorderSide.none,
         ),
       ),
     );
