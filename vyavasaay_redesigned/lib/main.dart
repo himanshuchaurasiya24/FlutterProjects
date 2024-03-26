@@ -41,6 +41,10 @@ class MyApp extends StatelessWidget {
           ),
         ),
         scaffoldBackgroundColor: primaryColor,
+        appBarTheme: AppBarTheme(
+          backgroundColor: primaryColor,
+          centerTitle: true,
+        ),
         hintColor: primaryColor,
         colorScheme: ColorScheme.fromSeed(
           seedColor: primaryColor,
