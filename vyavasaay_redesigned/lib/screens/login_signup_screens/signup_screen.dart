@@ -121,6 +121,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         CustomTextField(
                           controller: confirmPasswordController,
                           isObscure: true,
+                          isConfirm: true,
+                          passwordController: passwordController,
                           hintText: 'Confirm Password',
                         ),
                         SizedBox(

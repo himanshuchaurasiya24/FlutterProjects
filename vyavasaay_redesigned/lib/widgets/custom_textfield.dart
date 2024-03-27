@@ -8,12 +8,16 @@ class CustomTextField extends StatelessWidget {
     this.isObscure,
     required this.hintText,
     this.keyboardType,
+    this.passwordController,
+    this.isConfirm,
   });
 
   final TextEditingController controller;
   final bool? isObscure;
   final String hintText;
   final TextInputType? keyboardType;
+  final TextEditingController? passwordController;
+  final bool? isConfirm;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +29,11 @@ class CustomTextField extends StatelessWidget {
         color: titleLargeTextColor,
       ),
       validator: (value) {
+        if (isConfirm == true && passwordController != null) {
+          if (value != passwordController!.text) {
+            return 'Password does\'nt match';
+          }
+        }
         if (value != null && value.trim().isEmpty) {
           return 'Please enter $hintText';
         }

@@ -55,7 +55,7 @@ class MenuItems {
     MenuDetails(
       title: 'Log Out',
       icon: Icons.logout_outlined,
-      child: const Logout(),
+      child: Logout(),
     )
   ];
   List<MenuDetails> usersMenuItems = [
@@ -92,7 +92,7 @@ class MenuItems {
     MenuDetails(
       title: 'Log Out',
       icon: Icons.logout_outlined,
-      child: const Logout(),
+      child: Logout(),
     )
   ];
 }

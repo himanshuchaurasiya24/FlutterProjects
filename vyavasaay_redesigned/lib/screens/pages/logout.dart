@@ -1,12 +1,51 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vyavasaay_redesigned/database/database_helper.dart';
+import 'package:vyavasaay_redesigned/screens/introduction_screens/splash_screen.dart';
+import 'package:vyavasaay_redesigned/utils/constants.dart';
 
 class Logout extends StatelessWidget {
-  const Logout({super.key});
+  Logout({super.key});
+  final database = DatabaseHelper();
+  void navigate(BuildContext context) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return const SplashScreen();
+        },
+      ),
+    );
+  }
+
+  void logOut(BuildContext context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    prefs.setBool('isLoggedIn', false);
+    await database.deleteEverything();
+
+    navigate(context);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Logging you out!'),
+    Timer(const Duration(seconds: 1), () {
+      logOut(context);
+    });
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Logging you out!',
+            style: TextStyle(
+              fontSize: titleLargeTextSize,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

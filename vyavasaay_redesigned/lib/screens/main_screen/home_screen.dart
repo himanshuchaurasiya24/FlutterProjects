@@ -64,9 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           right: 3,
                         ),
                         decoration: BoxDecoration(
-                          color: isSelected
-                              ? titleLargeTextColor
-                              : primaryColorDark,
+                          color: isSelected ? blackTile : primaryColorDark,
                           borderRadius: BorderRadius.circular(
                             defaultSize - 10,
                           ),
@@ -81,6 +79,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             widget.logInType == 'admin'
                                 ? adminMenuItems[index].icon
                                 : userMenuItems[index].icon,
+                            color: currentIndex == index
+                                ? whitePrimary
+                                : titleLargeTextColor,
                           ),
                           title: Text(
                             widget.logInType == 'admin'
@@ -88,8 +89,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 : userMenuItems[index].title,
                             style: TextStyle(
                               color: currentIndex == index
-                                  ? primaryColorDark
+                                  ? whitePrimary
                                   : titleLargeTextColor,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),

@@ -25,6 +25,31 @@ class DatabaseHelper {
     phoneNumber INT,
     password TEXT
   )''';
+  String doctorQuery = '''CREATE TABLE IF NOT EXISTS doctorTable(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT,
+    age INT,
+    sex TEXT,
+    phone INT,
+    address TEXT,
+    percent INT
+  )
+''';
+  String patientQuery = '''CREATE TABLE IF NOT EXISTS patientTable(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT,
+    age INT,
+    sex TEXT,
+    date TEXT,
+    doctor INT,
+    type TEXT,
+    remark TEXT,
+    totalAmount INT,
+    paidAmount INT,
+    docAmount INT,
+    percent INT
+  )
+''';
   Future<Database> initDB() async {
     DatabaseFactory _databaseFactory;
     String path = '';
@@ -51,6 +76,8 @@ class DatabaseHelper {
       onCreate: (db, version) async {
         await db.execute(adminQuery);
         await db.execute(userQuery);
+        await db.execute(patientQuery);
+        await db.execute(doctorQuery);
       },
     );
     return _database!;
@@ -85,10 +112,34 @@ class DatabaseHelper {
     return res.isNotEmpty ? AdminModel.fromMap(res.first) : null;
   }
 
-  Future<UserModel?> getUser({required String name}) async {
+  Future<List<AdminModel>> getAllAdminAccount() async {
     final db = await initDB();
-    var res = await db.query(userTable, where: 'name = ?', whereArgs: [name]);
-    return res.isNotEmpty ? UserModel.fromMap(res.first) : null;
+    final List<Map<String, Object?>> result =
+        await db.rawQuery('SELECT * FROM $adminTable');
+    return result.map((e) => AdminModel.fromMap(e)).toList();
+  }
+
+  Future<int> getAdminAccountLength() async {
+    final db = await initDB();
+    final List<Map<String, Object?>> result =
+        await db.rawQuery('SELECT * FROM $adminTable');
+    return result.length;
+  }
+
+  // Future<List<AdminModel>> getAdminInfo({required String name}) async {
+  //   final db = await initDB();
+  //   final List<Map<String, Object?>> searchResult = await db.rawQuery(
+  //     'select * from adminTable where name LIKE ?',
+  //     ["%$name%"],
+  //   );
+  //   return searchResult.map((e) => AdminModel.fromMap(e)).toList();
+  // }
+  Future<void> createUserAccount({required UserModel model}) async {
+    final db = await initDB();
+    await db.insert(
+      userTable,
+      model.toMap(),
+    );
   }
 
   Future<bool> authUser({
@@ -105,26 +156,10 @@ class DatabaseHelper {
     }
   }
 
-  Future<void> createUserAccount({required UserModel model}) async {
+  Future<UserModel?> getUser({required String name}) async {
     final db = await initDB();
-    await db.insert(
-      userTable,
-      model.toMap(),
-    );
-  }
-
-  Future<List<AdminModel>> getAllAdminAccount() async {
-    final db = await initDB();
-    final List<Map<String, Object?>> result =
-        await db.rawQuery('SELECT * FROM $adminTable');
-    return result.map((e) => AdminModel.fromMap(e)).toList();
-  }
-
-  Future<int> getAdminAccountLength() async {
-    final db = await initDB();
-    final List<Map<String, Object?>> result =
-        await db.rawQuery('SELECT * FROM $adminTable');
-    return result.length;
+    var res = await db.query(userTable, where: 'name = ?', whereArgs: [name]);
+    return res.isNotEmpty ? UserModel.fromMap(res.first) : null;
   }
 
   Future<List<UserModel>> getAllUserAccount() async {
@@ -134,23 +169,20 @@ class DatabaseHelper {
     return result.map((e) => UserModel.fromMap(e)).toList();
   }
 
-  Future<List<AdminModel>> getAdminInfo({required String name}) async {
+  Future<int> getUserAccountLength() async {
     final db = await initDB();
-    final List<Map<String, Object?>> searchResult = await db.rawQuery(
-      'select * from adminTable where name LIKE ?',
-      ["%$name%"],
-    );
-    return searchResult.map((e) => AdminModel.fromMap(e)).toList();
+    final List<Map<String, Object?>> result =
+        await db.rawQuery('SELECT * FROM $userTable');
+    return result.length;
   }
-
-  Future<List<UserModel>> getUserInfo({required String name}) async {
-    final db = await initDB();
-    final List<Map<String, Object?>> searchResult = await db.rawQuery(
-      'select * from userTable where name LIKE ?',
-      ["%$name%"],
-    );
-    return searchResult.map((e) => UserModel.fromMap(e)).toList();
-  }
+  // Future<List<UserModel>> getUserInfo({required String name}) async {
+  //   final db = await initDB();
+  //   final List<Map<String, Object?>> searchResult = await db.rawQuery(
+  //     'select * from userTable where name LIKE ?',
+  //     ["%$name%"],
+  //   );
+  //   return searchResult.map((e) => UserModel.fromMap(e)).toList();
+  // }
 
   Future<void> deleteEverything() async {
     final db = await initDB();

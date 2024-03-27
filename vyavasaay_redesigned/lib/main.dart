@@ -40,6 +40,9 @@ class MyApp extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
+        iconTheme: IconThemeData(
+          color: titleLargeTextColor,
+        ),
         scaffoldBackgroundColor: primaryColor,
         appBarTheme: AppBarTheme(
           backgroundColor: primaryColor,
