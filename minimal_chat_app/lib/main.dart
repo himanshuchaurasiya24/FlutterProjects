@@ -4,7 +4,7 @@ import 'package:minimal_chat_app/services/auth/auth_gate.dart';
 import 'package:minimal_chat_app/firebase_options.dart';
 import 'package:minimal_chat_app/themes/light_mode.dart';
 
-// vid at 10:38 mitch koko
+// vid at 50:14 mitch koko
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
