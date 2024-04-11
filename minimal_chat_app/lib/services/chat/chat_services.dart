@@ -20,8 +20,8 @@ class ChatServices {
     final currentUserEmail = firebaseAuth.currentUser!.email;
     final Timestamp timestamp = Timestamp.now();
     Message newMessage = Message(
-      senderId: currentUserEmail!,
-      senderEmail: currentUserId,
+      senderId: currentUserId,
+      senderEmail: currentUserEmail!,
       receiverId: receiverId,
       message: message,
       timestamp: timestamp,

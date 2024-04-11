@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:minimal_chat_app/components/chat_bubble.dart';
 import 'package:minimal_chat_app/components/my_textfield.dart';
 import 'package:minimal_chat_app/services/auth/auth_service.dart';
 import 'package:minimal_chat_app/services/chat/chat_services.dart';
@@ -19,6 +20,41 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
+  FocusNode myFocusNode = FocusNode();
+  @override
+  void initState() {
+    super.initState();
+    myFocusNode.addListener(() {
+      if (myFocusNode.hasFocus) {
+        Future.delayed(
+          const Duration(milliseconds: 500),
+          () {
+            scrollDown();
+          },
+        );
+      }
+    });
+    Future.delayed(
+      const Duration(milliseconds: 500),
+      () {
+        scrollDown();
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    messageController.dispose();
+    myFocusNode.dispose();
+  }
+
+  final ScrollController scrollController = ScrollController();
+  scrollDown() {
+    scrollController.animateTo(scrollController.position.maxScrollExtent,
+        duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+  }
+
   TextEditingController messageController = TextEditingController();
 
   ChatServices chatServices = ChatServices();
@@ -30,11 +66,22 @@ class _ChatPageState extends State<ChatPage> {
           receiverId: widget.receiverId, message: messageController.text);
       messageController.clear();
     }
+    scrollDown();
   }
 
   Widget buildMessageItem(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-    return Text(data['message']);
+    bool isCurrentUser = doc['senderId'] == authService.getCurrentUser()!.uid;
+    var alignment =
+        isCurrentUser ? Alignment.centerRight : Alignment.centerLeft;
+    return Container(
+      alignment: alignment,
+      // decoration: ,
+      child: ChatBubble(
+        message: data['message'],
+        isCurrentUser: isCurrentUser,
+      ),
+    );
   }
 
   @override
@@ -62,6 +109,7 @@ class _ChatPageState extends State<ChatPage> {
       children: [
         Expanded(
           child: MyTextfield(
+            focusNode: myFocusNode,
             hintText: 'Type here...',
             controller: messageController,
             isObscure: false,
@@ -69,9 +117,10 @@ class _ChatPageState extends State<ChatPage> {
         ),
         IconButton(
           onPressed: sendMessage,
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_circle_right_rounded,
             size: 64,
+            color: Colors.green[300],
           ),
         )
       ],
@@ -80,6 +129,7 @@ class _ChatPageState extends State<ChatPage> {
 
   Widget buildMessageList() {
     String senderId = FirebaseAuth.instance.currentUser!.uid;
+
     return StreamBuilder(
       stream: chatServices.getMessages(
           userId: senderId, otherId: widget.receiverId),
@@ -96,6 +146,7 @@ class _ChatPageState extends State<ChatPage> {
         }
 
         return ListView(
+          controller: scrollController,
           children: snapshot.data!.docs
               .map(
                 (doc) => buildMessageItem(doc),

@@ -2,7 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:minimal_chat_app/services/auth/auth_gate.dart';
 import 'package:minimal_chat_app/firebase_options.dart';
-import 'package:minimal_chat_app/themes/light_mode.dart';
+import 'package:minimal_chat_app/themes/theme_provider.dart';
+import 'package:provider/provider.dart';
 
 // vid at 50:14 mitch koko
 void main() async {
@@ -10,7 +11,10 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+    create: (context) => ThemeProvider(),
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -20,7 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: lightMode,
+      theme: Provider.of<ThemeProvider>(context).themeData,
       debugShowCheckedModeBanner: false,
       home: const AuthGate(),
     );

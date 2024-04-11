@@ -8,8 +8,17 @@ ThemeData lightMode = ThemeData(
       tertiary: Colors.white,
       inversePrimary: Colors.grey.shade900,
     ),
-    appBarTheme: AppBarTheme(
-      backgroundColor: Colors.grey.shade300,
+    appBarTheme: const AppBarTheme(
+      // backgroundColor: Colors.grey.shade300,
+      //         elevation: 0,
+      centerTitle: true,
+      backgroundColor: Colors.transparent,
+      foregroundColor: Colors.grey,
+      titleTextStyle: TextStyle(
+        color: Colors.black,
+        fontWeight: FontWeight.bold,
+        letterSpacing: 5,
+      ),
     ),
     drawerTheme: DrawerThemeData(
       backgroundColor: Colors.grey.shade300,

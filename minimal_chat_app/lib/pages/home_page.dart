@@ -20,10 +20,11 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.grey,
         title: Text(
           widget.user.email!,
-          style: const TextStyle(
-              fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),
         ),
       ),
       drawer: const MyDrawer(),
