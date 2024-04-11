@@ -5,9 +5,12 @@ class MyButton extends StatelessWidget {
     super.key,
     required this.btnName,
     this.ontap,
+    required this.isLoading,
   });
+
   final String btnName;
   final void Function()? ontap;
+  final bool isLoading;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -20,9 +23,16 @@ class MyButton extends StatelessWidget {
         padding: const EdgeInsets.all(25),
         margin: const EdgeInsets.all(25),
         child: Center(
-          child: Text(
-            btnName,
-          ),
+          child: isLoading
+              ? const CircularProgressIndicator()
+              : Text(
+                  btnName,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30,
+                    fontStyle: FontStyle.normal,
+                  ),
+                ),
         ),
       ),
     );

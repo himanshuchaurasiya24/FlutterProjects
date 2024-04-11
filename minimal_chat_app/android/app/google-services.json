@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "592656389284",
+    "project_id": "chatappmitch-59882",
+    "storage_bucket": "chatappmitch-59882.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:592656389284:android:f84de1f2bd1c0ae746c231",
+        "android_client_info": {
+          "package_name": "com.example.minimal_chat_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAlyv1eaG60XvcedwsqHUBQy5CqmGiQ6M0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
