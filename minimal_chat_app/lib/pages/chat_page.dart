@@ -33,6 +33,7 @@ class _ChatPageState extends State<ChatPage> {
           },
         );
       }
+      // scrollDown();
     });
     Future.delayed(
       const Duration(milliseconds: 500),
@@ -52,7 +53,8 @@ class _ChatPageState extends State<ChatPage> {
   final ScrollController scrollController = ScrollController();
   scrollDown() {
     scrollController.animateTo(scrollController.position.maxScrollExtent,
-        duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+        duration: const Duration(microseconds: 500),
+        curve: Curves.fastOutSlowIn);
   }
 
   TextEditingController messageController = TextEditingController();
