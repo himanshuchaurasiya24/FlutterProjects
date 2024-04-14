@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
         hintColor: primaryColor,
         colorScheme: ColorScheme.fromSeed(
           seedColor: primaryColor,
-        ).copyWith(error: Colors.red).copyWith(error: titleLargeTextColor),
+        ).copyWith(error: titleLargeTextColor),
       ),
       home: const SplashScreen(),
     );
