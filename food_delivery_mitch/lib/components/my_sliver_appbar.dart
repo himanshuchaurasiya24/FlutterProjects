@@ -14,7 +14,7 @@ class MySliverAppbar extends StatelessWidget {
       expandedHeight: 340,
       collapsedHeight: 120,
       floating: false,
-      // pinned: true,
+      pinned: true,
       actions: [
         IconButton(
           onPressed: () {},
@@ -26,7 +26,10 @@ class MySliverAppbar extends StatelessWidget {
       foregroundColor: Theme.of(context).colorScheme.inversePrimary,
       title: const Text('Sunset Dinner'),
       flexibleSpace: FlexibleSpaceBar(
-        background: child,
+        background: Padding(
+          padding: const EdgeInsets.only(bottom: 90),
+          child: child,
+        ),
         title: title,
         centerTitle: true,
         titlePadding: const EdgeInsets.only(
