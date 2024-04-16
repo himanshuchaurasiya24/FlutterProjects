@@ -1,7 +1,7 @@
 import 'package:food_delivery_mitch/models/food_model.dart';
 
 class Resturant {
-  final List<FoodModel> menu = [
+  final List<FoodModel> _menu = [
     FoodModel(
       name: 'Classic Cheeseburger',
       description:
@@ -222,5 +222,332 @@ class Resturant {
         ),
       ],
     ),
+    FoodModel(
+      name: 'Sweet Potato Fries',
+      description: 'Crispy sweet potato fries with a touch of salt.',
+      imagePath: 'assets/sides/side1.png',
+      price: 4.99,
+      catagory: FoodCatagory.sides,
+      availableAddon: [
+        Addon(
+          name: 'Cheese Sauce',
+          price: 0.99,
+        ),
+        Addon(
+          name: 'Truffle Iol',
+          price: 1.49,
+        ),
+        Addon(
+          name: 'Cajun Spice',
+          price: 1.99,
+        ),
+      ],
+    ),
+    FoodModel(
+      name: 'Onion Rings',
+      description: 'Golden and crispy onion rings, perfect for dipping.',
+      imagePath: 'assets/sides/side2.png',
+      price: 3.99,
+      catagory: FoodCatagory.sides,
+      availableAddon: [
+        Addon(
+          name: 'Ranch Dip',
+          price: 0.99,
+        ),
+        Addon(
+          name: 'Spicy Mayo',
+          price: 1.49,
+        ),
+        Addon(
+          name: 'Permesan Dust',
+          price: 1.99,
+        ),
+      ],
+    ),
+    FoodModel(
+      name: 'Garlic Bread',
+      description:
+          'Warm and toasty garlic bread, topped eith melted butter and parsley',
+      imagePath: 'assets/sides/side3.png',
+      price: 4.99,
+      catagory: FoodCatagory.sides,
+      availableAddon: [
+        Addon(
+          name: 'Extra Garlic',
+          price: 0.99,
+        ),
+        Addon(
+          name: 'Mozzarella Cheese',
+          price: 1.49,
+        ),
+        Addon(
+          name: 'Marinara Dip',
+          price: 1.99,
+        ),
+      ],
+    ),
+    FoodModel(
+      name: 'Loaded Sweet Potato Fries',
+      description:
+          'Savory sweet potato fries with melted cheese, smoky bacon bits, and a dollop of salt.',
+      imagePath: 'assets/sides/side4.png',
+      price: 4.99,
+      catagory: FoodCatagory.sides,
+      availableAddon: [
+        Addon(
+          name: 'Saur Cream',
+          price: 0.99,
+        ),
+        Addon(
+          name: 'Bacon Bits',
+          price: 1.49,
+        ),
+        Addon(
+          name: 'Green Onions',
+          price: 1.99,
+        ),
+      ],
+    ),
+    FoodModel(
+      name: 'Crispy Mac & Cheese Bites',
+      description:
+          'Golden brown, bite-sized mac and cheese balls, perfect for on-the-go snacking. Served with sauce.',
+      imagePath: 'assets/sides/side5.png',
+      price: 3.99,
+      catagory: FoodCatagory.sides,
+      availableAddon: [
+        Addon(
+          name: 'Bacon Bits',
+          price: 0.99,
+        ),
+        Addon(
+          name: 'Jalepeno Slices',
+          price: 1.49,
+        ),
+        Addon(
+          name: 'Sriracha Drizzle',
+          price: 1.99,
+        ),
+      ],
+    ),
+    FoodModel(
+      name: 'Chocolate Brownie',
+      description:
+          'Rich and fudgy chocolate brownie, with chunks of chocolate.',
+      imagePath: 'assets/desserts/dessert1.png',
+      price: 3.99,
+      catagory: FoodCatagory.desserts,
+      availableAddon: [
+        Addon(
+          name: 'Vanilla Ice Cream',
+          price: 0.99,
+        ),
+        Addon(
+          name: 'Hot Fudge',
+          price: 1.49,
+        ),
+        Addon(
+          name: 'Whipped Cream',
+          price: 1.99,
+        ),
+      ],
+    ),
+    FoodModel(
+      name: 'Cheesecake',
+      description:
+          'Creamy cheesecake on a grahm cracker crust, eith a berry compote.',
+      imagePath: 'assets/desserts/dessert2.png',
+      price: 3.99,
+      catagory: FoodCatagory.desserts,
+      availableAddon: [
+        Addon(
+          name: 'Strawberry Topping',
+          price: 0.99,
+        ),
+        Addon(
+          name: 'Blueberry Compote',
+          price: 1.49,
+        ),
+        Addon(
+          name: 'Chocolate Chips',
+          price: 1.99,
+        ),
+      ],
+    ),
+    FoodModel(
+      name: 'Apple Pie',
+      description:
+          'Classic apple pie with a flaky crust and a cinnamon-spiced apple filling.',
+      imagePath: 'assets/desserts/dessert3.png',
+      price: 3.99,
+      catagory: FoodCatagory.desserts,
+      availableAddon: [
+        Addon(
+          name: 'Caramel Sauce',
+          price: 0.99,
+        ),
+        Addon(
+          name: 'Vanilla Ice Cream',
+          price: 1.49,
+        ),
+        Addon(
+          name: 'Cinnamon Spice',
+          price: 1.99,
+        ),
+      ],
+    ),
+    FoodModel(
+      name: 'Red Velvet lava Cake',
+      description:
+          'A delectable red velvet cake with a warm, goey chocolate lava center, served with a dessert.',
+      imagePath: 'assets/desserts/dessert4.png',
+      price: 3.99,
+      catagory: FoodCatagory.desserts,
+      availableAddon: [
+        Addon(
+          name: 'Raspberry Sauce',
+          price: 0.99,
+        ),
+        Addon(
+          name: 'Cream Cheese Icing',
+          price: 1.49,
+        ),
+        Addon(
+          name: 'Chocolate Sprinkles',
+          price: 1.99,
+        ),
+      ],
+    ),
+    FoodModel(
+      name: 'Pineapple Cake',
+      description: 'A pineapple cake added with sugerfree sweetness.',
+      imagePath: 'assets/desserts/dessert5.png',
+      price: 3.99,
+      catagory: FoodCatagory.desserts,
+      availableAddon: [
+        Addon(
+          name: 'Raspberry Sauce',
+          price: 0.99,
+        ),
+        Addon(
+          name: 'Cream Cheese Icing',
+          price: 1.49,
+        ),
+        Addon(
+          name: 'Chocolate Sprinkles',
+          price: 1.99,
+        ),
+      ],
+    ),
+    FoodModel(
+      name: 'Lemonade',
+      description:
+          'Refreshing lemonade made with real lemons and a touch of sweetness.',
+      imagePath: 'assets/drinks/drink1.png',
+      price: 3.99,
+      catagory: FoodCatagory.drinks,
+      availableAddon: [
+        Addon(
+          name: 'Strawberry Flavor',
+          price: 0.99,
+        ),
+        Addon(
+          name: 'Mont Leaves',
+          price: 1.49,
+        ),
+        Addon(
+          name: 'Ginger Zest',
+          price: 1.99,
+        ),
+      ],
+    ),
+    FoodModel(
+      name: 'Iced Tea',
+      description: 'Chilled iced tea with a hint of lemon, served over ice.',
+      imagePath: 'assets/drinks/drink2.png',
+      price: 3.99,
+      catagory: FoodCatagory.drinks,
+      availableAddon: [
+        Addon(
+          name: 'Peach Flavor',
+          price: 0.99,
+        ),
+        Addon(
+          name: 'Lemon Slices',
+          price: 1.49,
+        ),
+        Addon(
+          name: 'Honey',
+          price: 1.99,
+        ),
+      ],
+    ),
+    FoodModel(
+      name: 'Smoothie',
+      description:
+          'A bleed of fresh friuts and yogurt, perfect for a healthy boost.',
+      imagePath: 'assets/drinks/drink3.png',
+      price: 3.99,
+      catagory: FoodCatagory.drinks,
+      availableAddon: [
+        Addon(
+          name: 'Protein Power',
+          price: 0.99,
+        ),
+        Addon(
+          name: 'Almond Milk',
+          price: 1.49,
+        ),
+        Addon(
+          name: 'Chia Seeds',
+          price: 1.99,
+        ),
+      ],
+    ),
+    FoodModel(
+      name: 'Mojito',
+      description:
+          'A classic Cuban with muddled lime and mint, sweetened with sugar.',
+      imagePath: 'assets/drinks/drink4.png',
+      price: 3.99,
+      catagory: FoodCatagory.drinks,
+      availableAddon: [
+        Addon(
+          name: 'Extra Mint',
+          price: 0.99,
+        ),
+        Addon(
+          name: 'Raspberry Puree',
+          price: 1.49,
+        ),
+        Addon(
+          name: 'Splash of Coconut Rum',
+          price: 1.99,
+        ),
+      ],
+    ),
+    FoodModel(
+      name: 'Caramel Macchiato',
+      description:
+          'A layered coffee drink with steamed milk, espresso and vanilla syrup.',
+      imagePath: 'assets/drinks/drink5.png',
+      price: 3.99,
+      catagory: FoodCatagory.drinks,
+      availableAddon: [
+        Addon(
+          name: 'EXtra Shot of Espresso',
+          price: 0.99,
+        ),
+        Addon(
+          name: 'Hazelnut Syrup',
+          price: 1.49,
+        ),
+        Addon(
+          name: 'Whipped Cream',
+          price: 1.99,
+        ),
+      ],
+    ),
   ];
+  List<FoodModel> get menu => _menu;
 }

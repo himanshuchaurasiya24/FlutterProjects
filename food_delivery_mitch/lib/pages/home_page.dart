@@ -6,6 +6,7 @@ import 'package:food_delivery_mitch/components/my_drawer.dart';
 import 'package:food_delivery_mitch/components/my_sliver_appbar.dart';
 import 'package:food_delivery_mitch/components/my_tab_bar.dart';
 import 'package:food_delivery_mitch/components/my_textformfield.dart';
+import 'package:food_delivery_mitch/models/food_model.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -20,7 +21,8 @@ class _HomePageState extends State<HomePage>
   @override
   void initState() {
     super.initState();
-    tabController = TabController(length: 3, vsync: this);
+    tabController =
+        TabController(length: FoodCatagory.values.length, vsync: this);
   }
 
   @override
@@ -100,6 +102,18 @@ class _HomePageState extends State<HomePage>
               itemCount: 5,
               itemBuilder: (context, index) {
                 return const Text('First Tab Items');
+              },
+            ),
+            ListView.builder(
+              itemCount: 5,
+              itemBuilder: (context, index) {
+                return const Text('Second Tab Items');
+              },
+            ),
+            ListView.builder(
+              itemCount: 5,
+              itemBuilder: (context, index) {
+                return const Text('Second Tab Items');
               },
             ),
             ListView.builder(
