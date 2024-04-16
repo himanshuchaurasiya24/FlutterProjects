@@ -1,6 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:food_delivery_mitch/models/food_model.dart';
 
-class Resturant {
+class Resturant extends ChangeNotifier {
   final List<FoodModel> _menu = [
     FoodModel(
       name: 'Classic Cheeseburger',

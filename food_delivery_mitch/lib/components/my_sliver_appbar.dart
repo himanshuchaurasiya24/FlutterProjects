@@ -14,7 +14,7 @@ class MySliverAppbar extends StatelessWidget {
       expandedHeight: 340,
       collapsedHeight: 120,
       floating: false,
-      pinned: true,
+      pinned: false,
       actions: [
         IconButton(
           onPressed: () {},
