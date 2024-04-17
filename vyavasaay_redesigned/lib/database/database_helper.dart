@@ -100,6 +100,15 @@ class DatabaseHelper {
     return intV;
   }
 
+  Future<List<DoctorModel>> getAllDoctorList() async {
+    final db = await initDB();
+    final List<Map<String, Object?>> result =
+        await db.rawQuery('select * from $doctorTable');
+    return result.map((e) {
+      return DoctorModel.fromMap(e);
+    }).toList();
+  }
+
 // admin
   Future<String> createAdminAccount({required AdminModel model}) async {
     final db = await initDB();

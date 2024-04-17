@@ -40,10 +40,44 @@ class _DoctorInfoState extends State<DoctorInfo> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        const Center(
-          child: Text(
-            'Doctor Info',
-          ),
+        FutureBuilder(
+          future: databaseHelper.getAllDoctorList(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            if (snapshot.hasError) {
+              return Center(
+                child: Text(
+                  'Some error occurred!',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+              );
+            }
+            if (snapshot.hasData) {
+              if (snapshot.data!.isEmpty) {
+                return Center(
+                  child: Text(
+                    'Empty Doctor List',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                );
+              }
+            }
+            return ListView.builder(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(
+                    snapshot.data![index].name,
+                  ),
+                  subtitle: Text(snapshot.data![index].address),
+                );
+              },
+            );
+          },
         ),
         Positioned(
           bottom: -10,
