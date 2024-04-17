@@ -33,9 +33,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
-        primaryTextTheme: const TextTheme(
+        textTheme: TextTheme(
           titleLarge: TextStyle(
-            color: Colors.white30,
+            color: titleLargeTextColor,
             fontSize: 40,
             fontWeight: FontWeight.bold,
           ),
@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
         iconTheme: IconThemeData(
           color: titleLargeTextColor,
         ),
-        scaffoldBackgroundColor: primaryColor,
+        scaffoldBackgroundColor: primaryColorDark,
         appBarTheme: AppBarTheme(
           backgroundColor: primaryColor,
           centerTitle: true,

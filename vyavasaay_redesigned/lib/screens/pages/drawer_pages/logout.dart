@@ -24,7 +24,6 @@ class Logout extends StatelessWidget {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     prefs.setBool('isLoggedIn', false);
-    await database.deleteEverything();
 
     navigate(context);
   }

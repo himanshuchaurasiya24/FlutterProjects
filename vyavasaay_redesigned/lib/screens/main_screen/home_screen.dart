@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:vyavasaay_redesigned/screens/model/menu_items.dart';
 import 'package:vyavasaay_redesigned/utils/constants.dart';
 
@@ -21,7 +19,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: primaryColorDark,
       body: Row(
         children: [
           background(

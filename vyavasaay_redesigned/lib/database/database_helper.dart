@@ -5,6 +5,7 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 import 'package:vyavasaay_redesigned/screens/model/admin_model.dart';
+import 'package:vyavasaay_redesigned/screens/model/doctor_model.dart';
 import 'package:vyavasaay_redesigned/screens/model/user_model.dart';
 
 Database? _database;
@@ -13,6 +14,7 @@ class DatabaseHelper {
   final databaseName = 'abcd.db';
   String adminTable = 'adminTable';
   String userTable = 'userTable';
+  String doctorTable = 'doctorTable';
   String userQuery = '''CREATE TABLE IF NOT EXISTS userTable(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT UNIQUE,
@@ -83,11 +85,29 @@ class DatabaseHelper {
     return _database!;
   }
 
+  // doctor
+  Future<int> addDoctor({required DoctorModel model}) async {
+    final db = await initDB();
+    var intV = 00;
+    await db
+        .insert(
+      doctorTable,
+      model.toMap(),
+    )
+        .then((value) {
+      intV = value;
+    });
+    return intV;
+  }
+
+// admin
   Future<String> createAdminAccount({required AdminModel model}) async {
     final db = await initDB();
+
     await db.insert(
       adminTable,
       model.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
     );
     return model.name;
   }
@@ -134,6 +154,7 @@ class DatabaseHelper {
   //   );
   //   return searchResult.map((e) => AdminModel.fromMap(e)).toList();
   // }
+  // user
   Future<void> createUserAccount({required UserModel model}) async {
     final db = await initDB();
     await db.insert(

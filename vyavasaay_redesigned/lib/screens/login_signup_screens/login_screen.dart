@@ -53,18 +53,10 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void loggedIn() async {
+  void loggedIn({required String name, required String type}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('isLoggedIn', true);
-  }
-
-  void loggedInName({required String name}) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('loggedInName', name);
-  }
-
-  void logInType({required String type}) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('logInType', type);
   }
 
@@ -167,9 +159,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                         final model = await database.getAdmin(
                                             name: nameController.text);
                                         final name = model!.name;
-                                        loggedIn();
-                                        loggedInName(name: name);
-                                        logInType(type: 'admin');
+                                        loggedIn(name: name, type: 'admin');
+
                                         Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
@@ -194,9 +185,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                         final model = await database.getUser(
                                             name: nameController.text);
                                         final name = model!.name;
-                                        loggedIn();
-                                        loggedInName(name: name);
-                                        logInType(type: 'user');
+                                        loggedIn(name: name, type: 'user');
+
                                         Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(

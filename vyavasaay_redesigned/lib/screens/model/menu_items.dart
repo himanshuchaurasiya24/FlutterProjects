@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:vyavasaay_redesigned/screens/model/menu_details.dart';
-import 'package:vyavasaay_redesigned/screens/pages/about_this_app.dart';
-import 'package:vyavasaay_redesigned/screens/pages/access_control.dart';
-import 'package:vyavasaay_redesigned/screens/pages/account_details.dart';
-import 'package:vyavasaay_redesigned/screens/pages/dashboard.dart';
-import 'package:vyavasaay_redesigned/screens/pages/diagnosis_history.dart';
-import 'package:vyavasaay_redesigned/screens/pages/doctor_info.dart';
-import 'package:vyavasaay_redesigned/screens/pages/generate_report.dart';
-import 'package:vyavasaay_redesigned/screens/pages/login_history.dart';
-import 'package:vyavasaay_redesigned/screens/pages/logout.dart';
+import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/about_this_app.dart';
+import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/access_control.dart';
+import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/account_details.dart';
+import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/dashboard.dart';
+import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/diagnosis_history.dart';
+import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/doctor_info.dart';
+import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/generate_report.dart';
+import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/login_history.dart';
+import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/logout.dart';
 
 class MenuItems {
   List<MenuDetails> adminMenuItems = [
@@ -25,7 +25,7 @@ class MenuItems {
     MenuDetails(
       title: 'Doctor Info',
       icon: Icons.person_outlined,
-      child: const DoctorInfo(),
+      child: DoctorInfo(),
     ),
     MenuDetails(
       title: 'Diagnosis History',
@@ -72,7 +72,7 @@ class MenuItems {
     MenuDetails(
       title: 'Doctor Info',
       icon: Icons.person_outlined,
-      child: const DoctorInfo(),
+      child: DoctorInfo(),
     ),
     MenuDetails(
       title: 'Diagnosis History',

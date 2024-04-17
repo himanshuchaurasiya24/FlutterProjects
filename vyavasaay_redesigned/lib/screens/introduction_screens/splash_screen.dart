@@ -69,21 +69,21 @@ class _SplashScreenState extends State<SplashScreen> {
             );
           },
         );
-        return;
+      } else {
+        Timer(
+          const Duration(seconds: 1),
+          () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return const LoginScreen();
+                },
+              ),
+            );
+          },
+        );
       }
-      Timer(
-        const Duration(seconds: 1),
-        () {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                return const LoginScreen();
-              },
-            ),
-          );
-        },
-      );
     } else {
       Timer(
         const Duration(seconds: 1),
