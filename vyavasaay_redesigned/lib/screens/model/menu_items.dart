@@ -9,6 +9,7 @@ import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/doctor_info.dart
 import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/generate_report.dart';
 import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/login_history.dart';
 import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/logout.dart';
+import 'package:vyavasaay_redesigned/screens/pages/generate_bill.dart';
 
 class MenuItems {
   List<MenuDetails> adminMenuItems = [
@@ -18,6 +19,11 @@ class MenuItems {
       child: const Dashboard(),
     ),
     MenuDetails(
+      title: 'Generate Bill',
+      icon: Icons.report_outlined,
+      child: const BillHistory(),
+    ),
+    MenuDetails(
       title: 'Generate Report',
       icon: Icons.report_outlined,
       child: const GenerateReport(),
@@ -25,7 +31,7 @@ class MenuItems {
     MenuDetails(
       title: 'Doctor Info',
       icon: Icons.person_outlined,
-      child: DoctorInfo(),
+      child: const DoctorInfo(),
     ),
     MenuDetails(
       title: 'Diagnosis History',

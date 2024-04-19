@@ -8,6 +8,7 @@ import 'package:vyavasaay_redesigned/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 late SharedPreferences pref;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   pref = await SharedPreferences.getInstance();

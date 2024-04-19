@@ -10,6 +10,7 @@ class CustomTextField extends StatelessWidget {
     this.keyboardType,
     this.passwordController,
     this.isConfirm,
+    this.readOnly,
   });
 
   final TextEditingController controller;
@@ -18,13 +19,14 @@ class CustomTextField extends StatelessWidget {
   final TextInputType? keyboardType;
   final TextEditingController? passwordController;
   final bool? isConfirm;
-
+  final bool? readOnly;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
       keyboardType: keyboardType,
       obscureText: isObscure ?? false,
+      readOnly: readOnly ?? false,
       style: TextStyle(
         color: titleLargeTextColor,
       ),

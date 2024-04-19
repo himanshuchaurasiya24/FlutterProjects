@@ -34,6 +34,7 @@ class _SplashScreenState extends State<SplashScreen> {
     if (adminActLength == 0) {
       prefs.setBool('isIntrodu', false);
       prefs.setBool('isLoggedIn', false);
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(

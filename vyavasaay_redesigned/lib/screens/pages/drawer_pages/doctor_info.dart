@@ -28,7 +28,6 @@ class _DoctorInfoState extends State<DoctorInfo> {
 
   final List<String> sexType = ['Male', 'Female', 'Others'];
 
-  String selectedSex = 'Male';
   DatabaseHelper databaseHelper = DatabaseHelper();
   @override
   void initState() {
@@ -80,8 +79,8 @@ class _DoctorInfoState extends State<DoctorInfo> {
           },
         ),
         Positioned(
-          bottom: -10,
-          left: 225,
+          bottom: 10,
+          right: 0,
           child: GestureDetector(
             onTap: () async {
               addDoctorDialog(
@@ -90,11 +89,21 @@ class _DoctorInfoState extends State<DoctorInfo> {
             },
             child: DefaultContainer(
               height: MediaQuery.of(context).size.height * 0.1,
-              width: MediaQuery.of(context).size.width * 0.5,
+              width: 260,
+              boxShadow: [
+                BoxShadow(
+                  color: primaryColorDark,
+                  blurStyle: BlurStyle.outer,
+                  blurRadius: 50,
+                  spreadRadius: 0.5,
+                ),
+              ],
               child: Center(
                 child: Text(
                   'Add a doctor',
-                  style: Theme.of(context).textTheme.titleLarge,
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                        fontSize: 28,
+                      ),
                 ),
               ),
             ),
@@ -146,33 +155,31 @@ class _DoctorInfoState extends State<DoctorInfo> {
                       ),
                       Gap(defaultSize),
                       Expanded(
-                        flex: 1,
-                        child: DropdownMenu<String>(
-                          inputDecorationTheme: InputDecorationTheme(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(
-                                defaultSize,
-                              ),
-                              borderSide: BorderSide.none,
+                          child: DropdownButtonFormField(
+                        dropdownColor: primaryColor,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(
+                              defaultSize,
                             ),
-                            filled: true,
-                            fillColor: primaryColor,
+                            borderSide: BorderSide.none,
                           ),
-                          initialSelection: sexType.first,
-                          onSelected: (String? value) {
-                            setState(() {
-                              selectedSex = value!;
-                            });
-                          },
-                          dropdownMenuEntries: sexType
-                              .map<DropdownMenuEntry<String>>((String value) {
-                            return DropdownMenuEntry<String>(
-                              value: value,
-                              label: value,
-                            );
-                          }).toList(),
+                          fillColor: primaryColor,
+                          filled: true,
                         ),
-                      ),
+                        value: sexType.first,
+                        items: sexType.map((String value) {
+                          return DropdownMenuItem(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            docSexController.text = value!;
+                          });
+                        },
+                      )),
                     ],
                   ),
                   Gap(defaultSize),

@@ -8,12 +8,13 @@ class DefaultContainer extends StatelessWidget {
     this.width,
     this.color,
     this.height,
+    this.boxShadow,
   });
   final Widget child;
   final double? width;
   final double? height;
   final Color? color;
-
+  final List<BoxShadow>? boxShadow;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -26,6 +27,7 @@ class DefaultContainer extends StatelessWidget {
           borderRadius: BorderRadius.circular(
             defaultSize,
           ),
+          boxShadow: boxShadow,
         ),
         child: child,
       ),
