@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 import 'package:vyavasaay_redesigned/database/database_helper.dart';
 import 'package:vyavasaay_redesigned/screens/model/doctor_model.dart';
@@ -38,6 +39,7 @@ class _BillHistoryState extends State<BillHistory> {
   TextEditingController doctorNameController = TextEditingController();
   TextEditingController patientAddressController = TextEditingController();
   TextEditingController patientPhoneController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
   final List<String> diagnosisType = [
     'Ultrasound',
     'Pathology',
@@ -51,7 +53,7 @@ class _BillHistoryState extends State<BillHistory> {
       builder: (context) {
         return Dialog(
           child: Container(
-            height: getDeviceHeight(context: context) * 0.6,
+            height: getDeviceHeight(context: context) * 0.7,
             width: getDeviceWidth(context: context) * 0.6,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(
@@ -63,80 +65,83 @@ class _BillHistoryState extends State<BillHistory> {
               padding: EdgeInsets.all(
                 defaultSize,
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: CustomTextField(
-                          controller: patientNameContoller,
-                          hintText: 'Patient Name',
-                        ),
-                      ),
-                      Gap(defaultSize),
-                      Expanded(
-                          child: DropdownButtonFormField(
-                        dropdownColor: primaryColor,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                              defaultSize,
-                            ),
-                            borderSide: BorderSide.none,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: CustomTextField(
+                            controller: patientNameContoller,
+                            hintText: 'Patient Name',
                           ),
-                          fillColor: primaryColor,
-                          filled: true,
                         ),
-                        value: sexType.first,
-                        items: sexType.map((String value) {
-                          return DropdownMenuItem(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            patientSexContoller.text = value!;
-                          });
-                        },
-                      )),
-                      Gap(defaultSize),
-                      Expanded(
-                        flex: 1,
-                        child: CustomTextField(
-                          controller: patientAgeContoller,
-                          hintText: 'Patient Age',
-                          keyboardType: TextInputType.number,
+                        Gap(defaultSize),
+                        Expanded(
+                            child: DropdownButtonFormField(
+                          dropdownColor: primaryColor,
+                          borderRadius: BorderRadius.circular(defaultSize),
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(
+                                defaultSize,
+                              ),
+                              borderSide: BorderSide.none,
+                            ),
+                            fillColor: primaryColor,
+                            filled: true,
+                          ),
+                          value: sexType.first,
+                          items: sexType.map((String value) {
+                            return DropdownMenuItem(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              patientSexContoller.text = value!;
+                            });
+                          },
+                        )),
+                        Gap(defaultSize),
+                        Expanded(
+                          flex: 1,
+                          child: CustomTextField(
+                            controller: patientAgeContoller,
+                            hintText: 'Patient Age',
+                            keyboardType: TextInputType.number,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  Gap(defaultSize),
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: CustomTextField(
-                            controller: patientPhoneController,
-                            hintText: 'Patient Phone'),
-                      ),
-                      Gap(defaultSize),
-                      Expanded(
-                        flex: 2,
-                        child: CustomTextField(
-                          controller: patientAddressController,
-                          hintText: 'Patient Address',
+                      ],
+                    ),
+                    Gap(defaultSize),
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: CustomTextField(
+                              controller: patientPhoneController,
+                              hintText: 'Patient Phone'),
                         ),
-                      ),
-                      Gap(defaultSize),
-                      Expanded(
+                        Gap(defaultSize),
+                        Expanded(
+                          flex: 2,
+                          child: CustomTextField(
+                            controller: patientAddressController,
+                            hintText: 'Patient Address',
+                          ),
+                        ),
+                        Gap(defaultSize),
+                        Expanded(
                           flex: 1,
                           child: DropdownButtonFormField(
                             dropdownColor: primaryColor,
+                            borderRadius: BorderRadius.circular(defaultSize),
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(
@@ -159,75 +164,125 @@ class _BillHistoryState extends State<BillHistory> {
                                 diagnosisTypeContoller.text = value!;
                               });
                             },
-                          )),
-                    ],
-                  ),
-                  Gap(defaultSize),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: CustomTextField(
-                          controller: diagnosisRemarkContoller,
-                          hintText: 'Diagnosis Remark',
+                          ),
                         ),
-                      ),
-                      Gap(defaultSize),
-                      Expanded(
-                        child: CustomTextField(
-                          controller: doctorNameController,
-                          hintText: 'Doctor Name',
-                        ),
-                      ),
-                    ],
-                  ),
-                  Gap(defaultSize),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: CustomTextField(
-                          controller: totalAmountContoller,
-                          hintText: 'Total Amount',
-                          keyboardType: TextInputType.number,
-                        ),
-                      ),
-                      Gap(defaultSize),
-                      Expanded(
-                        child: CustomTextField(
-                          controller: paidAmountContoller,
-                          hintText: 'Paid Amount',
-                          keyboardType: TextInputType.number,
-                        ),
-                      ),
-                      Gap(defaultSize),
-                      Expanded(
-                        child: CustomTextField(
-                          readOnly: true,
-                          controller: incentiveContoller,
-                          hintText: 'Incentive',
-                          keyboardType: TextInputType.number,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Gap(defaultSize),
-                  GestureDetector(
-                    onTap: () async {},
-                    child: Container(
-                      height: getDeviceHeight(context: context) * 0.1,
-                      width: getDeviceWidth(context: context),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(defaultSize),
-                        color: primaryColor,
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Add Doctor',
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                      ),
+                      ],
                     ),
-                  )
-                ],
+                    Gap(defaultSize),
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: CustomTextField(
+                            controller: doctorNameController,
+                            hintText: 'Select doctor',
+                            readOnly: true,
+                          ),
+                        ),
+                        Gap(defaultSize / 2),
+                        Expanded(
+                          flex: 1,
+                          child: CircleAvatar(
+                            radius: 28,
+                            backgroundColor: primaryColor,
+                            foregroundColor: titleLargeTextColor,
+                            child: const Icon(
+                              Icons.search_outlined,
+                              size: 40,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 50,
+                          child: VerticalDivider(
+                            color: primaryColor,
+                            thickness: 4,
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: CircleAvatar(
+                            radius: 28,
+                            backgroundColor: primaryColor,
+                            foregroundColor: titleLargeTextColor,
+                            child: const Icon(
+                              Icons.calendar_month_outlined,
+                              size: 40,
+                            ),
+                          ),
+                        ),
+                        Gap(defaultSize / 2),
+                        Expanded(
+                          flex: 3,
+                          child: CustomTextField(
+                            controller: dateController,
+                            hintText: 'Select date',
+                            readOnly: true,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Gap(defaultSize),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: CustomTextField(
+                            maxLines: 3,
+                            controller: diagnosisRemarkContoller,
+                            hintText: 'Diagnosis Remark',
+                          ),
+                        ),
+                      ],
+                    ),
+                    Gap(defaultSize),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: CustomTextField(
+                            controller: totalAmountContoller,
+                            hintText: 'Total Amount',
+                            keyboardType: TextInputType.number,
+                          ),
+                        ),
+                        Gap(defaultSize),
+                        Expanded(
+                          child: CustomTextField(
+                            controller: paidAmountContoller,
+                            hintText: 'Paid Amount',
+                            keyboardType: TextInputType.number,
+                          ),
+                        ),
+                        Gap(defaultSize),
+                        Expanded(
+                          child: CustomTextField(
+                            readOnly: true,
+                            controller: incentiveContoller,
+                            hintText: 'Incentive',
+                            keyboardType: TextInputType.number,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Gap(defaultSize),
+                    GestureDetector(
+                      onTap: () async {},
+                      child: Container(
+                        height: getDeviceHeight(context: context) * 0.1,
+                        width: getDeviceWidth(context: context),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(defaultSize),
+                          color: primaryColor,
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Add Doctor',
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ),

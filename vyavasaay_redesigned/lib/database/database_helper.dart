@@ -46,10 +46,19 @@ class DatabaseHelper {
     doctor INT,
     type TEXT,
     remark TEXT,
+    technician TEXT,
     totalAmount INT,
     paidAmount INT,
-    docAmount INT,
+    incentive INT,
     percent INT
+  )
+''';
+  String loginHistory = '''CREATE TABLE IF NOT EXISTS loginHistory(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    personId INT,
+    name TEXT,
+    time TEXT,
+    type TEXT
   )
 ''';
   Future<Database> initDB() async {
