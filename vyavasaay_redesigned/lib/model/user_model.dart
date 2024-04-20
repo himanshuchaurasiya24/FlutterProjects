@@ -1,25 +1,25 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-class AdminModel {
+class UserModel {
   int? id;
   String name;
-  int phoneNumber;
+  String phoneNumber;
   String password;
-  AdminModel({
+  UserModel({
     this.id,
     required this.name,
     required this.phoneNumber,
     required this.password,
   });
 
-  AdminModel copyWith({
+  UserModel copyWith({
     int? id,
     String? name,
-    int? phoneNumber,
+    String? phoneNumber,
     String? password,
   }) {
-    return AdminModel(
+    return UserModel(
       id: id ?? this.id,
       name: name ?? this.name,
       phoneNumber: phoneNumber ?? this.phoneNumber,
@@ -36,27 +36,27 @@ class AdminModel {
     };
   }
 
-  factory AdminModel.fromMap(Map<String, dynamic> map) {
-    return AdminModel(
+  factory UserModel.fromMap(Map<String, dynamic> map) {
+    return UserModel(
       id: map['id'] != null ? map['id'] as int : null,
       name: map['name'] as String,
-      phoneNumber: map['phoneNumber'] as int,
+      phoneNumber: map['phoneNumber'] as String,
       password: map['password'] as String,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory AdminModel.fromJson(String source) =>
-      AdminModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory UserModel.fromJson(String source) =>
+      UserModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
-    return 'AdminModel(id: $id, name: $name, phoneNumber: $phoneNumber, password: $password)';
+    return 'UserModel(id: $id, name: $name, phoneNumber: $phoneNumber, password: $password)';
   }
 
   @override
-  bool operator ==(covariant AdminModel other) {
+  bool operator ==(covariant UserModel other) {
     if (identical(this, other)) return true;
 
     return other.id == id &&

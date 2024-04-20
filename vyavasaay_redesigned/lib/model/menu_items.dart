@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:vyavasaay_redesigned/screens/model/menu_details.dart';
+import 'package:vyavasaay_redesigned/model/menu_details.dart';
 import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/about_this_app.dart';
 import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/access_control.dart';
 import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/account_details.dart';
 import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/dashboard.dart';
 import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/diagnosis_history.dart';
 import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/doctor_info.dart';
+import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/bill_history.dart';
 import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/generate_report.dart';
 import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/login_history.dart';
 import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/logout.dart';
-import 'package:vyavasaay_redesigned/screens/pages/generate_bill.dart';
 
 class MenuItems {
   List<MenuDetails> adminMenuItems = [
@@ -19,7 +19,7 @@ class MenuItems {
       child: const Dashboard(),
     ),
     MenuDetails(
-      title: 'Generate Bill',
+      title: 'Generate Bills',
       icon: Icons.report_outlined,
       child: const BillHistory(),
     ),
@@ -78,7 +78,7 @@ class MenuItems {
     MenuDetails(
       title: 'Doctor Info',
       icon: Icons.person_outlined,
-      child: DoctorInfo(),
+      child: const DoctorInfo(),
     ),
     MenuDetails(
       title: 'Diagnosis History',

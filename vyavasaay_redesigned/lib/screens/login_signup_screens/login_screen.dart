@@ -21,6 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
   DatabaseHelper database = DatabaseHelper();
   Color containerColor = primaryColor;
   bool isAdminLogin = false;
+
   void showBanner(BuildContext context) {
     ScaffoldMessenger.of(context).showMaterialBanner(
       MaterialBanner(

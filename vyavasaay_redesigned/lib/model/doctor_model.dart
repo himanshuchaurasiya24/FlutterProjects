@@ -6,9 +6,13 @@ class DoctorModel {
   final String name;
   final int age;
   final String sex;
-  final int phone;
+  final String phone;
   final String address;
-  final int percent;
+  final int ultrasound;
+
+  final int pathology;
+  final int ecg;
+  final int xray;
 
   DoctorModel({
     this.id,
@@ -17,7 +21,10 @@ class DoctorModel {
     required this.sex,
     required this.phone,
     required this.address,
-    required this.percent,
+    required this.ultrasound,
+    required this.pathology,
+    required this.ecg,
+    required this.xray,
   });
 
   DoctorModel copyWith({
@@ -25,9 +32,12 @@ class DoctorModel {
     String? name,
     int? age,
     String? sex,
-    int? phone,
+    String? phone,
     String? address,
-    int? percent,
+    int? ultrasound,
+    int? pathology,
+    int? ecg,
+    int? xray,
   }) {
     return DoctorModel(
       id: id ?? this.id,
@@ -36,7 +46,10 @@ class DoctorModel {
       sex: sex ?? this.sex,
       phone: phone ?? this.phone,
       address: address ?? this.address,
-      percent: percent ?? this.percent,
+      ultrasound: ultrasound ?? this.ultrasound,
+      pathology: pathology ?? this.pathology,
+      ecg: ecg ?? this.ecg,
+      xray: xray ?? this.xray,
     );
   }
 
@@ -48,7 +61,10 @@ class DoctorModel {
       'sex': sex,
       'phone': phone,
       'address': address,
-      'percent': percent,
+      'ultrasound': ultrasound,
+      'pathology': pathology,
+      'ecg': ecg,
+      'xray': xray,
     };
   }
 
@@ -58,9 +74,12 @@ class DoctorModel {
       name: map['name'] as String,
       age: map['age'] as int,
       sex: map['sex'] as String,
-      phone: map['phone'] as int,
+      phone: map['phone'] as String,
       address: map['address'] as String,
-      percent: map['percent'] as int,
+      ultrasound: map['ultrasound'] as int,
+      pathology: map['pathology'] as int,
+      ecg: map['ecg'] as int,
+      xray: map['xray'] as int,
     );
   }
 
@@ -71,7 +90,7 @@ class DoctorModel {
 
   @override
   String toString() {
-    return 'DoctorModel(id: $id, name: $name, age: $age, sex: $sex, phone: $phone, address: $address, percent: $percent)';
+    return 'DoctorModel(id: $id, name: $name, age: $age, sex: $sex, phone: $phone, address: $address, ultrasound: $ultrasound, pathology: $pathology, ecg: $ecg, xray: $xray)';
   }
 
   @override
@@ -84,7 +103,10 @@ class DoctorModel {
         other.sex == sex &&
         other.phone == phone &&
         other.address == address &&
-        other.percent == percent;
+        other.ultrasound == ultrasound &&
+        other.pathology == pathology &&
+        other.ecg == ecg &&
+        other.xray == xray;
   }
 
   @override
@@ -95,6 +117,9 @@ class DoctorModel {
         sex.hashCode ^
         phone.hashCode ^
         address.hashCode ^
-        percent.hashCode;
+        ultrasound.hashCode ^
+        pathology.hashCode ^
+        ecg.hashCode ^
+        xray.hashCode;
   }
 }

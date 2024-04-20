@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vyavasaay_redesigned/database/database_helper.dart';
 import 'package:vyavasaay_redesigned/screens/login_signup_screens/login_screen.dart';
-import 'package:vyavasaay_redesigned/screens/model/admin_model.dart';
+import 'package:vyavasaay_redesigned/model/admin_model.dart';
 
 import 'package:vyavasaay_redesigned/utils/constants.dart';
 import 'package:vyavasaay_redesigned/widgets/custom_textfield.dart';
@@ -147,9 +147,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     .createAdminAccount(
                                       model: AdminModel(
                                         name: nameController.text,
-                                        phoneNumber: int.tryParse(
-                                          phoneController.text,
-                                        )!,
+                                        phoneNumber: phoneController.text,
                                         password: passwordController.text,
                                       ),
                                     )

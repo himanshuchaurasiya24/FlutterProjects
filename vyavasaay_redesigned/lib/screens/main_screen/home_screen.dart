@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vyavasaay_redesigned/screens/model/menu_items.dart';
+import 'package:vyavasaay_redesigned/model/menu_items.dart';
 import 'package:vyavasaay_redesigned/utils/constants.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -16,6 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final userMenuItems = MenuItems().usersMenuItems;
   int currentIndex = 0;
   bool isSelected = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

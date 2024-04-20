@@ -4,27 +4,27 @@ import 'package:flutter/foundation.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
-import 'package:vyavasaay_redesigned/screens/model/admin_model.dart';
-import 'package:vyavasaay_redesigned/screens/model/doctor_model.dart';
-import 'package:vyavasaay_redesigned/screens/model/user_model.dart';
+import 'package:vyavasaay_redesigned/model/admin_model.dart';
+import 'package:vyavasaay_redesigned/model/doctor_model.dart';
+import 'package:vyavasaay_redesigned/model/user_model.dart';
 
 Database? _database;
 
 class DatabaseHelper {
-  final databaseName = 'abcd.db';
+  final databaseName = 'abcdef.db';
   String adminTable = 'adminTable';
   String userTable = 'userTable';
   String doctorTable = 'doctorTable';
   String userQuery = '''CREATE TABLE IF NOT EXISTS userTable(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT UNIQUE,
-    phoneNumber INT,
+    phoneNumber TEXT,
     password TEXT
   )''';
   String adminQuery = '''CREATE TABLE IF NOT EXISTS adminTable(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT UNIQUE,
-    phoneNumber INT,
+    phoneNumber TEXT,
     password TEXT
   )''';
   String doctorQuery = '''CREATE TABLE IF NOT EXISTS doctorTable(
@@ -32,9 +32,12 @@ class DatabaseHelper {
     name TEXT,
     age INT,
     sex TEXT,
-    phone INT,
+    phone TEXT,
     address TEXT,
-    percent INT
+    ultrasound INT
+    pathology INT
+    ecg INT
+    xray INT
   )
 ''';
   String patientQuery = '''CREATE TABLE IF NOT EXISTS patientTable(
@@ -118,6 +121,15 @@ class DatabaseHelper {
     }).toList();
   }
 
+  Future<List<DoctorModel>> searchDoctor({required String name}) async {
+    final db = await initDB();
+    final List<Map<String, Object?>> result = await db
+        .query(doctorTable, where: 'name LIKE ?', whereArgs: ['%$name%']);
+    return result.map((e) {
+      return DoctorModel.fromMap(e);
+    }).toList();
+  }
+
 // admin
   Future<String> createAdminAccount({required AdminModel model}) async {
     final db = await initDB();
@@ -164,15 +176,6 @@ class DatabaseHelper {
     return result.length;
   }
 
-  // Future<List<AdminModel>> getAdminInfo({required String name}) async {
-  //   final db = await initDB();
-  //   final List<Map<String, Object?>> searchResult = await db.rawQuery(
-  //     'select * from adminTable where name LIKE ?',
-  //     ["%$name%"],
-  //   );
-  //   return searchResult.map((e) => AdminModel.fromMap(e)).toList();
-  // }
-  // user
   Future<void> createUserAccount({required UserModel model}) async {
     final db = await initDB();
     await db.insert(
@@ -214,18 +217,11 @@ class DatabaseHelper {
         await db.rawQuery('SELECT * FROM $userTable');
     return result.length;
   }
-  // Future<List<UserModel>> getUserInfo({required String name}) async {
-  //   final db = await initDB();
-  //   final List<Map<String, Object?>> searchResult = await db.rawQuery(
-  //     'select * from userTable where name LIKE ?',
-  //     ["%$name%"],
-  //   );
-  //   return searchResult.map((e) => UserModel.fromMap(e)).toList();
-  // }
 
   Future<void> deleteEverything() async {
     final db = await initDB();
     await db.rawDelete('DELETE FROM $adminTable');
     await db.rawDelete('DELETE FROM $userTable');
+    await db.rawDelete('DELETE FROM $doctorTable');
   }
 }

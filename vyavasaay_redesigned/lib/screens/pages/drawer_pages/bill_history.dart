@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:gap/gap.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vyavasaay_redesigned/database/database_helper.dart';
-import 'package:vyavasaay_redesigned/screens/model/doctor_model.dart';
+import 'package:vyavasaay_redesigned/model/doctor_model.dart';
 import 'package:vyavasaay_redesigned/utils/constants.dart';
+import 'package:vyavasaay_redesigned/widgets/custom_selector_circle.dart';
 import 'package:vyavasaay_redesigned/widgets/custom_textfield.dart';
 import 'package:vyavasaay_redesigned/widgets/default_container.dart';
 
@@ -19,13 +21,25 @@ class _BillHistoryState extends State<BillHistory> {
   final List<String> sexType = ['Male', 'Female', 'Others'];
 
   String selectedSex = 'Male';
+  void getReportGeneratedByData() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    reportGeneratedByController.text = pref.getString('loggedInName')!;
+  }
+
   @override
   void initState() {
     super.initState();
 
-    databaseHelper.initDB().whenComplete(() {
-      doctorList = databaseHelper.getAllDoctorList();
-    });
+    databaseHelper.initDB();
+    getReportGeneratedByData();
+  }
+
+  Future<List<DoctorModel>> searchDoctor(String name) {
+    if (name.trim().isEmpty) {
+      return databaseHelper.getAllDoctorList();
+    } else {
+      return databaseHelper.searchDoctor(name: name);
+    }
   }
 
   TextEditingController patientNameContoller = TextEditingController();
@@ -40,21 +54,117 @@ class _BillHistoryState extends State<BillHistory> {
   TextEditingController patientAddressController = TextEditingController();
   TextEditingController patientPhoneController = TextEditingController();
   TextEditingController dateController = TextEditingController();
+  TextEditingController reportGeneratedByController = TextEditingController();
   final List<String> diagnosisType = [
     'Ultrasound',
     'Pathology',
     'ECG',
     'X-Ray'
   ];
-  late Future<List<DoctorModel>> doctorList;
+
+  void showDoctorSelector(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          child: Container(
+            height: getDeviceHeight(context: context) * 0.8,
+            width: getDeviceWidth(context: context) * 0.8,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(
+                defaultSize,
+              ),
+              color: primaryColorDark,
+            ),
+            child: ListView(
+              children: [
+                Gap(defaultSize),
+                SizedBox(
+                  height: getDeviceHeight(context: context) * 0.74,
+                  width: getDeviceWidth(context: context) * 0.8,
+                  child: FutureBuilder(
+                    future: databaseHelper.getAllDoctorList(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      if (snapshot.hasError) {
+                        return Center(
+                          child: Text(
+                            'Some error occurred!',
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                        );
+                      }
+                      if (snapshot.hasData) {
+                        if (snapshot.data!.isEmpty) {
+                          return Center(
+                            child: Text(
+                              'Empty Doctor List',
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
+                          );
+                        }
+                      }
+                      return ListView.builder(
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              doctorNameController.text =
+                                  snapshot.data![index].name;
+                              Navigator.pop(context);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 6, vertical: 6),
+                              child: Card(
+                                color: primaryColor,
+                                elevation: 1,
+                                child: Padding(
+                                  padding: EdgeInsets.all(defaultSize),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        snapshot.data![index].name,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium,
+                                      ),
+                                      Text(
+                                        snapshot.data![index].address,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   void showGenerateNewBill(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) {
         return Dialog(
           child: Container(
-            height: getDeviceHeight(context: context) * 0.7,
-            width: getDeviceWidth(context: context) * 0.6,
+            height: getDeviceHeight(context: context) * 0.8,
+            width: getDeviceWidth(context: context) * 0.8,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(
                 defaultSize,
@@ -179,19 +289,17 @@ class _BillHistoryState extends State<BillHistory> {
                             readOnly: true,
                           ),
                         ),
-                        Gap(defaultSize / 2),
+                        Gap(defaultSize),
                         Expanded(
                           flex: 1,
-                          child: CircleAvatar(
-                            radius: 28,
-                            backgroundColor: primaryColor,
-                            foregroundColor: titleLargeTextColor,
-                            child: const Icon(
-                              Icons.search_outlined,
-                              size: 40,
-                            ),
+                          child: CustomSelectorCircle(
+                            onTap: () {
+                              showDoctorSelector(context);
+                            },
+                            icon: Icons.person_2_outlined,
                           ),
                         ),
+                        Gap(defaultSize),
                         SizedBox(
                           height: 50,
                           child: VerticalDivider(
@@ -199,24 +307,45 @@ class _BillHistoryState extends State<BillHistory> {
                             thickness: 4,
                           ),
                         ),
+                        Gap(defaultSize),
                         Expanded(
                           flex: 1,
-                          child: CircleAvatar(
-                            radius: 28,
-                            backgroundColor: primaryColor,
-                            foregroundColor: titleLargeTextColor,
-                            child: const Icon(
-                              Icons.calendar_month_outlined,
-                              size: 40,
-                            ),
+                          child: CustomSelectorCircle(
+                            onTap: () {},
+                            icon: Icons.calendar_month_outlined,
                           ),
                         ),
-                        Gap(defaultSize / 2),
+                        Gap(defaultSize),
                         Expanded(
                           flex: 3,
                           child: CustomTextField(
                             controller: dateController,
                             hintText: 'Select date',
+                            readOnly: true,
+                          ),
+                        ),
+                        Gap(defaultSize),
+                        SizedBox(
+                          height: 50,
+                          child: VerticalDivider(
+                            color: primaryColor,
+                            thickness: 4,
+                          ),
+                        ),
+                        Gap(defaultSize),
+                        Expanded(
+                          flex: 1,
+                          child: CustomSelectorCircle(
+                            onTap: () {},
+                            icon: Icons.person_outlined,
+                          ),
+                        ),
+                        Gap(defaultSize),
+                        Expanded(
+                          flex: 3,
+                          child: CustomTextField(
+                            controller: reportGeneratedByController,
+                            hintText: 'Report generated by',
                             readOnly: true,
                           ),
                         ),
