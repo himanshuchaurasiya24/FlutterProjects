@@ -21,6 +21,11 @@ class _LoginScreenState extends State<LoginScreen> {
   DatabaseHelper database = DatabaseHelper();
   Color containerColor = primaryColor;
   bool isAdminLogin = false;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   void showBanner(BuildContext context) {
     ScaffoldMessenger.of(context).showMaterialBanner(

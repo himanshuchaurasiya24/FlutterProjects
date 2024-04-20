@@ -11,7 +11,7 @@ import 'package:vyavasaay_redesigned/model/user_model.dart';
 Database? _database;
 
 class DatabaseHelper {
-  final databaseName = 'abcdef.db';
+  final databaseName = 'abcde.db';
   String adminTable = 'adminTable';
   String userTable = 'userTable';
   String doctorTable = 'doctorTable';
@@ -34,9 +34,9 @@ class DatabaseHelper {
     sex TEXT,
     phone TEXT,
     address TEXT,
-    ultrasound INT
-    pathology INT
-    ecg INT
+    ultrasound INT,
+    pathology INT,
+    ecg INT,
     xray INT
   )
 ''';
