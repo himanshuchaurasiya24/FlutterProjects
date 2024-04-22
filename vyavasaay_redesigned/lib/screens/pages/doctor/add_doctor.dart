@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 import 'package:vyavasaay_redesigned/database/database_helper.dart';
 import 'package:vyavasaay_redesigned/model/doctor_model.dart';
@@ -6,8 +7,9 @@ import 'package:vyavasaay_redesigned/utils/constants.dart';
 import 'package:vyavasaay_redesigned/widgets/custom_textfield.dart';
 
 class AddDoctor extends StatefulWidget {
-  const AddDoctor({super.key});
-
+  const AddDoctor({super.key, this.isUpdate = false, this.model});
+  final bool isUpdate;
+  final DoctorModel? model;
   @override
   State<AddDoctor> createState() => _AddDoctorState();
 }
@@ -35,7 +37,19 @@ class _AddDoctorState extends State<AddDoctor> {
   @override
   void initState() {
     super.initState();
-    docSexController.text = 'Male';
+    if (widget.isUpdate) {
+      docNameController.text = widget.model!.name;
+      docSexController.text = widget.model!.sex;
+      docPhoneController.text = widget.model!.phone;
+      docAddressController.text = widget.model!.address;
+      docUltraPercentageController.text = widget.model!.ultrasound.toString();
+      docPathPercentageController.text = widget.model!.pathology.toString();
+      docEcgPercentageController.text = widget.model!.ecg.toString();
+      docxrayPercentageController.text = widget.model!.xray.toString();
+      docAgeController.text = widget.model!.age.toString();
+    } else {
+      docSexController.text = 'Male';
+    }
     databaseHelper.initDB();
   }
 
@@ -53,12 +67,54 @@ class _AddDoctorState extends State<AddDoctor> {
     docAddressController.dispose();
   }
 
+  void excuteOperation() async {
+    if (widget.isUpdate) {
+      await databaseHelper
+          .updateDoctor(
+        model: DoctorModel(
+            id: widget.model!.id!,
+            name: docNameController.text,
+            age: int.tryParse(docAgeController.text)!.toInt(),
+            sex: docSexController.text,
+            phone: docPhoneController.text,
+            address: docAddressController.text,
+            ultrasound:
+                int.tryParse(docUltraPercentageController.text)!.toInt(),
+            pathology: int.tryParse(docPathPercentageController.text)!.toInt(),
+            ecg: int.tryParse(docEcgPercentageController.text)!.toInt(),
+            xray: int.tryParse(docxrayPercentageController.text)!.toInt()),
+      )
+          .then((value) {
+        Navigator.pop(context, value);
+      });
+    } else {
+      await databaseHelper
+          .addDoctor(
+        model: DoctorModel(
+            name: docNameController.text,
+            age: int.tryParse(docAgeController.text)!.toInt(),
+            sex: docSexController.text,
+            phone: docPhoneController.text,
+            address: docAddressController.text,
+            ultrasound:
+                int.tryParse(docUltraPercentageController.text)!.toInt(),
+            pathology: int.tryParse(docPathPercentageController.text)!.toInt(),
+            ecg: int.tryParse(docEcgPercentageController.text)!.toInt(),
+            xray: int.tryParse(docxrayPercentageController.text)!.toInt()),
+      )
+          .then((value) {
+        Navigator.pop(context, value);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: primaryColor,
       appBar: AppBar(
-        title: const Text('Enter doctor details'),
+        title: Text(
+            widget.isUpdate ? 'Update doctor details' : 'Enter doctor details'),
       ),
       body: Container(
         margin: EdgeInsets.all(defaultSize * 3),
@@ -114,7 +170,8 @@ class _AddDoctorState extends State<AddDoctor> {
                           fillColor: primaryColor,
                           filled: true,
                         ),
-                        value: sexType.first,
+                        value:
+                            widget.isUpdate ? widget.model!.sex : sexType.first,
                         items: sexType.map((String value) {
                           return DropdownMenuItem(
                             value: value,
@@ -192,30 +249,7 @@ class _AddDoctorState extends State<AddDoctor> {
                   GestureDetector(
                     onTap: () async {
                       if (formKey.currentState!.validate()) {
-                        await databaseHelper
-                            .addDoctor(
-                          model: DoctorModel(
-                              name: docNameController.text,
-                              age: int.tryParse(docAgeController.text)!.toInt(),
-                              sex: docSexController.text,
-                              phone: docPhoneController.text,
-                              address: docAddressController.text,
-                              ultrasound: int.tryParse(
-                                      docUltraPercentageController.text)!
-                                  .toInt(),
-                              pathology: int.tryParse(
-                                      docPathPercentageController.text)!
-                                  .toInt(),
-                              ecg:
-                                  int.tryParse(docEcgPercentageController.text)!
-                                      .toInt(),
-                              xray: int.tryParse(
-                                      docxrayPercentageController.text)!
-                                  .toInt()),
-                        )
-                            .then((value) {
-                          Navigator.pop(context, value);
-                        });
+                        excuteOperation();
                       }
                     },
                     child: Container(
@@ -227,8 +261,35 @@ class _AddDoctorState extends State<AddDoctor> {
                       ),
                       child: Center(
                         child: Text(
-                          'Add Doctor',
+                          widget.isUpdate ? 'Update Doctor' : 'Add Doctor',
                           style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Gap(defaultSize),
+                  Visibility(
+                    visible: widget.isUpdate,
+                    child: GestureDetector(
+                      onTap: () async {
+                        await databaseHelper
+                            .deleteDoctor(id: widget.model!.id!)
+                            .then((value) {
+                          Navigator.pop(context, value);
+                        });
+                      },
+                      child: Container(
+                        height: getDeviceHeight(context: context) * 0.1,
+                        width: getDeviceWidth(context: context),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(defaultSize),
+                          color: primaryColor,
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Delete Doctor',
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
                         ),
                       ),
                     ),

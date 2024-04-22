@@ -59,6 +59,24 @@ class _DoctorInfoState extends State<DoctorInfo> {
                   ),
                   subtitle: Text(snapshot.data![index].sex +
                       snapshot.data![index].address),
+                  trailing: IconButton(
+                    onPressed: () async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return AddDoctor(
+                              isUpdate: true,
+                              model: snapshot.data![index],
+                            );
+                          },
+                        ),
+                      ).then((value) {
+                        setState(() {});
+                      });
+                    },
+                    icon: const Icon(Icons.edit_outlined),
+                  ),
                 );
               },
             );

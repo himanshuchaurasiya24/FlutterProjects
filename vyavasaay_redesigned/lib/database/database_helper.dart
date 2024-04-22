@@ -11,7 +11,7 @@ import 'package:vyavasaay_redesigned/model/user_model.dart';
 Database? _database;
 
 class DatabaseHelper {
-  final databaseName = 'abcdefg.db';
+  final databaseName = 'abcdefgh.db';
   String adminTable = 'adminTable';
   String userTable = 'userTable';
   String doctorTable = 'doctorTable';
@@ -107,6 +107,22 @@ CREATE TABLE IF NOT EXISTS doctorTable(
   Future<int> addDoctor({required DoctorModel model}) async {
     final db = await initDB();
     final res = await db.insert(doctorTable, model.toMap());
+    return res;
+  }
+
+  Future<int> updateDoctor({required DoctorModel model}) async {
+    final db = await initDB();
+    return await db.update(
+      doctorTable,
+      model.toMap(),
+      where: 'id = ?',
+      whereArgs: [model.id],
+    );
+  }
+
+  Future<int> deleteDoctor({required int id}) async {
+    final db = await initDB();
+    final res = await db.delete(doctorTable, where: 'id = ?', whereArgs: [id]);
     return res;
   }
 
