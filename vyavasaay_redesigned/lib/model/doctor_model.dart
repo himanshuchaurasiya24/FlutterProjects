@@ -9,11 +9,9 @@ class DoctorModel {
   final String phone;
   final String address;
   final int ultrasound;
-
   final int pathology;
   final int ecg;
   final int xray;
-
   DoctorModel({
     this.id,
     required this.name,

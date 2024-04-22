@@ -11,7 +11,7 @@ import 'package:vyavasaay_redesigned/model/user_model.dart';
 Database? _database;
 
 class DatabaseHelper {
-  final databaseName = 'abcde.db';
+  final databaseName = 'abcdefg.db';
   String adminTable = 'adminTable';
   String userTable = 'userTable';
   String doctorTable = 'doctorTable';
@@ -27,33 +27,33 @@ class DatabaseHelper {
     phoneNumber TEXT,
     password TEXT
   )''';
-  String doctorQuery = '''CREATE TABLE IF NOT EXISTS doctorTable(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT,
-    age INT,
-    sex TEXT,
-    phone TEXT,
-    address TEXT,
-    ultrasound INT,
-    pathology INT,
-    ecg INT,
-    xray INT
-  )
-''';
+  String doctorQuery = '''
+CREATE TABLE IF NOT EXISTS doctorTable(
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT,
+  age INTEGER,
+  sex TEXT,
+  phone TEXT,
+  address TEXT,
+  ultrasound INTEGER,
+  pathology INTEGER,
+  ecg INTEGER,
+  xray INTEGER
+)''';
   String patientQuery = '''CREATE TABLE IF NOT EXISTS patientTable(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT,
-    age INT,
+    age INTEGER,
     sex TEXT,
     date TEXT,
-    doctor INT,
+    refBy INTEGER,
     type TEXT,
     remark TEXT,
     technician TEXT,
-    totalAmount INT,
-    paidAmount INT,
-    incentive INT,
-    percent INT
+    totalAmount INTEGER,
+    paidAmount INTEGER,
+    incentive INTEGER,
+    percent INTEGER
   )
 ''';
   String loginHistory = '''CREATE TABLE IF NOT EXISTS loginHistory(
@@ -88,37 +88,26 @@ class DatabaseHelper {
       path,
       version: 1,
       onCreate: (db, version) async {
+        await db.execute(doctorQuery);
         await db.execute(adminQuery);
         await db.execute(userQuery);
         await db.execute(patientQuery);
-        await db.execute(doctorQuery);
       },
     );
     return _database!;
   }
 
   // doctor
-  Future<int> addDoctor({required DoctorModel model}) async {
+  Future<List<DoctorModel>> getDoctorList() async {
     final db = await initDB();
-    var intV = 00;
-    await db
-        .insert(
-      doctorTable,
-      model.toMap(),
-    )
-        .then((value) {
-      intV = value;
-    });
-    return intV;
+    final List<Map<String, Object?>> res = await db.query(doctorTable);
+    return res.map((e) => DoctorModel.fromMap(e)).toList();
   }
 
-  Future<List<DoctorModel>> getAllDoctorList() async {
+  Future<int> addDoctor({required DoctorModel model}) async {
     final db = await initDB();
-    final List<Map<String, Object?>> result =
-        await db.rawQuery('select * from $doctorTable');
-    return result.map((e) {
-      return DoctorModel.fromMap(e);
-    }).toList();
+    final res = await db.insert(doctorTable, model.toMap());
+    return res;
   }
 
   Future<List<DoctorModel>> searchDoctor({required String name}) async {
@@ -131,15 +120,15 @@ class DatabaseHelper {
   }
 
 // admin
-  Future<String> createAdminAccount({required AdminModel model}) async {
+  Future<int> createAdminAccount({required AdminModel model}) async {
     final db = await initDB();
 
-    await db.insert(
+    final value = await db.insert(
       adminTable,
       model.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-    return model.name;
+    return value;
   }
 
   Future<bool> authAdmin({

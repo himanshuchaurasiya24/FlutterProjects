@@ -151,14 +151,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         password: passwordController.text,
                                       ),
                                     )
-                                    .then((value) => {
-                                          Navigator.pushReplacement(context,
+                                    .then(
+                                      (value) => {
+                                        if (value != 0)
+                                          {
+                                            Navigator.pushReplacement(
+                                              context,
                                               MaterialPageRoute(
-                                            builder: (context) {
-                                              return const LoginScreen();
-                                            },
-                                          ))
-                                        });
+                                                builder: (context) {
+                                                  return const SignUpScreen();
+                                                },
+                                              ),
+                                            ),
+                                          }
+                                        else
+                                          {showBanner(context)}
+                                      },
+                                    );
                               }
                             }
                           },

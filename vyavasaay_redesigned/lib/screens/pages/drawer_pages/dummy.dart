@@ -17,7 +17,7 @@ class _DummyState extends State<Dummy> {
 
   Future<List<DoctorModel>> searchDoctor(String name) {
     if (name.trim().isEmpty) {
-      return databaseHelper.getAllDoctorList();
+      return databaseHelper.getDoctorList();
     } else {
       return databaseHelper.searchDoctor(name: name);
     }

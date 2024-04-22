@@ -23,7 +23,6 @@ class _LoginScreenState extends State<LoginScreen> {
   bool isAdminLogin = false;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 

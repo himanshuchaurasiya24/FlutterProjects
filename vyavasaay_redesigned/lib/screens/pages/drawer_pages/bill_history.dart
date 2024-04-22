@@ -36,7 +36,7 @@ class _BillHistoryState extends State<BillHistory> {
 
   Future<List<DoctorModel>> searchDoctor(String name) {
     if (name.trim().isEmpty) {
-      return databaseHelper.getAllDoctorList();
+      return databaseHelper.getDoctorList();
     } else {
       return databaseHelper.searchDoctor(name: name);
     }
@@ -83,7 +83,7 @@ class _BillHistoryState extends State<BillHistory> {
                   height: getDeviceHeight(context: context) * 0.74,
                   width: getDeviceWidth(context: context) * 0.8,
                   child: FutureBuilder(
-                    future: databaseHelper.getAllDoctorList(),
+                    future: databaseHelper.getDoctorList(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(
