@@ -64,7 +64,28 @@ class _BillHistoryState extends State<BillHistory> {
   TextEditingController dateController = TextEditingController();
   TextEditingController incentivePerController = TextEditingController();
   TextEditingController reportGeneratedByController = TextEditingController();
+  TextEditingController discountByDoctorController = TextEditingController();
+
   late DoctorModel doctorModel;
+
+  int calculateIncentive() {
+    int totalAmount = int.tryParse(totalAmountContoller.text)!;
+    int paidAmount = int.tryParse(paidAmountContoller.text)!;
+    int incentivePercent = int.tryParse(incentivePerController.text)!;
+
+    if (totalAmount == paidAmount) {
+      discountByDoctorController.text = (totalAmount - paidAmount).toString();
+
+      double calculated = (totalAmount * incentivePercent) / 100;
+      return calculated.toInt();
+    }
+
+    discountByDoctorController.text = (totalAmount - paidAmount).toString();
+    int discountByDoctor = int.tryParse(discountByDoctorController.text)!;
+    double calculated = (totalAmount * incentivePercent) / 100;
+    return calculated.toInt() - discountByDoctor;
+  }
+
   void showDatePick() async {
     final date = await showDatePicker(
       initialDate: DateTime.now(),
@@ -147,6 +168,10 @@ class _BillHistoryState extends State<BillHistory> {
                                     snapshot.data![index].xray.toString();
                               }
                               doctorModel = snapshot.data![index];
+                              totalAmountContoller.text = 0.toString();
+                              paidAmountContoller.text = 0.toString();
+                              discountByDoctorController.text = 0.toString();
+                              incentiveContoller.text = 0.toString();
                               Navigator.pop(context);
                             },
                             child: Padding(
@@ -429,6 +454,35 @@ class _BillHistoryState extends State<BillHistory> {
                             child: CustomTextField(
                               controller: paidAmountContoller,
                               hintText: 'Paid Amount',
+                              onChanged: (p0) {
+                                setState(() {
+                                  incentiveContoller.text =
+                                      calculateIncentive().toString();
+                                });
+                              },
+                              keyboardType: TextInputType.number,
+                            ),
+                          ),
+                          Gap(defaultSize),
+                          Expanded(
+                            flex: 4,
+                            child: CustomTextField(
+                              controller: discountByDoctorController,
+                              hintText: 'Discount by doctor',
+                              onChanged: (p0) {
+                                setState(() {
+                                  int total =
+                                      int.tryParse(totalAmountContoller.text)!;
+                                  int incentivePer = int.tryParse(
+                                      incentivePerController.text)!;
+                                  int discount = int.tryParse(
+                                      discountByDoctorController.text)!;
+                                  double incentive =
+                                      ((total * incentivePer) / 100) - discount;
+                                  incentiveContoller.text =
+                                      incentive.toInt().toString();
+                                });
+                              },
                               keyboardType: TextInputType.number,
                             ),
                           ),
