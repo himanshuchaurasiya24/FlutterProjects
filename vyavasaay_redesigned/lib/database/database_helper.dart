@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 import 'package:vyavasaay_redesigned/model/admin_model.dart';
 import 'package:vyavasaay_redesigned/model/doctor_model.dart';
+import 'package:vyavasaay_redesigned/model/patient_model.dart';
 import 'package:vyavasaay_redesigned/model/user_model.dart';
 
 Database? _database;
@@ -15,6 +16,7 @@ class DatabaseHelper {
   String adminTable = 'adminTable';
   String userTable = 'userTable';
   String doctorTable = 'doctorTable';
+  String patientTable = 'patientTable';
   String userQuery = '''CREATE TABLE IF NOT EXISTS userTable(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT UNIQUE,
@@ -40,21 +42,24 @@ CREATE TABLE IF NOT EXISTS doctorTable(
   ecg INTEGER,
   xray INTEGER
 )''';
-  String patientQuery = '''CREATE TABLE IF NOT EXISTS patientTable(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT,
-    age INTEGER,
-    sex TEXT,
-    date TEXT,
-    refBy INTEGER,
-    type TEXT,
-    remark TEXT,
-    technician TEXT,
-    totalAmount INTEGER,
-    paidAmount INTEGER,
-    incentive INTEGER,
-    percent INTEGER
-  )
+  String patientQuery = '''
+CREATE TABLE IF NOT EXISTS patientTable(
+  id TEXT,
+  name TEXT,
+  age INTEGER,
+  sex TEXT,
+  date TEXT,
+  refBy TEXT,
+  type TEXT,
+  remark TEXT,
+  technician TEXT,
+  totalAmount INTEGER,
+  paidAmount INTEGER,
+  discDoc INTEGER,
+  discCen INTEGER,
+  incentive INTEGER,
+  percent INTEGER
+)
 ''';
   String loginHistory = '''CREATE TABLE IF NOT EXISTS loginHistory(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -97,6 +102,39 @@ CREATE TABLE IF NOT EXISTS doctorTable(
     return _database!;
   }
 
+  //Patient
+  Future<List<PatientModel>> getPatientList() async {
+    final db = await initDB();
+    final List<Map<String, Object?>> res = await db.query(patientTable);
+    return res.map((e) {
+      return PatientModel.fromMap(e);
+    }).toList();
+  }
+
+  Future<int> addPatient({required PatientModel model}) async {
+    final db = await initDB();
+    final res = await db.insert(
+      patientTable,
+      model.toMap(),
+    );
+    return res;
+  }
+
+  Future<List<PatientModel>> searchPatient({required String name}) async {
+    final db = await initDB();
+    final List<Map<String, Object?>> result = await db
+        .query(patientTable, where: 'name LIKE ?', whereArgs: ['%$name%']);
+    return result.map((e) {
+      return PatientModel.fromMap(e);
+    }).toList();
+  }
+
+  Future<int> deletePatient({required int id}) async {
+    final db = await initDB();
+    final res = await db.delete(patientTable, where: 'id = ?', whereArgs: [id]);
+    return res;
+  }
+
   // doctor
   Future<List<DoctorModel>> getDoctorList() async {
     final db = await initDB();
@@ -133,6 +171,18 @@ CREATE TABLE IF NOT EXISTS doctorTable(
     return result.map((e) {
       return DoctorModel.fromMap(e);
     }).toList();
+  }
+
+  Future<DoctorModel> searchDoctorById({required int id}) async {
+    final db = await initDB();
+    final List<Map<String, Object?>> result =
+        await db.query(doctorTable, where: 'id = ?', whereArgs: ['%$id%']);
+    return result
+        .map((e) {
+          return DoctorModel.fromMap(e);
+        })
+        .toList()
+        .first;
   }
 
 // admin
@@ -181,6 +231,7 @@ CREATE TABLE IF NOT EXISTS doctorTable(
     return result.length;
   }
 
+// User
   Future<void> createUserAccount({required UserModel model}) async {
     final db = await initDB();
     await db.insert(
@@ -223,6 +274,7 @@ CREATE TABLE IF NOT EXISTS doctorTable(
     return result.length;
   }
 
+// Delete Everything
   Future<void> deleteEverything() async {
     final db = await initDB();
     await db.rawDelete('DELETE FROM $adminTable');

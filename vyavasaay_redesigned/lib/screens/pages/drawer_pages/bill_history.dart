@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vyavasaay_redesigned/database/database_helper.dart';
 import 'package:vyavasaay_redesigned/model/doctor_model.dart';
+import 'package:vyavasaay_redesigned/model/patient_model.dart';
 import 'package:vyavasaay_redesigned/utils/constants.dart';
 import 'package:vyavasaay_redesigned/widgets/custom_selector_circle.dart';
 import 'package:vyavasaay_redesigned/widgets/custom_textfield.dart';
@@ -59,12 +60,14 @@ class _BillHistoryState extends State<BillHistory> {
   TextEditingController paidAmountContoller = TextEditingController();
   TextEditingController incentiveContoller = TextEditingController();
   TextEditingController doctorNameController = TextEditingController();
+  TextEditingController doctorIdController = TextEditingController();
   TextEditingController patientAddressController = TextEditingController();
   TextEditingController patientPhoneController = TextEditingController();
   TextEditingController dateController = TextEditingController();
   TextEditingController incentivePerController = TextEditingController();
   TextEditingController reportGeneratedByController = TextEditingController();
-  TextEditingController discountByDoctorController = TextEditingController();
+  TextEditingController discountByDocController = TextEditingController();
+  TextEditingController discountByCenController = TextEditingController();
 
   late DoctorModel doctorModel;
 
@@ -74,14 +77,14 @@ class _BillHistoryState extends State<BillHistory> {
     int incentivePercent = int.tryParse(incentivePerController.text)!;
 
     if (totalAmount == paidAmount) {
-      discountByDoctorController.text = (totalAmount - paidAmount).toString();
+      discountByDocController.text = (totalAmount - paidAmount).toString();
 
       double calculated = (totalAmount * incentivePercent) / 100;
       return calculated.toInt();
     }
 
-    discountByDoctorController.text = (totalAmount - paidAmount).toString();
-    int discountByDoctor = int.tryParse(discountByDoctorController.text)!;
+    discountByDocController.text = (totalAmount - paidAmount).toString();
+    int discountByDoctor = int.tryParse(discountByDocController.text)!;
     double calculated = (totalAmount * incentivePercent) / 100;
     return calculated.toInt() - discountByDoctor;
   }
@@ -168,9 +171,11 @@ class _BillHistoryState extends State<BillHistory> {
                                     snapshot.data![index].xray.toString();
                               }
                               doctorModel = snapshot.data![index];
+                              doctorIdController.text =
+                                  doctorModel.id!.toString();
                               totalAmountContoller.text = 0.toString();
                               paidAmountContoller.text = 0.toString();
-                              discountByDoctorController.text = 0.toString();
+                              discountByDocController.text = 0.toString();
                               incentiveContoller.text = 0.toString();
                               Navigator.pop(context);
                             },
@@ -467,20 +472,25 @@ class _BillHistoryState extends State<BillHistory> {
                           Expanded(
                             flex: 4,
                             child: CustomTextField(
-                              controller: discountByDoctorController,
+                              controller: discountByDocController,
                               hintText: 'Discount by doctor',
                               onChanged: (p0) {
                                 setState(() {
                                   int total =
                                       int.tryParse(totalAmountContoller.text)!;
+                                  int paid =
+                                      int.tryParse(paidAmountContoller.text)!;
                                   int incentivePer = int.tryParse(
                                       incentivePerController.text)!;
-                                  int discount = int.tryParse(
-                                      discountByDoctorController.text)!;
+                                  int discountByDoc = int.tryParse(
+                                      discountByDocController.text)!;
                                   double incentive =
-                                      ((total * incentivePer) / 100) - discount;
+                                      ((total * incentivePer) / 100) -
+                                          discountByDoc;
                                   incentiveContoller.text =
                                       incentive.toInt().toString();
+                                  discountByCenController.text =
+                                      (total - paid - discountByDoc).toString();
                                 });
                               },
                               keyboardType: TextInputType.number,
@@ -511,7 +521,67 @@ class _BillHistoryState extends State<BillHistory> {
                       Gap(defaultSize),
                       GestureDetector(
                         onTap: () async {
-                          if (formKey.currentState!.validate()) {}
+                          if (formKey.currentState!.validate()) {
+                            debugPrint(PatientModel(
+                              name: patientNameContoller.text,
+                              age: int.tryParse(patientAgeContoller.text)!,
+                              sex: patientSexContoller.text,
+                              date: dateController.text,
+                              type: diagnosisType.toString(),
+                              remark: diagnosisRemarkContoller.text,
+                              technician: reportGeneratedByController.text,
+                              refBy: int.tryParse(doctorIdController.text)!,
+                              totalAmount:
+                                  int.tryParse(totalAmountContoller.text)!,
+                              paidAmount:
+                                  int.tryParse(paidAmountContoller.text)!,
+                              discDoc:
+                                  int.tryParse(discountByDocController.text)!,
+                              discCen:
+                                  int.tryParse(discountByCenController.text)!,
+                              incentive: int.tryParse(incentiveContoller.text)!,
+                              percent:
+                                  int.tryParse(incentivePerController.text)!,
+                            ).toString());
+                            await databaseHelper
+                                .addPatient(
+                              model: PatientModel(
+                                name: patientNameContoller.text,
+                                age: int.tryParse(patientAgeContoller.text)!,
+                                sex: patientSexContoller.text,
+                                date: dateController.text,
+                                type: diagnosisType.toString(),
+                                remark: diagnosisRemarkContoller.text,
+                                technician: reportGeneratedByController.text,
+                                refBy: int.tryParse(doctorIdController.text)!,
+                                totalAmount:
+                                    int.tryParse(totalAmountContoller.text)!,
+                                paidAmount:
+                                    int.tryParse(paidAmountContoller.text)!,
+                                discDoc:
+                                    int.tryParse(discountByDocController.text)!,
+                                discCen:
+                                    int.tryParse(discountByCenController.text)!,
+                                incentive:
+                                    int.tryParse(incentiveContoller.text)!,
+                                percent:
+                                    int.tryParse(incentivePerController.text)!,
+                              ),
+                            )
+                                .then((value) {
+                              debugPrint(value.toString());
+                              Navigator.pop(context, value);
+                            }).onError((error, stackTrace) {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    content: Text(error.toString()),
+                                  );
+                                },
+                              );
+                            });
+                          }
                         },
                         child: Container(
                           height: getDeviceHeight(context: context) * 0.1,
@@ -572,6 +642,36 @@ class _BillHistoryState extends State<BillHistory> {
             ),
           ),
         ),
+        Expanded(
+            child: FutureBuilder(
+          future: databaseHelper.getPatientList(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (snapshot.hasData) {
+              if (snapshot.data!.isEmpty) {
+                return const Center(
+                  child: Text('No data found'),
+                );
+              }
+            }
+            if (snapshot.hasError) {
+              return const Center(
+                child: Text('Some error occurred!'),
+              );
+            }
+
+            return ListView.builder(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(snapshot.data![index].name),
+                );
+              },
+            );
+          },
+        )),
       ],
     );
   }
