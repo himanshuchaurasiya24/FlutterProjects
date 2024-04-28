@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:vyavasaay_redesigned/model/menu_items.dart';
 import 'package:vyavasaay_redesigned/utils/constants.dart';
 
@@ -36,7 +37,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     : Center(
                         child: Icon(
                           Icons.person_outlined,
-                          color: primaryColorDark,
+                          color: titleLargeTextColor,
+                          size: 200,
                         ),
                       ),
                 Text(
@@ -50,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   textAlign: TextAlign.center,
                 ),
+                Gap(defaultSize),
                 Expanded(
                   child: ListView.builder(
                     itemBuilder: (context, index) {

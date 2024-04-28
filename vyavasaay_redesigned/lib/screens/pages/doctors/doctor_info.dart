@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vyavasaay_redesigned/database/database_helper.dart';
-import 'package:vyavasaay_redesigned/screens/pages/doctor/add_doctor.dart';
+import 'package:vyavasaay_redesigned/screens/pages/doctors/add_doctor.dart';
 import 'package:vyavasaay_redesigned/utils/constants.dart';
 import 'package:vyavasaay_redesigned/widgets/default_container.dart';
 

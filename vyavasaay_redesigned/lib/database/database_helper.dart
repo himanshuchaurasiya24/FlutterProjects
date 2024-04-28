@@ -117,6 +117,8 @@ CREATE TABLE IF NOT EXISTS patientTable(
       patientTable,
       model.toMap(),
     );
+    debugPrint(res.toString());
+
     return res;
   }
 
@@ -173,18 +175,6 @@ CREATE TABLE IF NOT EXISTS patientTable(
     }).toList();
   }
 
-  Future<DoctorModel> searchDoctorById({required int id}) async {
-    final db = await initDB();
-    final List<Map<String, Object?>> result =
-        await db.query(doctorTable, where: 'id = ?', whereArgs: ['%$id%']);
-    return result
-        .map((e) {
-          return DoctorModel.fromMap(e);
-        })
-        .toList()
-        .first;
-  }
-
 // admin
   Future<int> createAdminAccount({required AdminModel model}) async {
     final db = await initDB();
@@ -232,12 +222,13 @@ CREATE TABLE IF NOT EXISTS patientTable(
   }
 
 // User
-  Future<void> createUserAccount({required UserModel model}) async {
+  Future<int> createUserAccount({required UserModel model}) async {
     final db = await initDB();
-    await db.insert(
+    final res = await db.insert(
       userTable,
       model.toMap(),
     );
+    return res;
   }
 
   Future<bool> authUser({

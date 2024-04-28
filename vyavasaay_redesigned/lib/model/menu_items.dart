@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:vyavasaay_redesigned/model/menu_details.dart';
 import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/about_this_app.dart';
-import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/access_control.dart';
+import 'package:vyavasaay_redesigned/screens/pages/account_control/access_control.dart';
 import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/account_details.dart';
 import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/dashboard.dart';
 import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/diagnosis_history.dart';
-import 'package:vyavasaay_redesigned/screens/pages/doctor/doctor_info.dart';
-import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/bill_history.dart';
-import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/generate_report.dart';
+import 'package:vyavasaay_redesigned/screens/pages/doctors/doctor_info.dart';
+import 'package:vyavasaay_redesigned/screens/pages/patients/bill_history.dart';
+import 'package:vyavasaay_redesigned/screens/pages/patients/generate_report.dart';
 import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/login_history.dart';
 import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/logout.dart';
 
@@ -69,6 +69,11 @@ class MenuItems {
       title: 'Dashboard',
       icon: Icons.dashboard_outlined,
       child: const Dashboard(),
+    ),
+    MenuDetails(
+      title: 'Generate Bills',
+      icon: Icons.report_outlined,
+      child: const BillHistory(),
     ),
     MenuDetails(
       title: 'Generate Report',

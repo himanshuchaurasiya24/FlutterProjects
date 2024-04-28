@@ -165,7 +165,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                             name: nameController.text);
                                         final name = model!.name;
                                         loggedIn(name: name, type: 'admin');
-
                                         Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
