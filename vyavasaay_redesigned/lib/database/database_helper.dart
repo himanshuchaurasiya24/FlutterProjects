@@ -106,7 +106,10 @@ CREATE TABLE IF NOT EXISTS patientTable(
   //Patient
   Future<List<PatientModel>> getPatientList() async {
     final db = await initDB();
-    final List<Map<String, Object?>> res = await db.query(patientTable);
+    final List<Map<String, Object?>> res = await db.query(
+      patientTable,
+      orderBy: 'date DESC',
+    );
     return res.map((e) {
       return PatientModel.fromMap(e);
     }).toList();
@@ -123,10 +126,18 @@ CREATE TABLE IF NOT EXISTS patientTable(
     return res;
   }
 
-  Future<List<PatientModel>> searchPatient({required String name}) async {
+  Future<List<PatientModel>> searchPatient({required String data}) async {
     final db = await initDB();
-    final List<Map<String, Object?>> result = await db
-        .query(patientTable, where: 'name LIKE ?', whereArgs: ['%$name%']);
+    final List<Map<String, Object?>> result = await db.query(patientTable,
+        where:
+            'name LIKE ? OR type LIKE ? OR refBy LIKE ? OR technician LIKE ?',
+        whereArgs: [
+          '%$data%',
+          '%$data%',
+          '%$data%',
+          '%$data%',
+        ],
+        orderBy: 'date DESC');
     return result.map((e) {
       return PatientModel.fromMap(e);
     }).toList();
@@ -151,7 +162,8 @@ CREATE TABLE IF NOT EXISTS patientTable(
   // doctor
   Future<List<DoctorModel>> getDoctorList() async {
     final db = await initDB();
-    final List<Map<String, Object?>> res = await db.query(doctorTable);
+    final List<Map<String, Object?>> res =
+        await db.query(doctorTable, orderBy: 'name ASC');
     return res.map((e) => DoctorModel.fromMap(e)).toList();
   }
 
@@ -179,8 +191,8 @@ CREATE TABLE IF NOT EXISTS patientTable(
 
   Future<List<DoctorModel>> searchDoctor({required String name}) async {
     final db = await initDB();
-    final List<Map<String, Object?>> result = await db
-        .query(doctorTable, where: 'name LIKE ?', whereArgs: ['%$name%']);
+    final List<Map<String, Object?>> result = await db.query(doctorTable,
+        where: 'name LIKE ?', whereArgs: ['%$name%'], orderBy: 'name ASC');
     return result.map((e) {
       return DoctorModel.fromMap(e);
     }).toList();

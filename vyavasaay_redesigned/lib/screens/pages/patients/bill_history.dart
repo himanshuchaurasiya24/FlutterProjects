@@ -1,13 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:vyavasaay_redesigned/database/database_helper.dart';
+import 'package:vyavasaay_redesigned/model/patient_model.dart';
 import 'package:vyavasaay_redesigned/screens/pages/patients/generate_new_bill.dart';
 import 'package:vyavasaay_redesigned/utils/constants.dart';
+import 'package:vyavasaay_redesigned/widgets/custom_textfield.dart';
 import 'package:vyavasaay_redesigned/widgets/default_container.dart';
+import 'package:vyavasaay_redesigned/widgets/patient_details_child.dart';
 
 class BillHistory extends StatefulWidget {
   const BillHistory({super.key});
@@ -19,10 +20,12 @@ class BillHistory extends StatefulWidget {
 class _BillHistoryState extends State<BillHistory> {
   final DatabaseHelper databaseHelper = DatabaseHelper();
   bool isAdminLogin = false;
+  late Future<List<PatientModel>> patientList;
   @override
   void initState() {
     super.initState();
     databaseHelper.initDB();
+    patientList = databaseHelper.getPatientList();
     getTechnicianInfo();
   }
 
@@ -36,174 +39,227 @@ class _BillHistoryState extends State<BillHistory> {
     }
   }
 
+  final searchController = TextEditingController();
+  Future<List<PatientModel>> getPatientList() {
+    setState(() {
+      if (searchController.text.isNotEmpty) {
+        patientList = databaseHelper.searchPatient(data: searchController.text);
+      } else if (searchController.text.isEmpty) {
+        patientList = databaseHelper.getPatientList();
+      }
+    });
+    return patientList;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        FutureBuilder(
-          future: databaseHelper.getPatientList(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            if (snapshot.hasError) {
-              return Center(
-                child: Text(
-                  'Some error occurred!',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              );
-            }
-            if (snapshot.hasData) {
-              if (snapshot.data!.isEmpty) {
-                return Center(
-                  child: Text(
-                    'Empty List',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                );
-              }
-            }
-            return ListView.builder(
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) {
-                return Card(
-                  elevation: 0,
-                  color: primaryCardColor,
-                  child: ExpansionTile(
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(snapshot.data![index].name, style: patientHeader),
-                        Gap(defaultSize),
-                        Text(
-                          snapshot.data![index].date,
-                          style: patientHeaderSmall,
-                        )
-                      ],
-                    ),
-                    subtitle: Text(
-                      snapshot.data![index].refBy,
-                      style: patientHeaderSmall,
-                    ),
-                    childrenPadding: EdgeInsets.only(
-                      left: defaultSize,
-                      right: defaultSize,
-                      bottom: defaultSize,
-                    ),
-                    children: [
-                      Column(
-                        children: [
-                          Row(
+        Column(
+          children: [
+            CustomTextField(
+              controller: searchController,
+              hintText: 'Search here...',
+              onChanged: (p0) async {
+                {
+                  getPatientList();
+                }
+              },
+            ),
+            Expanded(
+              child: FutureBuilder(
+                future: getPatientList(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        'Some error occurred!',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                    );
+                  }
+                  if (snapshot.hasData) {
+                    if (snapshot.data!.isEmpty) {
+                      return Center(
+                        child: Text(
+                          'Empty List',
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                      );
+                    }
+                  }
+                  return ListView.builder(
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) {
+                      return Card(
+                        elevation: 0,
+                        color: primaryCardColor,
+                        child: ExpansionTile(
+                          title: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  PatientDetailsChild(
-                                    heading: 'Age ',
-                                    value: snapshot.data![index].age.toString(),
-                                  ),
-                                  Gap(defaultSize),
-                                  PatientDetailsChild(
-                                    heading: 'Sex ',
-                                    value: snapshot.data![index].sex,
-                                  ),
-                                  Gap(defaultSize),
-                                  PatientDetailsChild(
-                                    heading: 'Bill generated by ',
-                                    value: snapshot.data![index].technician,
-                                  ),
-                                  Gap(defaultSize),
-                                  PatientDetailsChild(
-                                    heading: 'Remark ',
-                                    value: snapshot.data![index].remark,
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  PatientDetailsChild(
-                                    heading: 'Total ',
-                                    value: snapshot.data![index].totalAmount
-                                        .toString(),
-                                  ),
-                                  Gap(defaultSize),
-                                  PatientDetailsChild(
-                                    heading: 'Paid ',
-                                    value: snapshot.data![index].paidAmount
-                                        .toString(),
-                                  ),
-                                  Gap(defaultSize),
-                                  PatientDetailsChild(
-                                    heading: 'Discount given by center ',
-                                    value: snapshot.data![index].discCen
-                                        .toString(),
-                                  ),
-                                  Gap(defaultSize),
-                                  PatientDetailsChild(
-                                    heading: 'Discount given by doctor ',
-                                    value: snapshot.data![index].discDoc
-                                        .toString(),
-                                  ),
-                                ],
-                              ),
+                              Text(snapshot.data![index].name,
+                                  style: patientHeader),
+                              Gap(defaultSize),
+                              Text(
+                                snapshot.data![index].date,
+                                style: patientHeaderSmall,
+                              )
                             ],
                           ),
-                          Visibility(
-                            visible: isAdminLogin,
-                            child: Gap(defaultSize),
+                          subtitle: Text(
+                            snapshot.data![index].refBy,
+                            style: patientHeaderSmall,
                           ),
-                          Visibility(
-                            visible: isAdminLogin,
-                            child: GestureDetector(
-                              onTap: () async {
-                                await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return GenerateNewBill(
-                                        isUpdate: true,
-                                        model: snapshot.data![index],
-                                      );
-                                    },
-                                  ),
-                                ).then((value) => setState(() {}));
-                              },
-                              child: DefaultContainer(
-                                  color: primaryColor,
-                                  height:
-                                      getDeviceHeight(context: context) * 0.1,
-                                  child: Center(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                          childrenPadding: EdgeInsets.only(
+                            left: defaultSize,
+                            right: defaultSize,
+                            bottom: defaultSize,
+                          ),
+                          children: [
+                            Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        const Icon(
-                                          Icons.edit_outlined,
-                                          size: 30,
+                                        PatientDetailsChild(
+                                          heading: 'Age ',
+                                          value: snapshot.data![index].age
+                                              .toString(),
                                         ),
                                         Gap(defaultSize),
-                                        Text(
-                                          'Edit Bill',
-                                          style: patientHeader,
+                                        PatientDetailsChild(
+                                          heading: 'Sex ',
+                                          value: snapshot.data![index].sex,
+                                        ),
+                                        Gap(defaultSize),
+                                        PatientDetailsChild(
+                                          heading: 'Diagnosis type ',
+                                          value: snapshot.data![index].type,
+                                        ),
+                                        Gap(defaultSize),
+                                        PatientDetailsChild(
+                                          heading: 'Bill generated by ',
+                                          value:
+                                              snapshot.data![index].technician,
+                                        ),
+                                        Gap(defaultSize),
+                                        PatientDetailsChild(
+                                          heading: 'Remark ',
+                                          value: snapshot.data![index].remark,
                                         ),
                                       ],
                                     ),
-                                  )),
-                            ),
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                );
-              },
-            );
-          },
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        PatientDetailsChild(
+                                          heading: 'Total ',
+                                          value: snapshot
+                                              .data![index].totalAmount
+                                              .toString(),
+                                        ),
+                                        Gap(defaultSize),
+                                        PatientDetailsChild(
+                                          heading: 'Paid ',
+                                          value: snapshot
+                                              .data![index].paidAmount
+                                              .toString(),
+                                        ),
+                                        Gap(defaultSize),
+                                        PatientDetailsChild(
+                                          heading: 'Discount given by center ',
+                                          value: snapshot.data![index].discCen
+                                              .toString(),
+                                        ),
+                                        Gap(defaultSize),
+                                        PatientDetailsChild(
+                                          heading: 'Discount given by doctor ',
+                                          value: snapshot.data![index].discDoc
+                                              .toString(),
+                                        ),
+                                        Gap(defaultSize),
+                                        PatientDetailsChild(
+                                          heading: 'Incentive % ',
+                                          value: snapshot.data![index].percent
+                                              .toString(),
+                                        ),
+                                        Gap(defaultSize),
+                                        PatientDetailsChild(
+                                          heading: 'Incentive amount ',
+                                          value: snapshot.data![index].incentive
+                                              .toString(),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                Visibility(
+                                  visible: isAdminLogin,
+                                  child: Gap(defaultSize),
+                                ),
+                                Visibility(
+                                  visible: isAdminLogin,
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                      await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) {
+                                            return GenerateNewBill(
+                                              isUpdate: true,
+                                              model: snapshot.data![index],
+                                            );
+                                          },
+                                        ),
+                                      ).then((value) => setState(() {}));
+                                    },
+                                    child: DefaultContainer(
+                                        color: primaryColor,
+                                        height:
+                                            getDeviceHeight(context: context) *
+                                                0.1,
+                                        child: Center(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              const Icon(
+                                                Icons.edit_outlined,
+                                                size: 30,
+                                              ),
+                                              Gap(defaultSize),
+                                              Text(
+                                                'Edit Bill',
+                                                style: patientHeader,
+                                              ),
+                                            ],
+                                          ),
+                                        )),
+                                  ),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
         ),
         Positioned(
           bottom: 10,
@@ -219,15 +275,13 @@ class _BillHistoryState extends State<BillHistory> {
                 ),
               ).then(
                 (value) {
-                  if (value != 0) {
-                    setState(() {});
-                  }
+                  setState(() {});
                 },
               );
             },
             child: DefaultContainer(
-              height: MediaQuery.of(context).size.height * 0.1,
-              width: 260,
+              height: getDeviceHeight(context: context) * 0.1,
+              width: getDeviceWidth(context: context) * 0.25,
               boxShadow: [
                 BoxShadow(
                   color: primaryColorDark,
@@ -246,32 +300,6 @@ class _BillHistoryState extends State<BillHistory> {
               ),
             ),
           ),
-        ),
-      ],
-    );
-  }
-}
-
-class PatientDetailsChild extends StatelessWidget {
-  const PatientDetailsChild({
-    super.key,
-    required this.heading,
-    required this.value,
-  });
-  final String heading;
-  final String value;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Text(
-          heading,
-          style: patientChildrenHeading,
-        ),
-        Text(
-          value,
-          style: patientHeaderSmall,
         ),
       ],
     );
