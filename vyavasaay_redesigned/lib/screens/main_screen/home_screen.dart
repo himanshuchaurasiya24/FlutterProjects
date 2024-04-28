@@ -43,8 +43,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                 Text(
                   widget.logInType == 'admin'
-                      ? '${widget.name}\n(${widget.logInType})'
-                      : '${widget.name}\n(${widget.logInType})',
+                      ? '${widget.name}\n(Admin)'
+                      : '${widget.name}\n(Technician)',
                   style: TextStyle(
                     color: titleLargeTextColor,
                     fontSize: defaultSize,

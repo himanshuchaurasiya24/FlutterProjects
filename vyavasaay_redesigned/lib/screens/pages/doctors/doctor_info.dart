@@ -56,9 +56,12 @@ class _DoctorInfoState extends State<DoctorInfo> {
                 return ListTile(
                   title: Text(
                     snapshot.data![index].name,
+                    style: patientHeader,
                   ),
-                  subtitle: Text(snapshot.data![index].sex +
-                      snapshot.data![index].address),
+                  subtitle: Text(
+                    '${snapshot.data![index].address} | ${snapshot.data![index].phone}',
+                    style: patientHeaderSmall,
+                  ),
                   trailing: IconButton(
                     onPressed: () async {
                       await Navigator.push(

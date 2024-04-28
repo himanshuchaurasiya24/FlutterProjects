@@ -1,33 +1,26 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vyavasaay_redesigned/database/database_helper.dart';
 import 'package:vyavasaay_redesigned/model/patient_model.dart';
 import 'package:vyavasaay_redesigned/utils/constants.dart';
 import 'package:vyavasaay_redesigned/widgets/custom_textfield.dart';
 
 class GenerateNewBill extends StatefulWidget {
-  const GenerateNewBill({super.key});
-
+  const GenerateNewBill({super.key, this.isUpdate = false, this.model});
+  final bool? isUpdate;
+  final PatientModel? model;
   @override
   State<GenerateNewBill> createState() => _GenerateNewBillState();
 }
 
 class _GenerateNewBillState extends State<GenerateNewBill> {
-  @override
-  void initState() {
-    super.initState();
-    discCen.text = 0.toString();
-    pSex.text = patientSex.first;
-    diagType.text = diagnType.first;
-    databaseHelper.initDB();
-  }
-
   final TextEditingController pName = TextEditingController();
   final TextEditingController pAge = TextEditingController();
   final TextEditingController pSex = TextEditingController();
-  final TextEditingController pPhone = TextEditingController();
-  final TextEditingController pAddress = TextEditingController();
   final TextEditingController date = TextEditingController();
   final TextEditingController refBy = TextEditingController();
   final TextEditingController diagType = TextEditingController();
@@ -39,6 +32,45 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
   final TextEditingController discCen = TextEditingController();
   final TextEditingController incentiveAmount = TextEditingController();
   final TextEditingController percent = TextEditingController();
+  int updateDiagType = 0;
+  int updateSexType = 0;
+  @override
+  void initState() {
+    super.initState();
+
+    pSex.text = patientSex.first;
+    diagType.text = diagnType.first;
+    discCen.text = 0.toString();
+
+    databaseHelper.initDB();
+    getTechnicianInfo();
+    if (widget.isUpdate!) {
+      updateDiagType = diagnType.indexOf(widget.model!.type);
+      updateSexType = patientSex.indexOf(widget.model!.sex);
+      remark.text = widget.model!.remark;
+      total.text = widget.model!.totalAmount.toString();
+      discCen.text = widget.model!.discCen.toString();
+      percent.text = widget.model!.percent.toString();
+      incentiveAmount.text = widget.model!.incentive.toString();
+      discDoc.text = widget.model!.discDoc.toString();
+      total.text = widget.model!.totalAmount.toString();
+      paid.text = widget.model!.paidAmount.toString();
+      pName.text = widget.model!.name;
+      pName.text = widget.model!.name;
+      pAge.text = widget.model!.age.toString();
+      pSex.text = widget.model!.sex;
+      date.text = widget.model!.date;
+      refBy.text = widget.model!.refBy;
+      diagType.text = widget.model!.type;
+    }
+  }
+
+  void getTechnicianInfo() async {
+    final pref = await SharedPreferences.getInstance();
+    technician.text =
+        widget.model?.technician ?? pref.getString('loggedInName') ?? '';
+  }
+
   final DatabaseHelper databaseHelper = DatabaseHelper();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final List diagnType = [
@@ -108,7 +140,9 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
                         fillColor: primaryColor,
                         filled: true,
                       ),
-                      value: patientSex.first,
+                      value: widget.isUpdate == true
+                          ? patientSex[updateSexType]
+                          : patientSex.first,
                       items: patientSex
                           .map(
                             (e) => DropdownMenuItem(
@@ -140,7 +174,9 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
                         fillColor: primaryColor,
                         filled: true,
                       ),
-                      value: diagnType.first,
+                      value: widget.isUpdate == true
+                          ? diagnType[updateDiagType]
+                          : diagnType.first,
                       items: diagnType
                           .map(
                             (e) => DropdownMenuItem(
@@ -152,8 +188,8 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
                       onChanged: (value) {
                         setState(() {
                           diagType.text = value.toString();
-                          refBy.clear();
-                          doctorSelector();
+                          widget.isUpdate! ? () {} : refBy.clear();
+                          widget.isUpdate! ? () {} : doctorSelector();
                           debugPrint(diagType.text);
                         });
                       },
@@ -273,28 +309,52 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
               GestureDetector(
                 onTap: () async {
                   if (formKey.currentState!.validate()) {
-                    await databaseHelper
-                        .addPatient(
-                      model: PatientModel(
-                        name: pName.text,
-                        age: int.parse(pAge.text),
-                        sex: pSex.text,
-                        date: date.text,
-                        type: diagType.text,
-                        remark: remark.text,
-                        technician: technician.text,
-                        refBy: refBy.text,
-                        totalAmount: int.parse(total.text),
-                        paidAmount: int.parse(paid.text),
-                        discDoc: int.parse(discDoc.text),
-                        discCen: int.parse(discDoc.text),
-                        incentive: int.parse(incentiveAmount.text),
-                        percent: int.parse(percent.text),
-                      ),
-                    )
-                        .then((value) {
-                      Navigator.pop(context, value);
-                    });
+                    widget.isUpdate == false
+                        ? await databaseHelper
+                            .addPatient(
+                            model: PatientModel(
+                              name: pName.text,
+                              age: int.parse(pAge.text),
+                              sex: pSex.text,
+                              date: date.text,
+                              type: diagType.text,
+                              remark: remark.text,
+                              technician: technician.text,
+                              refBy: refBy.text,
+                              totalAmount: int.parse(total.text),
+                              paidAmount: int.parse(paid.text),
+                              discDoc: int.parse(discDoc.text),
+                              discCen: int.parse(discCen.text),
+                              incentive: int.parse(incentiveAmount.text),
+                              percent: int.parse(percent.text),
+                            ),
+                          )
+                            .then((value) {
+                            Navigator.pop(context, value);
+                          })
+                        : await databaseHelper
+                            .updatePatient(
+                            model: PatientModel(
+                              id: widget.model!.id,
+                              name: pName.text,
+                              age: int.parse(pAge.text),
+                              sex: pSex.text,
+                              date: date.text,
+                              type: diagType.text,
+                              remark: remark.text,
+                              technician: technician.text,
+                              refBy: refBy.text,
+                              totalAmount: int.parse(total.text),
+                              paidAmount: int.parse(paid.text),
+                              discDoc: int.parse(discDoc.text),
+                              discCen: int.parse(discCen.text),
+                              incentive: int.parse(incentiveAmount.text),
+                              percent: int.parse(percent.text),
+                            ),
+                          )
+                            .then((value) {
+                            Navigator.pop(context, value);
+                          });
                   }
                 },
                 child: Container(
@@ -306,12 +366,39 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
                   ),
                   child: Center(
                     child: Text(
-                      'Generate Bill',
+                      widget.isUpdate == true ? 'Update Bill' : 'Generate Bill',
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ),
                 ),
               ),
+              Gap(defaultSize),
+              Visibility(
+                visible: widget.isUpdate!,
+                child: GestureDetector(
+                  onTap: () async {
+                    await databaseHelper
+                        .deletePatient(id: widget.model!.id!)
+                        .then(
+                          (value) => Navigator.pop(context, value),
+                        );
+                  },
+                  child: Container(
+                    height: getDeviceHeight(context: context) * 0.1,
+                    width: getDeviceWidth(context: context),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(defaultSize),
+                      color: primaryColor,
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Delete Bill',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                    ),
+                  ),
+                ),
+              )
             ],
           ),
         ),
@@ -325,11 +412,10 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
     int incentivePer = int.tryParse(percent.text) ?? 0;
     int discByCen = int.tryParse(discCen.text) ?? 0;
     int paymentDiff = totalAmount - paidAmount;
-
+    discDoc.text = (paymentDiff - discByCen).toString();
     double rawIncentive =
         (totalAmount * incentivePer) / 100 - (paymentDiff - discByCen);
     incentiveAmount.text = rawIncentive.toInt().toString();
-    discDoc.text = (paymentDiff - discByCen).toString();
 
     setState(() {
       maxDisount = paymentDiff;
@@ -396,7 +482,7 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
                     return ListView.builder(
                       itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) {
-                        return ListTile(
+                        return GestureDetector(
                           onTap: () {
                             refBy.text = snapshot.data![index].name;
                             if (diagType.text == diagnType[0]) {
@@ -420,8 +506,37 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
 
                             Navigator.pop(context);
                           },
-                          title: Text(snapshot.data![index].name),
-                          subtitle: Text(snapshot.data![index].address),
+                          child: Card(
+                            elevation: 0,
+                            color: primaryCardColor,
+                            child: Padding(
+                              padding: const EdgeInsets.all(5),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          snapshot.data![index].name,
+                                          style: patientHeader,
+                                        ),
+                                        Text(
+                                          snapshot.data![index].address,
+                                          style: patientHeaderSmall,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Text(
+                                    snapshot.data![index].phone,
+                                    style: patientHeaderSmall,
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
                         );
                       },
                     );

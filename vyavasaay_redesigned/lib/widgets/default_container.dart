@@ -17,20 +17,18 @@ class DefaultContainer extends StatelessWidget {
   final List<BoxShadow>? boxShadow;
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
       padding: EdgeInsets.all(defaultSize),
-      child: Container(
-        height: height ?? getDeviceHeight(context: context),
-        width: width ?? getDeviceWidth(context: context),
-        decoration: BoxDecoration(
-          color: color ?? primaryColorDark,
-          borderRadius: BorderRadius.circular(
-            defaultSize,
-          ),
-          boxShadow: boxShadow,
+      height: height ?? getDeviceHeight(context: context),
+      width: width ?? getDeviceWidth(context: context),
+      decoration: BoxDecoration(
+        color: color ?? primaryColorDark,
+        borderRadius: BorderRadius.circular(
+          defaultSize,
         ),
-        child: child,
+        boxShadow: boxShadow,
       ),
+      child: child,
     );
   }
 }

@@ -17,6 +17,7 @@ class DatabaseHelper {
   String userTable = 'userTable';
   String doctorTable = 'doctorTable';
   String patientTable = 'patientTable';
+  String loginHistoryTable = 'loginHistory';
   String userQuery = '''CREATE TABLE IF NOT EXISTS userTable(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT UNIQUE,
@@ -44,7 +45,7 @@ CREATE TABLE IF NOT EXISTS doctorTable(
 )''';
   String patientQuery = '''
 CREATE TABLE IF NOT EXISTS patientTable(
-  id TEXT,
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT,
   age INTEGER,
   sex TEXT,
@@ -129,6 +130,16 @@ CREATE TABLE IF NOT EXISTS patientTable(
     return result.map((e) {
       return PatientModel.fromMap(e);
     }).toList();
+  }
+
+  Future<int> updatePatient({required PatientModel model}) async {
+    final db = await initDB();
+    return await db.update(
+      patientTable,
+      model.toMap(),
+      where: 'id = ?',
+      whereArgs: [model.id],
+    );
   }
 
   Future<int> deletePatient({required int id}) async {
@@ -271,5 +282,6 @@ CREATE TABLE IF NOT EXISTS patientTable(
     await db.rawDelete('DELETE FROM $adminTable');
     await db.rawDelete('DELETE FROM $userTable');
     await db.rawDelete('DELETE FROM $doctorTable');
+    await db.rawDelete('DELETE FROM $patientTable');
   }
 }
