@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vyavasaay_redesigned/database/database_helper.dart';
+import 'package:vyavasaay_redesigned/model/doctor_model.dart';
 import 'package:vyavasaay_redesigned/model/patient_model.dart';
 import 'package:vyavasaay_redesigned/utils/constants.dart';
 import 'package:vyavasaay_redesigned/widgets/custom_textfield.dart';
@@ -32,6 +33,8 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
   final TextEditingController percent = TextEditingController();
   int updateDiagType = 0;
   int updateSexType = 0;
+  late Future<List<DoctorModel>> doctorList;
+
   @override
   void initState() {
     super.initState();
@@ -40,7 +43,9 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
     diagType.text = diagnType.first;
     discCen.text = 0.toString();
 
-    databaseHelper.initDB();
+    databaseHelper.initDB().whenComplete(() {
+      doctorList = databaseHelper.getDoctorList();
+    });
     getTechnicianInfo();
     if (widget.isUpdate!) {
       updateDiagType = diagnType.indexOf(widget.model!.type);

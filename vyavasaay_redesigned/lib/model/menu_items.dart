@@ -4,7 +4,6 @@ import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/about_this_app.d
 import 'package:vyavasaay_redesigned/screens/pages/account_control/access_control.dart';
 import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/account_details.dart';
 import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/dashboard.dart';
-import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/diagnosis_history.dart';
 import 'package:vyavasaay_redesigned/screens/pages/doctors/doctor_info.dart';
 import 'package:vyavasaay_redesigned/screens/pages/patients/bill_history.dart';
 import 'package:vyavasaay_redesigned/screens/pages/patients/generate_report.dart';
@@ -32,11 +31,6 @@ class MenuItems {
       title: 'Doctor Info',
       icon: Icons.person_outlined,
       child: const DoctorInfo(),
-    ),
-    MenuDetails(
-      title: 'Diagnosis History',
-      icon: Icons.work_history_outlined,
-      child: const DiagnosisHistory(),
     ),
     MenuDetails(
       title: 'Account Details',
@@ -84,11 +78,6 @@ class MenuItems {
       title: 'Doctor Info',
       icon: Icons.person_outlined,
       child: const DoctorInfo(),
-    ),
-    MenuDetails(
-      title: 'Diagnosis History',
-      icon: Icons.work_history_outlined,
-      child: const DiagnosisHistory(),
     ),
     MenuDetails(
       title: 'Account Details',

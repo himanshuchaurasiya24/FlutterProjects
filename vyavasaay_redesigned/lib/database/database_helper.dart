@@ -189,10 +189,12 @@ CREATE TABLE IF NOT EXISTS patientTable(
     return res;
   }
 
-  Future<List<DoctorModel>> searchDoctor({required String name}) async {
+  Future<List<DoctorModel>> searchDoctor({required String data}) async {
     final db = await initDB();
     final List<Map<String, Object?>> result = await db.query(doctorTable,
-        where: 'name LIKE ?', whereArgs: ['%$name%'], orderBy: 'name ASC');
+        where: 'name LIKE ? OR address LIKE ?',
+        whereArgs: ['%$data%', '%$data%'],
+        orderBy: 'name ASC');
     return result.map((e) {
       return DoctorModel.fromMap(e);
     }).toList();
