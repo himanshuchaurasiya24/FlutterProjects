@@ -25,101 +25,185 @@ class _AccessControlState extends State<AccessControl> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Column(
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              'Admin Account List',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            Gap(defaultSize),
             Expanded(
-              child: FutureBuilder(
-                future: databaseHelper.getAllAdminAccount(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  if (snapshot.hasError) {
-                    return Center(
-                      child: Text(
-                        'Some error occurred!',
-                        style: Theme.of(context).textTheme.titleLarge,
+              child: Container(
+                margin: EdgeInsets.all(defaultSize),
+                padding: EdgeInsets.all(defaultSize),
+                decoration: BoxDecoration(
+                  color: primaryCardColor,
+                  borderRadius: BorderRadius.circular(defaultSize),
+                ),
+                child: Column(
+                  children: [
+                    Text(
+                      'Admin Account List',
+                      style: patientHeader,
+                    ),
+                    Gap(defaultSize),
+                    Expanded(
+                      child: FutureBuilder(
+                        future: databaseHelper.getAllAdminAccount(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          if (snapshot.hasError) {
+                            return Center(
+                              child: Text(
+                                'Some error occurred!',
+                                style: Theme.of(context).textTheme.titleLarge,
+                              ),
+                            );
+                          }
+                          if (snapshot.hasData) {
+                            if (snapshot.data!.isEmpty) {
+                              return Center(
+                                child: Text(
+                                  'Empty Admin Account',
+                                  style: Theme.of(context).textTheme.titleLarge,
+                                ),
+                              );
+                            }
+                          }
+                          return ListView.builder(
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, index) {
+                              return Card(
+                                color: primaryColor,
+                                elevation: 0,
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: defaultSize),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            snapshot.data![index].name,
+                                            style: patientHeader,
+                                          ),
+                                          Text(
+                                            snapshot.data![index].phoneNumber,
+                                            style: patientHeaderSmall,
+                                          ),
+                                        ],
+                                      ),
+                                      IconButton(
+                                        onPressed: () {},
+                                        icon: const Icon(Icons.edit_outlined),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
                       ),
-                    );
-                  }
-                  if (snapshot.hasData) {
-                    if (snapshot.data!.isEmpty) {
-                      return Center(
-                        child: Text(
-                          'Empty Admin Account',
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                      );
-                    }
-                  }
-                  return ListView.builder(
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(
-                          snapshot.data![index].name,
-                        ),
-                        subtitle: Text(snapshot.data![index].name),
-                      );
-                    },
-                  );
-                },
+                    ),
+                  ],
+                ),
               ),
             ),
-            Gap(defaultSize),
-            Text(
-              'Technician Account List',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            Gap(defaultSize),
             Expanded(
-              child: FutureBuilder(
-                future: databaseHelper.getAllUserAccount(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  if (snapshot.hasError) {
-                    return Center(
-                      child: Text(
-                        'Some error occurred!',
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                    );
-                  }
-                  if (snapshot.hasData) {
-                    if (snapshot.data!.isEmpty) {
-                      return Center(
-                        child: Text(
-                          'Empty User Account',
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                      );
-                    }
-                  }
-                  return ListView.builder(
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(
-                          snapshot.data![index].name,
-                        ),
-                        subtitle: Text(snapshot.data![index].name),
-                      );
-                    },
-                  );
-                },
+                child: Container(
+              margin: EdgeInsets.all(defaultSize),
+              padding: EdgeInsets.all(defaultSize),
+              decoration: BoxDecoration(
+                color: primaryCardColor,
+                borderRadius: BorderRadius.circular(defaultSize),
               ),
-            ),
+              child: Column(
+                children: [
+                  Text(
+                    'Technician Account List',
+                    style: patientHeader,
+                  ),
+                  Gap(defaultSize),
+                  Expanded(
+                    child: FutureBuilder(
+                      future: databaseHelper.getAllUserAccount(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        if (snapshot.hasError) {
+                          return Center(
+                            child: Text(
+                              'Some error occurred!',
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
+                          );
+                        }
+                        if (snapshot.hasData) {
+                          if (snapshot.data!.isEmpty) {
+                            return Center(
+                              child: Text(
+                                'Empty User Account',
+                                style: Theme.of(context).textTheme.titleLarge,
+                              ),
+                            );
+                          }
+                        }
+                        return ListView.builder(
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            return Card(
+                              color: primaryColor,
+                              elevation: 0,
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: defaultSize),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          snapshot.data![index].name,
+                                          style: patientHeader,
+                                        ),
+                                        Text(
+                                          snapshot.data![index].phoneNumber,
+                                          style: patientHeaderSmall,
+                                        ),
+                                      ],
+                                    ),
+                                    IconButton(
+                                      onPressed: () {},
+                                      icon: const Icon(Icons.edit_outlined),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ))
           ],
         ),
         Positioned(
