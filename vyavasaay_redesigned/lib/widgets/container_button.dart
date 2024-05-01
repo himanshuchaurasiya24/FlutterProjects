@@ -33,7 +33,7 @@ class _ContainerButtonState extends State<ContainerButton> {
       },
       child: DefaultContainer(
         color: containerColor,
-        height: getDeviceHeight(context: context) * 0.1,
+        height: getDeviceHeight(context: context) * 0.125,
         child: Center(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
