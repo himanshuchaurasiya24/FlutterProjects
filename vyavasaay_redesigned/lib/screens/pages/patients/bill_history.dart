@@ -112,9 +112,12 @@ class _BillHistoryState extends State<BillHistory> {
                               )
                             ],
                           ),
-                          subtitle: Text(
-                            snapshot.data![index].refBy,
-                            style: patientHeaderSmall,
+                          subtitle: FutureBuilder(
+                            future: databaseHelper.searchDoctorById(
+                                id: snapshot.data![index].id!),
+                            builder: (context, snapshot) {
+                              return Text(snapshot.data!.name);
+                            },
                           ),
                           childrenPadding: EdgeInsets.only(
                             left: defaultSize,

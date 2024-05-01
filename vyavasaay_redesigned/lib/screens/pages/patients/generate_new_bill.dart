@@ -22,6 +22,7 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
   final TextEditingController pSex = TextEditingController();
   final TextEditingController date = TextEditingController();
   final TextEditingController refBy = TextEditingController();
+  final TextEditingController refById = TextEditingController();
   final TextEditingController diagType = TextEditingController();
   final TextEditingController remark = TextEditingController();
   final TextEditingController technician = TextEditingController();
@@ -63,7 +64,6 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
       pAge.text = widget.model!.age.toString();
       pSex.text = widget.model!.sex;
       date.text = widget.model!.date;
-      refBy.text = widget.model!.refBy;
       diagType.text = widget.model!.type;
     }
   }
@@ -191,7 +191,7 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
                       onChanged: (value) {
                         setState(() {
                           diagType.text = value.toString();
-                          widget.isUpdate! ? () {} : refBy.clear();
+                          widget.isUpdate! ? () {} : refById.clear();
                           widget.isUpdate! ? () {} : doctorSelector();
                           debugPrint(diagType.text);
                         });
@@ -323,7 +323,7 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
                               type: diagType.text,
                               remark: remark.text,
                               technician: technician.text,
-                              refBy: refBy.text,
+                              refById: int.parse(refById.text),
                               totalAmount: int.parse(total.text),
                               paidAmount: int.parse(paid.text),
                               discDoc: int.parse(discDoc.text),
@@ -346,7 +346,7 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
                               type: diagType.text,
                               remark: remark.text,
                               technician: technician.text,
-                              refBy: refBy.text,
+                              refById: int.parse(refById.text),
                               totalAmount: int.parse(total.text),
                               paidAmount: int.parse(paid.text),
                               discDoc: int.parse(discDoc.text),
@@ -488,6 +488,8 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
                         return GestureDetector(
                           onTap: () {
                             refBy.text = snapshot.data![index].name;
+                            refById.text = snapshot.data![index].id!.toString();
+                            debugPrint(refById.text);
                             if (diagType.text == diagnType[0]) {
                               percent.text =
                                   snapshot.data![index].ultrasound.toString();

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:vyavasaay_redesigned/database/database_helper.dart';
+import 'package:vyavasaay_redesigned/screens/introduction_screens/splash_screen.dart';
 import 'package:vyavasaay_redesigned/screens/pages/account_control/change_account_details.dart';
 import 'package:vyavasaay_redesigned/screens/pages/account_control/create_account.dart';
 import 'package:vyavasaay_redesigned/utils/constants.dart';
@@ -21,6 +22,23 @@ class _AccessControlState extends State<AccessControl> {
   }
 
   final DatabaseHelper databaseHelper = DatabaseHelper();
+  Future<int> checkAdminExists() async {
+    var adminAccountLength = await databaseHelper.getAdminAccountLength();
+    if (adminAccountLength < 1) {
+      await databaseHelper.deleteEverything();
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) {
+            return const SplashScreen();
+          },
+        ),
+      );
+    } else {
+      Navigator.pop(context);
+    }
+    return adminAccountLength;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,21 +119,99 @@ class _AccessControlState extends State<AccessControl> {
                                           ),
                                         ],
                                       ),
-                                      IconButton(
-                                        onPressed: () async {
-                                          await Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) {
-                                                return ChangeAccountDetails(
-                                                  adminModel:
-                                                      snapshot.data![index],
-                                                );
-                                              },
-                                            ),
-                                          ).then((value) => setState(() {}));
-                                        },
-                                        icon: const Icon(Icons.edit_outlined),
+                                      Row(
+                                        children: [
+                                          IconButton(
+                                            onPressed: () async {
+                                              await Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) {
+                                                    return ChangeAccountDetails(
+                                                      adminModel:
+                                                          snapshot.data![index],
+                                                    );
+                                                  },
+                                                ),
+                                              ).then(
+                                                  (value) => setState(() {}));
+                                            },
+                                            icon:
+                                                const Icon(Icons.edit_outlined),
+                                          ),
+                                          IconButton(
+                                            onPressed: () async {
+                                              await showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return AlertDialog(
+                                                    content: Text(
+                                                      'Are you sure you want to delete this account?\nDeleting this will also delete entries made by this account',
+                                                      style: patientHeaderSmall,
+                                                    ),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () async {
+                                                          await databaseHelper
+                                                              .deleteAdmin(
+                                                                  adminId: snapshot
+                                                                      .data![
+                                                                          index]
+                                                                      .id!)
+                                                              .then(
+                                                                  (value) async {
+                                                            await checkAdminExists();
+                                                          }).onError((error,
+                                                                      stackTrace) =>
+                                                                  showDialog(
+                                                                    context:
+                                                                        context,
+                                                                    builder:
+                                                                        (context) {
+                                                                      return AlertDialog(
+                                                                        content:
+                                                                            Text(
+                                                                          error
+                                                                              .toString(),
+                                                                          style:
+                                                                              patientHeader,
+                                                                        ),
+                                                                      );
+                                                                    },
+                                                                  ));
+                                                        },
+                                                        child: Text(
+                                                          'Yes',
+                                                          style: patientChildrenHeading
+                                                              .copyWith(
+                                                                  color: Colors
+                                                                          .red[
+                                                                      400]),
+                                                        ),
+                                                      ),
+                                                      TextButton(
+                                                          onPressed: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                          child: Text(
+                                                            'No',
+                                                            style: patientChildrenHeading
+                                                                .copyWith(
+                                                                    color: Colors
+                                                                            .green[
+                                                                        400]),
+                                                          ))
+                                                    ],
+                                                  );
+                                                },
+                                              ).then(
+                                                  (value) => setState(() {}));
+                                            },
+                                            icon: const Icon(
+                                                Icons.delete_outlined),
+                                          ),
+                                        ],
                                       )
                                     ],
                                   ),
@@ -201,23 +297,97 @@ class _AccessControlState extends State<AccessControl> {
                                         ),
                                       ],
                                     ),
-                                    IconButton(
-                                      onPressed: () async {
-                                        await Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) {
-                                              return ChangeAccountDetails(
-                                                userModel:
-                                                    snapshot.data![index],
-                                              );
-                                            },
-                                          ),
-                                        ).then((value) {
-                                          setState(() {});
-                                        });
-                                      },
-                                      icon: const Icon(Icons.edit_outlined),
+                                    Row(
+                                      children: [
+                                        IconButton(
+                                          onPressed: () async {
+                                            await Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) {
+                                                  return ChangeAccountDetails(
+                                                    userModel:
+                                                        snapshot.data![index],
+                                                  );
+                                                },
+                                              ),
+                                            ).then((value) => setState(() {}));
+                                          },
+                                          icon: const Icon(Icons.edit_outlined),
+                                        ),
+                                        IconButton(
+                                          onPressed: () async {
+                                            await showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return AlertDialog(
+                                                  content: Text(
+                                                    'Are you sure you want to delete this account?\nDeleting this will also delete entries made by this account',
+                                                    style: patientHeaderSmall,
+                                                  ),
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () async {
+                                                        await databaseHelper
+                                                            .deleteUser(
+                                                                userId: snapshot
+                                                                    .data![
+                                                                        index]
+                                                                    .id!)
+                                                            .then(
+                                                                (value) async {
+                                                          await checkAdminExists();
+                                                        }).onError((error,
+                                                                    stackTrace) =>
+                                                                showDialog(
+                                                                  context:
+                                                                      context,
+                                                                  builder:
+                                                                      (context) {
+                                                                    return AlertDialog(
+                                                                      content:
+                                                                          Text(
+                                                                        error
+                                                                            .toString(),
+                                                                        style:
+                                                                            patientHeader,
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                ));
+                                                      },
+                                                      child: Text(
+                                                        'Yes',
+                                                        style:
+                                                            patientChildrenHeading
+                                                                .copyWith(
+                                                                    color: Colors
+                                                                            .red[
+                                                                        400]),
+                                                      ),
+                                                    ),
+                                                    TextButton(
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: Text(
+                                                          'No',
+                                                          style: patientChildrenHeading
+                                                              .copyWith(
+                                                                  color: Colors
+                                                                          .green[
+                                                                      400]),
+                                                        ))
+                                                  ],
+                                                );
+                                              },
+                                            ).then((value) => setState(() {}));
+                                          },
+                                          icon:
+                                              const Icon(Icons.delete_outlined),
+                                        ),
+                                      ],
                                     )
                                   ],
                                 ),

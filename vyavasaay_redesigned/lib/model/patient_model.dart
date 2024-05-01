@@ -10,7 +10,8 @@ class PatientModel {
   String type;
   String remark;
   String technician;
-  String refBy;
+
+  int refById;
   int totalAmount;
   int paidAmount;
   int discDoc;
@@ -26,7 +27,7 @@ class PatientModel {
     required this.type,
     required this.remark,
     required this.technician,
-    required this.refBy,
+    required this.refById,
     required this.totalAmount,
     required this.paidAmount,
     required this.discDoc,
@@ -44,7 +45,7 @@ class PatientModel {
     String? type,
     String? remark,
     String? technician,
-    String? refBy,
+    int? refById,
     int? totalAmount,
     int? paidAmount,
     int? discDoc,
@@ -61,7 +62,7 @@ class PatientModel {
       type: type ?? this.type,
       remark: remark ?? this.remark,
       technician: technician ?? this.technician,
-      refBy: refBy ?? this.refBy,
+      refById: refById ?? this.refById,
       totalAmount: totalAmount ?? this.totalAmount,
       paidAmount: paidAmount ?? this.paidAmount,
       discDoc: discDoc ?? this.discDoc,
@@ -81,7 +82,7 @@ class PatientModel {
       'type': type,
       'remark': remark,
       'technician': technician,
-      'refBy': refBy,
+      'refById': refById,
       'totalAmount': totalAmount,
       'paidAmount': paidAmount,
       'discDoc': discDoc,
@@ -101,7 +102,7 @@ class PatientModel {
       type: map['type'] as String,
       remark: map['remark'] as String,
       technician: map['technician'] as String,
-      refBy: map['refBy'] as String,
+      refById: map['refById'] as int,
       totalAmount: map['totalAmount'] as int,
       paidAmount: map['paidAmount'] as int,
       discDoc: map['discDoc'] as int,
@@ -118,7 +119,7 @@ class PatientModel {
 
   @override
   String toString() {
-    return 'PatientModel(id: $id, name: $name, age: $age, sex: $sex, date: $date, type: $type, remark: $remark, technician: $technician, refBy: $refBy, totalAmount: $totalAmount, paidAmount: $paidAmount, discDoc: $discDoc, discCen: $discCen, incentive: $incentive, percent: $percent)';
+    return 'PatientModel(id: $id, name: $name, age: $age, sex: $sex, date: $date, type: $type, remark: $remark, technician: $technician, refById: $refById, totalAmount: $totalAmount, paidAmount: $paidAmount, discDoc: $discDoc, discCen: $discCen, incentive: $incentive, percent: $percent)';
   }
 
   @override
@@ -133,7 +134,7 @@ class PatientModel {
         other.type == type &&
         other.remark == remark &&
         other.technician == technician &&
-        other.refBy == refBy &&
+        other.refById == refById &&
         other.totalAmount == totalAmount &&
         other.paidAmount == paidAmount &&
         other.discDoc == discDoc &&
@@ -152,7 +153,7 @@ class PatientModel {
         type.hashCode ^
         remark.hashCode ^
         technician.hashCode ^
-        refBy.hashCode ^
+        refById.hashCode ^
         totalAmount.hashCode ^
         paidAmount.hashCode ^
         discDoc.hashCode ^
