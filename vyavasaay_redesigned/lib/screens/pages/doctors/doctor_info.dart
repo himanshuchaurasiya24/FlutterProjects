@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vyavasaay_redesigned/database/database_helper.dart';
 import 'package:vyavasaay_redesigned/model/doctor_model.dart';
 import 'package:vyavasaay_redesigned/screens/pages/doctors/add_doctor.dart';
 import 'package:vyavasaay_redesigned/utils/constants.dart';
+import 'package:vyavasaay_redesigned/widgets/container_button.dart';
 import 'package:vyavasaay_redesigned/widgets/custom_textfield.dart';
 import 'package:vyavasaay_redesigned/widgets/default_container.dart';
 import 'package:vyavasaay_redesigned/widgets/patient_details_child.dart';
@@ -19,12 +21,25 @@ class _DoctorInfoState extends State<DoctorInfo> {
   DatabaseHelper databaseHelper = DatabaseHelper();
   final searchController = TextEditingController();
   late Future<List<DoctorModel>> doctorList;
+  bool isAdminLogin = false;
+
   @override
   void initState() {
     super.initState();
     databaseHelper.initDB().whenComplete(() {
       doctorList = databaseHelper.getDoctorList();
     });
+    getTechnicianInfo();
+  }
+
+  void getTechnicianInfo() async {
+    final pref = await SharedPreferences.getInstance();
+    String loggedInAs = pref.getString('logInType') ?? 'user';
+    if (loggedInAs == 'admin') {
+      isAdminLogin = true;
+    } else {
+      isAdminLogin = false;
+    }
   }
 
   Future<List<DoctorModel>> getDoctorList() {
@@ -133,7 +148,36 @@ class _DoctorInfoState extends State<DoctorInfo> {
                               heading: 'X-Ray % ',
                               value: snapshot.data![index].xray.toString(),
                             ),
-                            Gap(defaultSize),
+                            Visibility(
+                              visible: isAdminLogin,
+                              child: Gap(defaultSize),
+                            ),
+                            Visibility(
+                              visible: isAdminLogin,
+                              child: GestureDetector(
+                                onTap: () async {
+                                  await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) {
+                                        return AddDoctor(
+                                          isUpdate: true,
+                                          model: snapshot.data![index],
+                                        );
+                                      },
+                                    ),
+                                  ).then((value) => setState(() {}));
+                                },
+                                child: const ContainerButton(
+                                  btnName: 'Edit Doctor Info',
+                                  iconData: Icons.edit_outlined,
+                                ),
+                              ),
+                            ),
+                            Visibility(
+                              visible: isAdminLogin,
+                              child: Gap(defaultSize),
+                            ),
                           ],
                         ),
                       );

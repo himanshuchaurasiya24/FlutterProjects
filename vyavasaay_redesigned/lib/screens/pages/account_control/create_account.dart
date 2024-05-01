@@ -4,7 +4,9 @@ import 'package:vyavasaay_redesigned/database/database_helper.dart';
 import 'package:vyavasaay_redesigned/model/admin_model.dart';
 import 'package:vyavasaay_redesigned/model/user_model.dart';
 import 'package:vyavasaay_redesigned/utils/constants.dart';
+import 'package:vyavasaay_redesigned/widgets/container_button.dart';
 import 'package:vyavasaay_redesigned/widgets/custom_textfield.dart';
+import 'package:vyavasaay_redesigned/widgets/update_screen_widget.dart';
 
 class CreateAccount extends StatefulWidget {
   const CreateAccount({super.key});
@@ -37,17 +39,7 @@ class _CreateAccountState extends State<CreateAccount> {
       appBar: AppBar(
         title: const Text('Create Account'),
       ),
-      body: Container(
-        margin: EdgeInsets.all(defaultSize * 3),
-        height: getDeviceHeight(context: context),
-        width: getDeviceWidth(context: context),
-        padding: EdgeInsets.all(defaultSize),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(
-            defaultSize,
-          ),
-          color: primaryColorDark,
-        ),
+      body: UpdateScreenWidget(
         child: Form(
             key: formKey,
             child: Column(
@@ -169,20 +161,9 @@ class _CreateAccountState extends State<CreateAccount> {
                       }
                     }
                   },
-                  child: Container(
-                    height: getDeviceHeight(context: context) * 0.1,
-                    width: getDeviceWidth(context: context),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(defaultSize),
-                      color: primaryColor,
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Create Account',
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                    ),
-                  ),
+                  child: const ContainerButton(
+                      iconData: Icons.create_outlined,
+                      btnName: 'Create Account'),
                 ),
               ],
             )),

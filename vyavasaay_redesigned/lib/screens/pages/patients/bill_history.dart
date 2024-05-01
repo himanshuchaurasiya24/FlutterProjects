@@ -6,6 +6,7 @@ import 'package:vyavasaay_redesigned/database/database_helper.dart';
 import 'package:vyavasaay_redesigned/model/patient_model.dart';
 import 'package:vyavasaay_redesigned/screens/pages/patients/generate_new_bill.dart';
 import 'package:vyavasaay_redesigned/utils/constants.dart';
+import 'package:vyavasaay_redesigned/widgets/container_button.dart';
 import 'package:vyavasaay_redesigned/widgets/custom_textfield.dart';
 import 'package:vyavasaay_redesigned/widgets/default_container.dart';
 import 'package:vyavasaay_redesigned/widgets/patient_details_child.dart';
@@ -100,23 +101,25 @@ class _BillHistoryState extends State<BillHistory> {
                         elevation: 0,
                         color: primaryCardColor,
                         child: ExpansionTile(
-                          title: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(snapshot.data![index].name,
-                                  style: patientHeader),
-                              Gap(defaultSize),
-                              Text(
-                                snapshot.data![index].date,
-                                style: patientHeaderSmall,
-                              )
-                            ],
+                          title: Text(snapshot.data![index].name,
+                              style: patientHeader),
+                          trailing: Text(
+                            snapshot.data![index].date,
+                            style: patientHeaderSmall,
                           ),
                           subtitle: FutureBuilder(
                             future: databaseHelper.searchDoctorById(
                                 id: snapshot.data![index].id!),
                             builder: (context, snapshot) {
-                              return Text(snapshot.data!.name);
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return Text('Loading',
+                                    style: patientHeaderSmall);
+                              }
+                              return Text(
+                                snapshot.data!.name,
+                                style: patientHeaderSmall,
+                              );
                             },
                           ),
                           childrenPadding: EdgeInsets.only(
@@ -215,42 +218,22 @@ class _BillHistoryState extends State<BillHistory> {
                                 Visibility(
                                   visible: isAdminLogin,
                                   child: GestureDetector(
-                                    onTap: () async {
-                                      await Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) {
-                                            return GenerateNewBill(
-                                              isUpdate: true,
-                                              model: snapshot.data![index],
-                                            );
-                                          },
-                                        ),
-                                      ).then((value) => setState(() {}));
-                                    },
-                                    child: DefaultContainer(
-                                        color: primaryColor,
-                                        height:
-                                            getDeviceHeight(context: context) *
-                                                0.1,
-                                        child: Center(
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              const Icon(
-                                                Icons.edit_outlined,
-                                                size: 30,
-                                              ),
-                                              Gap(defaultSize),
-                                              Text(
-                                                'Edit Bill',
-                                                style: patientHeader,
-                                              ),
-                                            ],
+                                      onTap: () async {
+                                        await Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) {
+                                              return GenerateNewBill(
+                                                isUpdate: true,
+                                                model: snapshot.data![index],
+                                              );
+                                            },
                                           ),
-                                        )),
-                                  ),
+                                        ).then((value) => setState(() {}));
+                                      },
+                                      child: const ContainerButton(
+                                          iconData: Icons.edit_outlined,
+                                          btnName: 'Edit bill')),
                                 )
                               ],
                             )

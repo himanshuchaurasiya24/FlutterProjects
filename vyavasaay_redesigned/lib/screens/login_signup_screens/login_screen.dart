@@ -4,6 +4,7 @@ import 'package:vyavasaay_redesigned/database/database_helper.dart';
 import 'package:vyavasaay_redesigned/screens/main_screen/home_screen.dart';
 import 'package:vyavasaay_redesigned/screens/login_signup_screens/signup_screen.dart';
 import 'package:vyavasaay_redesigned/utils/constants.dart';
+import 'package:vyavasaay_redesigned/widgets/container_button.dart';
 import 'package:vyavasaay_redesigned/widgets/custom_textfield.dart';
 import 'package:vyavasaay_redesigned/widgets/default_container.dart';
 
@@ -106,6 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         CustomTextField(
                           controller: passwordController,
                           hintText: 'Password',
+                          isObscure: true,
                         ),
                         SizedBox(
                           height: defaultSize,
@@ -209,37 +211,19 @@ class _LoginScreenState extends State<LoginScreen> {
                             }
                           },
                           child: MouseRegion(
-                            onEnter: (event) {
-                              setState(() {
-                                containerColor = primaryColorDarker;
-                              });
-                            },
-                            onExit: (event) {
-                              setState(() {
-                                containerColor = primaryColor;
-                              });
-                            },
-                            child: Container(
-                              height: getDeviceHeight(context: context) * 0.1,
-                              width: getDeviceWidth(context: context) * 0.55,
-                              decoration: BoxDecoration(
-                                color: containerColor,
-                                borderRadius: BorderRadius.circular(
-                                  defaultSize,
-                                ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'Log In',
-                                  style: TextStyle(
-                                    color: titleLargeTextColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: titleLargeTextSize - 15,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
+                              onEnter: (event) {
+                                setState(() {
+                                  containerColor = primaryColorDarker;
+                                });
+                              },
+                              onExit: (event) {
+                                setState(() {
+                                  containerColor = primaryColor;
+                                });
+                              },
+                              child: const ContainerButton(
+                                  iconData: Icons.login_outlined,
+                                  btnName: 'Login')),
                         ),
                         SizedBox(
                           height: defaultSize,

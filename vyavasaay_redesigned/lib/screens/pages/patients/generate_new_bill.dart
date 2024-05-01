@@ -6,7 +6,9 @@ import 'package:vyavasaay_redesigned/database/database_helper.dart';
 import 'package:vyavasaay_redesigned/model/doctor_model.dart';
 import 'package:vyavasaay_redesigned/model/patient_model.dart';
 import 'package:vyavasaay_redesigned/utils/constants.dart';
+import 'package:vyavasaay_redesigned/widgets/container_button.dart';
 import 'package:vyavasaay_redesigned/widgets/custom_textfield.dart';
+import 'package:vyavasaay_redesigned/widgets/update_screen_widget.dart';
 
 class GenerateNewBill extends StatefulWidget {
   const GenerateNewBill({super.key, this.isUpdate = false, this.model});
@@ -93,17 +95,7 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
     return Scaffold(
       backgroundColor: primaryColor,
       appBar: AppBar(),
-      body: Container(
-        margin: EdgeInsets.all(defaultSize * 3),
-        height: getDeviceHeight(context: context),
-        width: getDeviceWidth(context: context),
-        padding: EdgeInsets.all(defaultSize),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(
-            defaultSize,
-          ),
-          color: primaryColorDark,
-        ),
+      body: UpdateScreenWidget(
         child: Form(
           key: formKey,
           child: Column(
@@ -310,97 +302,77 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
               ),
               Gap(defaultSize),
               GestureDetector(
-                onTap: () async {
-                  if (formKey.currentState!.validate()) {
-                    widget.isUpdate == false
-                        ? await databaseHelper
-                            .addPatient(
-                            model: PatientModel(
-                              name: pName.text,
-                              age: int.parse(pAge.text),
-                              sex: pSex.text,
-                              date: date.text,
-                              type: diagType.text,
-                              remark: remark.text,
-                              technician: technician.text,
-                              refById: int.parse(refById.text),
-                              totalAmount: int.parse(total.text),
-                              paidAmount: int.parse(paid.text),
-                              discDoc: int.parse(discDoc.text),
-                              discCen: int.parse(discCen.text),
-                              incentive: int.parse(incentiveAmount.text),
-                              percent: int.parse(percent.text),
-                            ),
-                          )
-                            .then((value) {
-                            Navigator.pop(context, value);
-                          })
-                        : await databaseHelper
-                            .updatePatient(
-                            model: PatientModel(
-                              id: widget.model!.id,
-                              name: pName.text,
-                              age: int.parse(pAge.text),
-                              sex: pSex.text,
-                              date: date.text,
-                              type: diagType.text,
-                              remark: remark.text,
-                              technician: technician.text,
-                              refById: int.parse(refById.text),
-                              totalAmount: int.parse(total.text),
-                              paidAmount: int.parse(paid.text),
-                              discDoc: int.parse(discDoc.text),
-                              discCen: int.parse(discCen.text),
-                              incentive: int.parse(incentiveAmount.text),
-                              percent: int.parse(percent.text),
-                            ),
-                          )
-                            .then((value) {
-                            Navigator.pop(context, value);
-                          });
-                  }
-                },
-                child: Container(
-                  height: getDeviceHeight(context: context) * 0.1,
-                  width: getDeviceWidth(context: context),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(defaultSize),
-                    color: primaryColor,
-                  ),
-                  child: Center(
-                    child: Text(
-                      widget.isUpdate == true ? 'Update Bill' : 'Generate Bill',
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                  ),
-                ),
-              ),
+                  onTap: () async {
+                    if (formKey.currentState!.validate()) {
+                      widget.isUpdate == false
+                          ? await databaseHelper
+                              .addPatient(
+                              model: PatientModel(
+                                name: pName.text,
+                                age: int.parse(pAge.text),
+                                sex: pSex.text,
+                                date: date.text,
+                                type: diagType.text,
+                                remark: remark.text,
+                                technician: technician.text,
+                                refById: int.parse(refById.text),
+                                totalAmount: int.parse(total.text),
+                                paidAmount: int.parse(paid.text),
+                                discDoc: int.parse(discDoc.text),
+                                discCen: int.parse(discCen.text),
+                                incentive: int.parse(incentiveAmount.text),
+                                percent: int.parse(percent.text),
+                              ),
+                            )
+                              .then((value) {
+                              Navigator.pop(context, value);
+                            })
+                          : await databaseHelper
+                              .updatePatient(
+                              model: PatientModel(
+                                id: widget.model!.id,
+                                name: pName.text,
+                                age: int.parse(pAge.text),
+                                sex: pSex.text,
+                                date: date.text,
+                                type: diagType.text,
+                                remark: remark.text,
+                                technician: technician.text,
+                                refById: int.parse(refById.text),
+                                totalAmount: int.parse(total.text),
+                                paidAmount: int.parse(paid.text),
+                                discDoc: int.parse(discDoc.text),
+                                discCen: int.parse(discCen.text),
+                                incentive: int.parse(incentiveAmount.text),
+                                percent: int.parse(percent.text),
+                              ),
+                            )
+                              .then((value) {
+                              Navigator.pop(context, value);
+                            });
+                    }
+                  },
+                  child: ContainerButton(
+                      iconData: widget.isUpdate == true
+                          ? Icons.update_outlined
+                          : Icons.create_outlined,
+                      btnName: widget.isUpdate == true
+                          ? 'Update Bill'
+                          : 'Generate Bill')),
               Gap(defaultSize),
               Visibility(
                 visible: widget.isUpdate!,
                 child: GestureDetector(
-                  onTap: () async {
-                    await databaseHelper
-                        .deletePatient(id: widget.model!.id!)
-                        .then(
-                          (value) => Navigator.pop(context, value),
-                        );
-                  },
-                  child: Container(
-                    height: getDeviceHeight(context: context) * 0.1,
-                    width: getDeviceWidth(context: context),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(defaultSize),
-                      color: primaryColor,
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Delete Bill',
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                    ),
-                  ),
-                ),
+                    onTap: () async {
+                      await databaseHelper
+                          .deletePatient(id: widget.model!.id!)
+                          .then(
+                            (value) => Navigator.pop(context, value),
+                          );
+                    },
+                    child: const ContainerButton(
+                        iconData: Icons.delete_outlined,
+                        btnName: 'Delete Bill')),
               )
             ],
           ),

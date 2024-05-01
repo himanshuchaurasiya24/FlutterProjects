@@ -3,7 +3,9 @@ import 'package:gap/gap.dart';
 import 'package:vyavasaay_redesigned/database/database_helper.dart';
 import 'package:vyavasaay_redesigned/model/doctor_model.dart';
 import 'package:vyavasaay_redesigned/utils/constants.dart';
+import 'package:vyavasaay_redesigned/widgets/container_button.dart';
 import 'package:vyavasaay_redesigned/widgets/custom_textfield.dart';
+import 'package:vyavasaay_redesigned/widgets/update_screen_widget.dart';
 
 class AddDoctor extends StatefulWidget {
   const AddDoctor({super.key, this.isUpdate = false, this.model});
@@ -115,17 +117,7 @@ class _AddDoctorState extends State<AddDoctor> {
         title: Text(
             widget.isUpdate ? 'Update doctor details' : 'Enter doctor details'),
       ),
-      body: Container(
-        margin: EdgeInsets.all(defaultSize * 3),
-        height: getDeviceHeight(context: context),
-        width: getDeviceWidth(context: context),
-        padding: EdgeInsets.all(defaultSize),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(
-            defaultSize,
-          ),
-          color: primaryColorDark,
-        ),
+      body: UpdateScreenWidget(
         child: Form(
           key: formKey,
           child: Column(
@@ -246,47 +238,27 @@ class _AddDoctorState extends State<AddDoctor> {
                     addOrUpdateDoctor();
                   }
                 },
-                child: Container(
-                  height: getDeviceHeight(context: context) * 0.1,
-                  width: getDeviceWidth(context: context),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(defaultSize),
-                    color: primaryColor,
-                  ),
-                  child: Center(
-                    child: Text(
-                      widget.isUpdate ? 'Update Doctor' : 'Add Doctor',
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                  ),
+                child: ContainerButton(
+                  iconData: widget.isUpdate
+                      ? Icons.update_outlined
+                      : Icons.add_outlined,
+                  btnName: widget.isUpdate ? 'Update Doctor' : 'Add Doctor',
                 ),
               ),
               Gap(defaultSize),
               Visibility(
                 visible: widget.isUpdate,
                 child: GestureDetector(
-                  onTap: () async {
-                    await databaseHelper
-                        .deleteDoctor(id: widget.model!.id!)
-                        .then((value) {
-                      Navigator.pop(context, value);
-                    });
-                  },
-                  child: Container(
-                    height: getDeviceHeight(context: context) * 0.1,
-                    width: getDeviceWidth(context: context),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(defaultSize),
-                      color: primaryColor,
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Delete Doctor',
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                    ),
-                  ),
-                ),
+                    onTap: () async {
+                      await databaseHelper
+                          .deleteDoctor(id: widget.model!.id!)
+                          .then((value) {
+                        Navigator.pop(context, value);
+                      });
+                    },
+                    child: const ContainerButton(
+                        iconData: Icons.delete_outlined,
+                        btnName: 'Delete doctor')),
               )
             ],
           ),

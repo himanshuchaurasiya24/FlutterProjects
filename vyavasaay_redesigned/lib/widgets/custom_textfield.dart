@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:vyavasaay_redesigned/utils/constants.dart';
 
-class CustomTextField extends StatelessWidget {
+class CustomTextField extends StatefulWidget {
   const CustomTextField({
     super.key,
     required this.controller,
-    this.isObscure,
+    this.isObscure = false,
     required this.hintText,
     this.keyboardType,
     this.passwordController,
@@ -14,6 +14,7 @@ class CustomTextField extends StatelessWidget {
     this.maxLines,
     this.onChanged,
     this.valueLimit,
+    this.suffixIconRequired = false,
   });
 
   final TextEditingController controller;
@@ -23,43 +24,57 @@ class CustomTextField extends StatelessWidget {
   final TextInputType? keyboardType;
   final TextEditingController? passwordController;
   final bool? isConfirm;
+  final bool? suffixIconRequired;
   final bool? readOnly;
   final int? maxLines;
   final int? valueLimit;
+
+  @override
+  State<CustomTextField> createState() => _CustomTextFieldState();
+}
+
+class _CustomTextFieldState extends State<CustomTextField> {
+  bool isObscure = false;
+  @override
+  void initState() {
+    super.initState();
+    isObscure = widget.isObscure! ? true : false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      onChanged: onChanged,
-      controller: controller,
-      keyboardType: keyboardType,
-      maxLines: maxLines ?? 1,
-      obscureText: isObscure ?? false,
-      readOnly: readOnly ?? false,
+      onChanged: widget.onChanged,
+      controller: widget.controller,
+      keyboardType: widget.keyboardType,
+      maxLines: widget.maxLines ?? 1,
+      obscureText: isObscure,
+      readOnly: widget.readOnly ?? false,
       style: TextStyle(
         color: titleLargeTextColor,
         fontWeight: FontWeight.w600,
       ),
       validator: (value) {
-        if (isConfirm == true && passwordController != null) {
-          if (value != passwordController!.text) {
+        if (widget.isConfirm == true && widget.passwordController != null) {
+          if (value != widget.passwordController!.text) {
             return 'Password does\'nt match';
           }
         }
         if (value != null && value.trim().isEmpty) {
-          return 'Please enter $hintText';
+          return 'Please enter ${widget.hintText}';
         }
-        if (valueLimit != null &&
-            keyboardType == TextInputType.number &&
+        if (widget.valueLimit != null &&
+            widget.keyboardType == TextInputType.number &&
             value != null) {
           int pValue = int.tryParse(value)!;
-          if (pValue > valueLimit!) {
-            return 'Range is only upto $valueLimit';
+          if (pValue > widget.valueLimit!) {
+            return 'Range is only upto ${widget.valueLimit}';
           }
         }
-        if (value != null && keyboardType == TextInputType.number) {
+        if (value != null && widget.keyboardType == TextInputType.number) {
           final intvalue = int.tryParse(value);
           if (intvalue == null) {
-            return 'Invalid $hintText';
+            return 'Invalid ${widget.hintText}';
           }
         }
 
@@ -67,7 +82,19 @@ class CustomTextField extends StatelessWidget {
       },
       decoration: InputDecoration(
         filled: true,
-        hintText: hintText,
+        hintText: widget.hintText,
+        suffixIcon: widget.isObscure!
+            ? IconButton(
+                onPressed: () {
+                  setState(() {
+                    isObscure = !isObscure;
+                  });
+                },
+                icon: const Icon(
+                  Icons.visibility,
+                ),
+              )
+            : null,
         hintStyle: TextStyle(
           color: titleLargeTextColor,
         ),

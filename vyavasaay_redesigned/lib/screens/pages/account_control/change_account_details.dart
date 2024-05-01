@@ -1,13 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 import 'package:vyavasaay_redesigned/database/database_helper.dart';
 import 'package:vyavasaay_redesigned/model/admin_model.dart';
 import 'package:vyavasaay_redesigned/model/user_model.dart';
 import 'package:vyavasaay_redesigned/utils/constants.dart';
+import 'package:vyavasaay_redesigned/widgets/container_button.dart';
 import 'package:vyavasaay_redesigned/widgets/custom_textfield.dart';
-import 'package:vyavasaay_redesigned/widgets/default_container.dart';
+import 'package:vyavasaay_redesigned/widgets/update_screen_widget.dart';
 
 class ChangeAccountDetails extends StatefulWidget {
   const ChangeAccountDetails({super.key, this.adminModel, this.userModel});
@@ -49,17 +48,7 @@ class _ChangeAccountDetailsState extends State<ChangeAccountDetails> {
       appBar: AppBar(
         title: const Text('Update Details'),
       ),
-      body: Container(
-        margin: EdgeInsets.all(defaultSize * 3),
-        height: getDeviceHeight(context: context),
-        width: getDeviceWidth(context: context),
-        padding: EdgeInsets.all(defaultSize),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(
-            defaultSize,
-          ),
-          color: primaryColorDark,
-        ),
+      body: UpdateScreenWidget(
         child: Form(
           key: formKey,
           child: Column(
@@ -150,20 +139,9 @@ class _ChangeAccountDetailsState extends State<ChangeAccountDetails> {
                                 .then((value) {
                               Navigator.pop(context, value);
                             });
-                            // .onError((error, stackTrace) => showDialog(
-                            //           context: context,
-                            //           builder: (context) {
-                            //             return AlertDialog(
-                            //               content: Text(
-                            //                 'Some error occurred!.\n This can happen if the username is already in database.',
-                            //                 style: patientHeader,
-                            //               ),
-                            //             );
-                            //           },
-                            //         ));
                           } else if (widget.userModel != null) {
                             await databaseHelper
-                                    .updateUser(
+                                .updateUser(
                               model: UserModel(
                                 id: widget.userModel!.id,
                                 name: name.text.toString(),
@@ -171,34 +149,15 @@ class _ChangeAccountDetailsState extends State<ChangeAccountDetails> {
                                 password: confirmPassword.text.toString(),
                               ),
                             )
-                                    .then((value) {
+                                .then((value) {
                               Navigator.pop(context, value);
-                            })
-                                // .onError((error, stackTrace) => showDialog(
-                                //           context: context,
-                                //           builder: (context) {
-                                //             return AlertDialog(
-                                //               content: Text(
-                                //                 'Some error occurred!.\n This can happen if the username is already in database.',
-                                //                 style: patientHeader,
-                                //               ),
-                                //             );
-                                //           },
-                                //         ))
-                                ;
+                            });
                           }
                         }
                       },
-                      child: DefaultContainer(
-                          height: getDeviceHeight(context: context) * 0.1,
-                          width: getDeviceWidth(context: context) * 0.9,
-                          color: primaryColor,
-                          child: Center(
-                            child: Text(
-                              'Update Details',
-                              style: patientHeader,
-                            ),
-                          )),
+                      child: const ContainerButton(
+                          iconData: Icons.update_outlined,
+                          btnName: 'Update info'),
                     )
                   ],
                 ),

@@ -4,6 +4,7 @@ import 'package:vyavasaay_redesigned/screens/login_signup_screens/login_screen.d
 import 'package:vyavasaay_redesigned/model/admin_model.dart';
 
 import 'package:vyavasaay_redesigned/utils/constants.dart';
+import 'package:vyavasaay_redesigned/widgets/container_button.dart';
 import 'package:vyavasaay_redesigned/widgets/custom_textfield.dart';
 import 'package:vyavasaay_redesigned/widgets/default_container.dart';
 
@@ -137,73 +138,43 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           height: defaultSize,
                         ),
                         GestureDetector(
-                          onTap: () async {
-                            if (_formKey.currentState!.validate()) {
-                              if (adminAccountLength > 0) {
-                                showBanner(context);
-                                return;
-                              } else {
-                                await database
-                                    .createAdminAccount(
-                                      model: AdminModel(
-                                        name: nameController.text,
-                                        phoneNumber: phoneController.text,
-                                        password: passwordController.text,
-                                      ),
-                                    )
-                                    .then(
-                                      (value) => {
-                                        if (value != 0)
-                                          {
-                                            Navigator.pushReplacement(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) {
-                                                  return const SignUpScreen();
-                                                },
+                            onTap: () async {
+                              if (_formKey.currentState!.validate()) {
+                                if (adminAccountLength > 0) {
+                                  showBanner(context);
+                                  return;
+                                } else {
+                                  await database
+                                      .createAdminAccount(
+                                        model: AdminModel(
+                                          name: nameController.text,
+                                          phoneNumber: phoneController.text,
+                                          password: passwordController.text,
+                                        ),
+                                      )
+                                      .then(
+                                        (value) => {
+                                          if (value != 0)
+                                            {
+                                              Navigator.pushReplacement(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) {
+                                                    return const SignUpScreen();
+                                                  },
+                                                ),
                                               ),
-                                            ),
-                                          }
-                                        else
-                                          {showBanner(context)}
-                                      },
-                                    );
+                                            }
+                                          else
+                                            {showBanner(context)}
+                                        },
+                                      );
+                                }
                               }
-                            }
-                          },
-                          child: MouseRegion(
-                            onEnter: (event) {
-                              setState(() {
-                                containerColor = primaryColorDarker;
-                              });
                             },
-                            onExit: (event) {
-                              setState(() {
-                                containerColor = primaryColor;
-                              });
-                            },
-                            child: Container(
-                              height: getDeviceHeight(context: context) * 0.1,
-                              width: getDeviceWidth(context: context) * 0.55,
-                              decoration: BoxDecoration(
-                                color: containerColor,
-                                borderRadius: BorderRadius.circular(
-                                  defaultSize,
-                                ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'Sign Up',
-                                  style: TextStyle(
-                                    color: titleLargeTextColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: titleLargeTextSize - 15,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
+                            child: const ContainerButton(
+                                iconData: Icons.check_circle_outline_outlined,
+                                btnName: 'Sign up')),
                         SizedBox(
                           height: defaultSize,
                         ),
