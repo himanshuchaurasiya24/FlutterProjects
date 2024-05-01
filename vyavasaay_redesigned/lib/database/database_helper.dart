@@ -207,9 +207,19 @@ CREATE TABLE IF NOT EXISTS patientTable(
     final value = await db.insert(
       adminTable,
       model.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
     );
     return value;
+  }
+
+  Future<int> updateAdmin({required AdminModel model}) async {
+    final db = await initDB();
+    final res = await db.update(
+      adminTable,
+      model.toMap(),
+      where: 'id = ?',
+      whereArgs: [model.id],
+    );
+    return res;
   }
 
   Future<bool> authAdmin({
@@ -254,6 +264,16 @@ CREATE TABLE IF NOT EXISTS patientTable(
       model.toMap(),
     );
     return res;
+  }
+
+  Future<int> updateUser({required UserModel model}) async {
+    final db = await initDB();
+    return await db.update(
+      userTable,
+      model.toMap(),
+      where: 'id = ?',
+      whereArgs: [model.id],
+    );
   }
 
   Future<bool> authUser({

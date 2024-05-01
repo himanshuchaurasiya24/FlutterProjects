@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:vyavasaay_redesigned/database/database_helper.dart';
+import 'package:vyavasaay_redesigned/screens/pages/account_control/change_account_details.dart';
 import 'package:vyavasaay_redesigned/screens/pages/account_control/create_account.dart';
 import 'package:vyavasaay_redesigned/utils/constants.dart';
 import 'package:vyavasaay_redesigned/widgets/default_container.dart';
@@ -101,7 +102,19 @@ class _AccessControlState extends State<AccessControl> {
                                         ],
                                       ),
                                       IconButton(
-                                        onPressed: () {},
+                                        onPressed: () async {
+                                          await Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) {
+                                                return ChangeAccountDetails(
+                                                  adminModel:
+                                                      snapshot.data![index],
+                                                );
+                                              },
+                                            ),
+                                          ).then((value) => setState(() {}));
+                                        },
                                         icon: const Icon(Icons.edit_outlined),
                                       )
                                     ],
@@ -154,7 +167,7 @@ class _AccessControlState extends State<AccessControl> {
                           if (snapshot.data!.isEmpty) {
                             return Center(
                               child: Text(
-                                'Empty User Account',
+                                'Empty technician Account',
                                 style: Theme.of(context).textTheme.titleLarge,
                               ),
                             );
@@ -189,7 +202,21 @@ class _AccessControlState extends State<AccessControl> {
                                       ],
                                     ),
                                     IconButton(
-                                      onPressed: () {},
+                                      onPressed: () async {
+                                        await Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) {
+                                              return ChangeAccountDetails(
+                                                userModel:
+                                                    snapshot.data![index],
+                                              );
+                                            },
+                                          ),
+                                        ).then((value) {
+                                          setState(() {});
+                                        });
+                                      },
                                       icon: const Icon(Icons.edit_outlined),
                                     )
                                   ],
