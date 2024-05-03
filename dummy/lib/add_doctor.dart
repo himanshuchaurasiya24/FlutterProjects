@@ -155,6 +155,7 @@ class CustomTextForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: nameController,
+      textCapitalization: TextCapitalization.words,
       decoration: InputDecoration(
         hintText: hintText,
         border: InputBorder.none,
