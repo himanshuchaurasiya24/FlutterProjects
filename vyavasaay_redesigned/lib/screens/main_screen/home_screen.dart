@@ -26,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
           background(
             child: Column(
               children: [
-                widget.logInType == 'admin'
+                widget.logInType == 'Admin'
                     ? Center(
                         child: Icon(
                           Icons.admin_panel_settings_outlined,
@@ -42,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                 Text(
-                  widget.logInType == 'admin'
+                  widget.logInType == 'Admin'
                       ? '${widget.name}\n(Admin)'
                       : '${widget.name}\n(Technician)',
                   style: TextStyle(
@@ -77,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             });
                           },
                           leading: Icon(
-                            widget.logInType == 'admin'
+                            widget.logInType == 'Admin'
                                 ? adminMenuItems[index].icon
                                 : userMenuItems[index].icon,
                             color: currentIndex == index
@@ -85,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 : titleLargeTextColor,
                           ),
                           title: Text(
-                            widget.logInType == 'admin'
+                            widget.logInType == 'Admin'
                                 ? adminMenuItems[index].title
                                 : userMenuItems[index].title,
                             style: TextStyle(
@@ -98,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       );
                     },
-                    itemCount: widget.logInType == 'admin'
+                    itemCount: widget.logInType == 'Admin'
                         ? adminMenuItems.length
                         : userMenuItems.length,
                   ),
@@ -111,11 +111,11 @@ class _HomeScreenState extends State<HomeScreen> {
               width: double.infinity,
               rightMargin: defaultSize,
               child: PageView.builder(
-                itemCount: widget.logInType == 'admin'
+                itemCount: widget.logInType == 'Admin'
                     ? adminMenuItems.length
                     : userMenuItems.length,
                 itemBuilder: (context, index) {
-                  return widget.logInType == 'admin'
+                  return widget.logInType == 'Admin'
                       ? adminMenuItems[currentIndex].child
                       : userMenuItems[currentIndex].child;
                 },

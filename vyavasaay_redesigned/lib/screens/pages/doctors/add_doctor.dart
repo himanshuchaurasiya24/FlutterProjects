@@ -147,6 +147,7 @@ class _AddDoctorState extends State<AddDoctor> {
                   Gap(defaultSize),
                   Expanded(
                       child: DropdownButtonFormField(
+                    borderRadius: BorderRadius.circular(defaultSize),
                     dropdownColor: primaryColor,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(

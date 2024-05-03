@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 import 'package:vyavasaay_redesigned/model/admin_model.dart';
 import 'package:vyavasaay_redesigned/model/doctor_model.dart';
+import 'package:vyavasaay_redesigned/model/login_history_model.dart';
 import 'package:vyavasaay_redesigned/model/patient_model.dart';
 import 'package:vyavasaay_redesigned/model/user_model.dart';
 
@@ -106,6 +107,35 @@ CREATE TABLE IF NOT EXISTS patientTable(
     return _database!;
   }
 
+  // Login history
+  Future<List<LoginHistoryModel>> getAllLoginHistory() async {
+    final db = await initDB();
+    final res = await db.query(loginHistoryTable, orderBy: 'id DESC');
+    return res.map((e) => LoginHistoryModel.fromMap(e)).toList();
+  }
+
+  Future<int> addToLoginHistory({required LoginHistoryModel model}) async {
+    final db = await initDB();
+    final res = await db.insert(loginHistoryTable, model.toMap());
+    return res;
+  }
+
+  Future<List<LoginHistoryModel>> searchLoginHistoryByName(
+      {required String name}) async {
+    final db = await initDB();
+    final res = await db
+        .query(loginHistoryTable, where: 'name Like ?', whereArgs: [name]);
+    return res.map((e) => LoginHistoryModel.fromMap(e)).toList();
+  }
+
+  Future<List<LoginHistoryModel>> searchLoginHistoryById(
+      {required int personId}) async {
+    final db = await initDB();
+    final res = await db.query(loginHistoryTable,
+        where: 'personId Like ?', whereArgs: [personId]);
+    return res.map((e) => LoginHistoryModel.fromMap(e)).toList();
+  }
+
   //Patient
   Future<List<PatientModel>> getPatientList() async {
     final db = await initDB();
@@ -173,6 +203,7 @@ CREATE TABLE IF NOT EXISTS patientTable(
   Future<int> addDoctor({required DoctorModel model}) async {
     final db = await initDB();
     final res = await db.insert(doctorTable, model.toMap());
+
     return res;
   }
 

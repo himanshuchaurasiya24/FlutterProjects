@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vyavasaay_redesigned/database/database_helper.dart';
+import 'package:vyavasaay_redesigned/model/login_history_model.dart';
 import 'package:vyavasaay_redesigned/screens/main_screen/home_screen.dart';
 import 'package:vyavasaay_redesigned/screens/login_signup_screens/signup_screen.dart';
 import 'package:vyavasaay_redesigned/utils/constants.dart';
@@ -166,18 +168,31 @@ class _LoginScreenState extends State<LoginScreen> {
                                         final model = await database.getAdmin(
                                             name: nameController.text);
                                         final name = model!.name;
+                                        final personalId = model.id;
                                         loggedIn(name: name, type: 'admin');
-                                        Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) {
-                                              return HomeScreen(
+                                        await database
+                                            .addToLoginHistory(
+                                              model: LoginHistoryModel(
+                                                personId: personalId!,
                                                 name: name,
-                                                logInType: 'admin',
-                                              );
-                                            },
-                                          ),
-                                        );
+                                                time:
+                                                    DateFormat('MMMM y d H:m:s')
+                                                        .format(DateTime.now()),
+                                                type: 'Admin',
+                                              ),
+                                            )
+                                            .then((value) =>
+                                                Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) {
+                                                      return HomeScreen(
+                                                        name: name,
+                                                        logInType: 'Admin',
+                                                      );
+                                                    },
+                                                  ),
+                                                ));
                                       } else {
                                         showBanner(context);
                                       }
@@ -191,39 +206,39 @@ class _LoginScreenState extends State<LoginScreen> {
                                         final model = await database.getUser(
                                             name: nameController.text);
                                         final name = model!.name;
+                                        int personalId = model.id!;
                                         loggedIn(name: name, type: 'user');
-
-                                        Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) {
-                                              return HomeScreen(
+                                        await database
+                                            .addToLoginHistory(
+                                              model: LoginHistoryModel(
+                                                personId: personalId,
                                                 name: name,
-                                                logInType: 'user',
-                                              );
-                                            },
-                                          ),
-                                        );
+                                                time:
+                                                    DateFormat('MMMM y d H:m:s')
+                                                        .format(DateTime.now()),
+                                                type: 'Technician',
+                                              ),
+                                            )
+                                            .then((value) =>
+                                                Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) {
+                                                      return HomeScreen(
+                                                        name: name,
+                                                        logInType: 'Technician',
+                                                      );
+                                                    },
+                                                  ),
+                                                ));
                                       } else {
                                         showBanner(context);
                                       }
                                     });
                             }
                           },
-                          child: MouseRegion(
-                              onEnter: (event) {
-                                setState(() {
-                                  containerColor = primaryColorDarker;
-                                });
-                              },
-                              onExit: (event) {
-                                setState(() {
-                                  containerColor = primaryColor;
-                                });
-                              },
-                              child: const ContainerButton(
-                                  iconData: Icons.login_outlined,
-                                  btnName: 'Login')),
+                          child: const ContainerButton(
+                              iconData: Icons.login_outlined, btnName: 'Login'),
                         ),
                         SizedBox(
                           height: defaultSize,

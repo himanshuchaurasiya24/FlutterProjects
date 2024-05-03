@@ -6,9 +6,13 @@ class PatientDetailsChild extends StatelessWidget {
     super.key,
     required this.heading,
     required this.value,
+    this.isWidgetInValue = false,
+    this.valueWidget,
   });
   final String heading;
   final String value;
+  final bool? isWidgetInValue;
+  final Widget? valueWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -18,10 +22,12 @@ class PatientDetailsChild extends StatelessWidget {
           heading,
           style: patientChildrenHeading,
         ),
-        Text(
-          value,
-          style: patientHeaderSmall,
-        ),
+        isWidgetInValue!
+            ? valueWidget!
+            : Text(
+                value,
+                style: patientHeaderSmall,
+              ),
       ],
     );
   }

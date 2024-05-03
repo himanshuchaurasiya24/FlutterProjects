@@ -415,7 +415,7 @@ class _AccessControlState extends State<AccessControl> {
                       return const CreateAccount();
                     },
                   ),
-                );
+                ).then((value) => setState(() {}));
               },
               title: 'Create Account'),
         ),

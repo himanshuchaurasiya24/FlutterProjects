@@ -6,6 +6,7 @@ import 'package:vyavasaay_redesigned/model/doctor_model.dart';
 import 'package:vyavasaay_redesigned/screens/pages/doctors/add_doctor.dart';
 import 'package:vyavasaay_redesigned/utils/constants.dart';
 import 'package:vyavasaay_redesigned/widgets/container_button.dart';
+import 'package:vyavasaay_redesigned/widgets/custom_details_card.dart';
 import 'package:vyavasaay_redesigned/widgets/custom_floating_action_button.dart';
 import 'package:vyavasaay_redesigned/widgets/custom_textfield.dart';
 import 'package:vyavasaay_redesigned/widgets/patient_details_child.dart';
@@ -99,87 +100,74 @@ class _DoctorInfoState extends State<DoctorInfo> {
                   return ListView.builder(
                     itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) {
-                      return Card(
-                        elevation: 0,
-                        color: primaryCardColor,
-                        child: ExpansionTile(
-                          childrenPadding:
-                              EdgeInsets.symmetric(horizontal: defaultSize),
-                          title: Text(
-                            snapshot.data![index].name,
-                            style: patientHeader,
+                      return CustomDetailsCard(
+                        title: snapshot.data![index].name,
+                        subtitle: Text(
+                          snapshot.data![index].address,
+                          style: patientHeaderSmall,
+                        ),
+                        trailing: snapshot.data![index].phone,
+                        children: [
+                          PatientDetailsChild(
+                            heading: 'Sex ',
+                            value: snapshot.data![index].sex.toString(),
                           ),
-                          subtitle: Text(
-                            snapshot.data![index].address,
-                            style: patientHeaderSmall,
+                          Gap(defaultSize),
+                          PatientDetailsChild(
+                            heading: 'Age ',
+                            value: snapshot.data![index].age.toString(),
                           ),
-                          trailing: Text(
-                            snapshot.data![index].phone,
-                            style: patientHeaderSmall,
+                          Gap(defaultSize),
+                          PatientDetailsChild(
+                            heading: 'Ultrasound % ',
+                            value: snapshot.data![index].ultrasound.toString(),
                           ),
-                          children: [
-                            PatientDetailsChild(
-                              heading: 'Sex ',
-                              value: snapshot.data![index].sex.toString(),
-                            ),
-                            Gap(defaultSize),
-                            PatientDetailsChild(
-                              heading: 'Age ',
-                              value: snapshot.data![index].age.toString(),
-                            ),
-                            Gap(defaultSize),
-                            PatientDetailsChild(
-                              heading: 'Ultrasound % ',
-                              value:
-                                  snapshot.data![index].ultrasound.toString(),
-                            ),
-                            Gap(defaultSize),
-                            PatientDetailsChild(
-                              heading: 'Pathology % ',
-                              value: snapshot.data![index].pathology.toString(),
-                            ),
-                            Gap(defaultSize),
-                            PatientDetailsChild(
-                              heading: 'ECG % ',
-                              value: snapshot.data![index].ecg.toString(),
-                            ),
-                            Gap(defaultSize),
-                            PatientDetailsChild(
-                              heading: 'X-Ray % ',
-                              value: snapshot.data![index].xray.toString(),
-                            ),
-                            Visibility(
-                              visible: isAdminLogin,
-                              child: Gap(defaultSize),
-                            ),
-                            Visibility(
-                              visible: isAdminLogin,
-                              child: GestureDetector(
-                                onTap: () async {
-                                  await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) {
-                                        return AddDoctor(
-                                          isUpdate: true,
-                                          model: snapshot.data![index],
-                                        );
-                                      },
-                                    ),
-                                  ).then((value) => setState(() {}));
-                                },
-                                child: const ContainerButton(
-                                  btnName: 'Edit Doctor Info',
-                                  iconData: Icons.edit_outlined,
-                                ),
+                          Gap(defaultSize),
+                          PatientDetailsChild(
+                            heading: 'Pathology % ',
+                            value: snapshot.data![index].pathology.toString(),
+                          ),
+                          Gap(defaultSize),
+                          PatientDetailsChild(
+                            heading: 'ECG % ',
+                            value: snapshot.data![index].ecg.toString(),
+                          ),
+                          Gap(defaultSize),
+                          PatientDetailsChild(
+                            heading: 'X-Ray % ',
+                            value: snapshot.data![index].xray.toString(),
+                          ),
+                          Visibility(
+                            visible: isAdminLogin,
+                            child: Gap(defaultSize),
+                          ),
+                          Visibility(
+                            visible: isAdminLogin,
+                            child: GestureDetector(
+                              onTap: () async {
+                                await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return AddDoctor(
+                                        isUpdate: true,
+                                        model: snapshot.data![index],
+                                      );
+                                    },
+                                  ),
+                                ).then((value) => setState(() {}));
+                              },
+                              child: const ContainerButton(
+                                btnName: 'Edit Doctor Info',
+                                iconData: Icons.edit_outlined,
                               ),
                             ),
-                            Visibility(
-                              visible: isAdminLogin,
-                              child: Gap(defaultSize),
-                            ),
-                          ],
-                        ),
+                          ),
+                          Visibility(
+                            visible: isAdminLogin,
+                            child: Gap(defaultSize),
+                          ),
+                        ],
                       );
                     },
                   );

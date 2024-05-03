@@ -199,6 +199,7 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
                     child: CustomTextField(
                       controller: refBy,
                       hintText: 'Select doctor',
+                      readOnly: true,
                     ),
                   ),
                   Gap(defaultSize),
@@ -219,6 +220,7 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
                   Expanded(
                     child: CustomTextField(
                       controller: date,
+                      readOnly: true,
                       hintText: 'Select date',
                     ),
                   ),
