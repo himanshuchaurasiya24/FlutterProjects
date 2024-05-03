@@ -6,8 +6,8 @@ import 'package:vyavasaay_redesigned/model/doctor_model.dart';
 import 'package:vyavasaay_redesigned/screens/pages/doctors/add_doctor.dart';
 import 'package:vyavasaay_redesigned/utils/constants.dart';
 import 'package:vyavasaay_redesigned/widgets/container_button.dart';
+import 'package:vyavasaay_redesigned/widgets/custom_floating_action_button.dart';
 import 'package:vyavasaay_redesigned/widgets/custom_textfield.dart';
-import 'package:vyavasaay_redesigned/widgets/default_container.dart';
 import 'package:vyavasaay_redesigned/widgets/patient_details_child.dart';
 
 class DoctorInfo extends StatefulWidget {
@@ -22,7 +22,7 @@ class _DoctorInfoState extends State<DoctorInfo> {
   final searchController = TextEditingController();
   late Future<List<DoctorModel>> doctorList;
   bool isAdminLogin = false;
-
+  int doctorListLength = 0;
   @override
   void initState() {
     super.initState();
@@ -190,45 +190,19 @@ class _DoctorInfoState extends State<DoctorInfo> {
         ),
         Positioned(
           bottom: 10,
-          right: 0,
-          child: GestureDetector(
-            onTap: () async {
-              await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return const AddDoctor();
-                  },
-                ),
-              ).then(
-                (value) {
-                  if (value != 0) {
-                    setState(() {});
-                  }
-                },
-              );
-            },
-            child: DefaultContainer(
-              height: MediaQuery.of(context).size.height * 0.1,
-              width: 260,
-              boxShadow: [
-                BoxShadow(
-                  color: primaryColorDark,
-                  blurStyle: BlurStyle.outer,
-                  blurRadius: 50,
-                  spreadRadius: 0.5,
-                ),
-              ],
-              child: Center(
-                child: Text(
-                  'Add a doctor',
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        fontSize: 28,
-                      ),
-                ),
-              ),
-            ),
-          ),
+          right: 10,
+          child: CustomFloatingActionButton(
+              onTap: () async {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return const AddDoctor();
+                    },
+                  ),
+                ).then((value) => setState(() {}));
+              },
+              title: 'Add Doctor'),
         ),
       ],
     );

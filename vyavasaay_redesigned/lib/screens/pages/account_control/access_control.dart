@@ -5,7 +5,7 @@ import 'package:vyavasaay_redesigned/screens/introduction_screens/splash_screen.
 import 'package:vyavasaay_redesigned/screens/pages/account_control/change_account_details.dart';
 import 'package:vyavasaay_redesigned/screens/pages/account_control/create_account.dart';
 import 'package:vyavasaay_redesigned/utils/constants.dart';
-import 'package:vyavasaay_redesigned/widgets/default_container.dart';
+import 'package:vyavasaay_redesigned/widgets/custom_floating_action_button.dart';
 
 class AccessControl extends StatefulWidget {
   const AccessControl({super.key});
@@ -406,44 +406,18 @@ class _AccessControlState extends State<AccessControl> {
         Positioned(
           bottom: 10,
           right: 0,
-          child: GestureDetector(
-            onTap: () async {
-              await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return const CreateAccount();
-                  },
-                ),
-              ).then(
-                (value) {
-                  if (value != 0) {
-                    setState(() {});
-                  }
-                },
-              );
-            },
-            child: DefaultContainer(
-              height: MediaQuery.of(context).size.height * 0.1,
-              width: 260,
-              boxShadow: [
-                BoxShadow(
-                  color: primaryColorDark,
-                  blurStyle: BlurStyle.outer,
-                  blurRadius: 50,
-                  spreadRadius: 0.5,
-                ),
-              ],
-              child: Center(
-                child: Text(
-                  'Create account',
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        fontSize: 28,
-                      ),
-                ),
-              ),
-            ),
-          ),
+          child: CustomFloatingActionButton(
+              onTap: () async {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return const CreateAccount();
+                    },
+                  ),
+                );
+              },
+              title: 'Create Account'),
         ),
       ],
     );

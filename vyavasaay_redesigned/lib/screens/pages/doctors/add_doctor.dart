@@ -131,6 +131,7 @@ class _AddDoctorState extends State<AddDoctor> {
                     child: CustomTextField(
                       controller: docNameController,
                       hintText: 'Doctor Name',
+                      allCaps: true,
                     ),
                   ),
                   Gap(defaultSize),

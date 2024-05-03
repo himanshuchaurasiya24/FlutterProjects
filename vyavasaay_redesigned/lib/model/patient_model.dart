@@ -75,7 +75,7 @@ class PatientModel {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
-      'name': name,
+      'name': name.toUpperCase(),
       'age': age,
       'sex': sex,
       'date': date,

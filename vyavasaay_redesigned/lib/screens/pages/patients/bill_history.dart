@@ -7,8 +7,8 @@ import 'package:vyavasaay_redesigned/model/patient_model.dart';
 import 'package:vyavasaay_redesigned/screens/pages/patients/generate_new_bill.dart';
 import 'package:vyavasaay_redesigned/utils/constants.dart';
 import 'package:vyavasaay_redesigned/widgets/container_button.dart';
+import 'package:vyavasaay_redesigned/widgets/custom_floating_action_button.dart';
 import 'package:vyavasaay_redesigned/widgets/custom_textfield.dart';
-import 'package:vyavasaay_redesigned/widgets/default_container.dart';
 import 'package:vyavasaay_redesigned/widgets/patient_details_child.dart';
 
 class BillHistory extends StatefulWidget {
@@ -249,43 +249,19 @@ class _BillHistoryState extends State<BillHistory> {
         ),
         Positioned(
           bottom: 10,
-          right: 0,
-          child: GestureDetector(
-            onTap: () async {
-              await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return const GenerateNewBill();
-                  },
-                ),
-              ).then(
-                (value) {
-                  setState(() {});
-                },
-              );
-            },
-            child: DefaultContainer(
-              height: getDeviceHeight(context: context) * 0.1,
-              width: getDeviceWidth(context: context) * 0.25,
-              boxShadow: [
-                BoxShadow(
-                  color: primaryColorDark,
-                  blurStyle: BlurStyle.outer,
-                  blurRadius: 50,
-                  spreadRadius: 0.5,
-                ),
-              ],
-              child: Center(
-                child: Text(
-                  'Generate new bill',
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        fontSize: 28,
-                      ),
-                ),
-              ),
-            ),
-          ),
+          right: 10,
+          child: CustomFloatingActionButton(
+              onTap: () async {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return const GenerateNewBill();
+                    },
+                  ),
+                ).then((value) => setState(() {}));
+              },
+              title: 'Generate New Bill'),
         ),
       ],
     );
