@@ -5,13 +5,15 @@ class LoginHistoryModel {
   int? id;
   int personId;
   String name;
-  String time;
+  String loginTime;
+  String logoutTime;
   String type;
   LoginHistoryModel({
     this.id,
     required this.personId,
     required this.name,
-    required this.time,
+    required this.loginTime,
+    required this.logoutTime,
     required this.type,
   });
 
@@ -19,14 +21,16 @@ class LoginHistoryModel {
     int? id,
     int? personId,
     String? name,
-    String? time,
+    String? loginTime,
+    String? logoutTime,
     String? type,
   }) {
     return LoginHistoryModel(
       id: id ?? this.id,
       personId: personId ?? this.personId,
       name: name ?? this.name,
-      time: time ?? this.time,
+      loginTime: loginTime ?? this.loginTime,
+      logoutTime: logoutTime ?? this.logoutTime,
       type: type ?? this.type,
     );
   }
@@ -36,7 +40,8 @@ class LoginHistoryModel {
       'id': id,
       'personId': personId,
       'name': name,
-      'time': time,
+      'loginTime': loginTime,
+      'logoutTime': logoutTime,
       'type': type,
     };
   }
@@ -46,7 +51,8 @@ class LoginHistoryModel {
       id: map['id'] != null ? map['id'] as int : null,
       personId: map['personId'] as int,
       name: map['name'] as String,
-      time: map['time'] as String,
+      loginTime: map['loginTime'] as String,
+      logoutTime: map['logoutTime'] as String,
       type: map['type'] as String,
     );
   }
@@ -58,7 +64,7 @@ class LoginHistoryModel {
 
   @override
   String toString() {
-    return 'LoginHistoryModel(id: $id, personId: $personId, name: $name, time: $time, type: $type)';
+    return 'LoginHistoryModel(id: $id, personId: $personId, name: $name, loginTime: $loginTime, logoutTime: $logoutTime, type: $type)';
   }
 
   @override
@@ -68,7 +74,8 @@ class LoginHistoryModel {
     return other.id == id &&
         other.personId == personId &&
         other.name == name &&
-        other.time == time &&
+        other.loginTime == loginTime &&
+        other.logoutTime == logoutTime &&
         other.type == type;
   }
 
@@ -77,7 +84,8 @@ class LoginHistoryModel {
     return id.hashCode ^
         personId.hashCode ^
         name.hashCode ^
-        time.hashCode ^
+        loginTime.hashCode ^
+        logoutTime.hashCode ^
         type.hashCode;
   }
 }

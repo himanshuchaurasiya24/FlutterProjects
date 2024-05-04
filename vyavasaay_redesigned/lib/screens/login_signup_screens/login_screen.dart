@@ -61,11 +61,15 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void loggedIn({required String name, required String type}) async {
+  void loggedIn(
+      {required String name,
+      required String type,
+      required int personId}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('isLoggedIn', true);
     prefs.setString('loggedInName', name);
     prefs.setString('logInType', type);
+    prefs.setInt('personId', personId);
   }
 
   @override
@@ -169,15 +173,20 @@ class _LoginScreenState extends State<LoginScreen> {
                                             name: nameController.text);
                                         final name = model!.name;
                                         final personalId = model.id;
-                                        loggedIn(name: name, type: 'admin');
+                                        loggedIn(
+                                            name: name,
+                                            type: 'admin',
+                                            personId: personalId!);
                                         await database
                                             .addToLoginHistory(
                                               model: LoginHistoryModel(
-                                                personId: personalId!,
+                                                personId: personalId,
                                                 name: name,
-                                                time:
-                                                    DateFormat('MMMM y d H:m:s')
-                                                        .format(DateTime.now()),
+                                                loginTime: DateFormat(
+                                                        'dd MMMM yyyy hh:mm:s a')
+                                                    .format(DateTime.now()),
+                                                logoutTime:
+                                                    'Currently logged in',
                                                 type: 'Admin',
                                               ),
                                             )
@@ -207,15 +216,20 @@ class _LoginScreenState extends State<LoginScreen> {
                                             name: nameController.text);
                                         final name = model!.name;
                                         int personalId = model.id!;
-                                        loggedIn(name: name, type: 'user');
+                                        loggedIn(
+                                            name: name,
+                                            type: 'user',
+                                            personId: personalId);
                                         await database
                                             .addToLoginHistory(
                                               model: LoginHistoryModel(
                                                 personId: personalId,
                                                 name: name,
-                                                time:
-                                                    DateFormat('MMMM y d H:m:s')
-                                                        .format(DateTime.now()),
+                                                loginTime: DateFormat(
+                                                        'dd MMMM yyyy hh:mm:s a')
+                                                    .format(DateTime.now()),
+                                                logoutTime:
+                                                    'Currently logged in',
                                                 type: 'Technician',
                                               ),
                                             )

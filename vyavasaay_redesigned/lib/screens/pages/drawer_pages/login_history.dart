@@ -51,7 +51,7 @@ class _LoginHistoryState extends State<LoginHistory> {
                   return CustomDetailsCard(
                     title: snapshot.data![index].name,
                     subtitle: Text(
-                      snapshot.data![index].time,
+                      snapshot.data![index].loginTime,
                       style: patientHeaderSmall,
                     ),
                     trailing: snapshot.data![index].type,
@@ -59,7 +59,11 @@ class _LoginHistoryState extends State<LoginHistory> {
                       PatientDetailsChild(
                         heading: 'Person Id ',
                         value: snapshot.data![index].personId.toString(),
-                      )
+                      ),
+                      PatientDetailsChild(
+                        heading: 'Logout Time ',
+                        value: snapshot.data![index].logoutTime.toString(),
+                      ),
                     ],
                   );
                 },

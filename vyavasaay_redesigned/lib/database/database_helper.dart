@@ -13,7 +13,7 @@ import 'package:vyavasaay_redesigned/model/user_model.dart';
 Database? _database;
 
 class DatabaseHelper {
-  final databaseName = 'abc.db';
+  final databaseName = 'abcd.db';
   String adminTable = 'adminTable';
   String userTable = 'userTable';
   String doctorTable = 'doctorTable';
@@ -24,8 +24,9 @@ CREATE TABLE IF NOT EXISTS loginHistory(
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   personId INTEGER,
   name TEXT,
-  time TEXT,
-  type TEXT
+  loginTime TEXT,
+  type TEXT,
+  logoutTime TEXT
 )
 ''';
   String userQuery = '''CREATE TABLE IF NOT EXISTS userTable(
@@ -108,6 +109,24 @@ CREATE TABLE IF NOT EXISTS patientTable(
   }
 
   // Login history
+  Future<int> updateStatusOfLogin({required LoginHistoryModel model}) async {
+    final db = await initDB();
+    final res = await db.update(
+      loginHistoryTable,
+      model.toMap(),
+      where: 'id = ?',
+      whereArgs: [model.id],
+    );
+    return res;
+  }
+
+  Future<LoginHistoryModel> getLoginInfo({required int personId}) async {
+    final db = await initDB();
+    final res = await db.query(loginHistoryTable,
+        where: 'personId LIKE ?', whereArgs: [personId], orderBy: 'id DESC');
+    return res.map((e) => LoginHistoryModel.fromMap(e)).toList().first;
+  }
+
   Future<List<LoginHistoryModel>> getAllLoginHistory() async {
     final db = await initDB();
     final res = await db.query(loginHistoryTable, orderBy: 'id DESC');
