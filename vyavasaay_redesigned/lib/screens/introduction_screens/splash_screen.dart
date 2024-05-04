@@ -28,22 +28,23 @@ class _SplashScreenState extends State<SplashScreen> {
     bool? isIntro = prefs.getBool('isIntrodu') ?? false;
     bool? isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
     String? loggedInName = prefs.getString('loggedInName') ?? 'empty';
-    String? logInType = prefs.getString('logInType') ?? 'user';
+    String? logInType = prefs.getString('logInType') ?? 'Technician';
     final DatabaseHelper database = DatabaseHelper();
 
     final adminActLength = await database.getAdminAccountLength();
     if (adminActLength == 0) {
-      prefs.setBool('isIntrodu', false);
-      prefs.setBool('isLoggedIn', false);
+      await prefs.setBool('isIntrodu', false);
+      await prefs.setBool('isLoggedIn', false).then((value) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return const IntroductionScreen();
+            },
+          ),
+        );
+      });
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) {
-            return const IntroductionScreen();
-          },
-        ),
-      );
       return;
     }
     if (isIntro) {

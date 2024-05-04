@@ -61,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void loggedIn(
+  void logIn(
       {required String name,
       required String type,
       required int personId}) async {
@@ -173,9 +173,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                             name: nameController.text);
                                         final name = model!.name;
                                         final personalId = model.id;
-                                        loggedIn(
+                                        logIn(
                                             name: name,
-                                            type: 'admin',
+                                            type: 'Admin',
                                             personId: personalId!);
                                         await database
                                             .addToLoginHistory(
@@ -216,9 +216,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                             name: nameController.text);
                                         final name = model!.name;
                                         int personalId = model.id!;
-                                        loggedIn(
+                                        logIn(
                                             name: name,
-                                            type: 'user',
+                                            type: 'Technician',
                                             personId: personalId);
                                         await database
                                             .addToLoginHistory(
