@@ -54,11 +54,11 @@ class DoctorModel {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
-      'name': name.toUpperCase(),
+      'name': name,
       'age': age,
       'sex': sex,
       'phone': phone,
-      'address': address.toUpperCase(),
+      'address': address,
       'ultrasound': ultrasound,
       'pathology': pathology,
       'ecg': ecg,

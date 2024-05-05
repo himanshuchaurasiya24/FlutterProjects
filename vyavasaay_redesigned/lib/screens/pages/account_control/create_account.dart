@@ -117,7 +117,7 @@ class _CreateAccountState extends State<CreateAccount> {
                         await databaseHelper
                             .createAdminAccount(
                           model: AdminModel(
-                            name: name.text,
+                            name: name.text.toUpperCase(),
                             phoneNumber: phone.text,
                             password: password.text,
                           ),
@@ -138,7 +138,7 @@ class _CreateAccountState extends State<CreateAccount> {
                         await databaseHelper
                             .createUserAccount(
                           model: UserModel(
-                            name: name.text,
+                            name: name.text.toUpperCase(),
                             phoneNumber: phone.text,
                             password: password.text,
                           ),

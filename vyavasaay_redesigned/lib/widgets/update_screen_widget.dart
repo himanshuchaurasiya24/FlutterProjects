@@ -13,7 +13,7 @@ class UpdateScreenWidget extends StatelessWidget {
       padding: EdgeInsets.all(defaultSize),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(
-          defaultSize,
+          defaultBorderRadius,
         ),
         color: primaryColorLite,
       ),

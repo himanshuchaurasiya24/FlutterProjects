@@ -46,12 +46,12 @@ class MyApp extends StatelessWidget {
           floatingActionButtonTheme:
               FloatingActionButtonThemeData(backgroundColor: btnColor),
           appBarTheme: AppBarTheme(
-            backgroundColor: primaryColorLite,
+            backgroundColor: primaryColorDark,
             centerTitle: true,
           ),
           textButtonTheme: TextButtonThemeData(
             style: ButtonStyle(
-              overlayColor: MaterialStatePropertyAll(primaryColorDark),
+              overlayColor: MaterialStatePropertyAll(btnColor),
               foregroundColor: const MaterialStatePropertyAll(
                 Colors.black,
               ),

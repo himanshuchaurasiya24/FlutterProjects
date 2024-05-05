@@ -70,7 +70,8 @@ CREATE TABLE IF NOT EXISTS patientTable(
   discCen INTEGER,
   incentive INTEGER,
   percent INTEGER,
-  refById INTEGER
+  refById INTEGER,
+  refBy TEXT
 )
 ''';
 
@@ -142,16 +143,24 @@ CREATE TABLE IF NOT EXISTS patientTable(
   Future<List<LoginHistoryModel>> searchLoginHistoryByName(
       {required String name}) async {
     final db = await initDB();
-    final res = await db
-        .query(loginHistoryTable, where: 'name Like ?', whereArgs: [name]);
+    final res = await db.query(
+      loginHistoryTable,
+      where: 'name Like ?',
+      whereArgs: [name],
+      orderBy: 'id DESC',
+    );
     return res.map((e) => LoginHistoryModel.fromMap(e)).toList();
   }
 
   Future<List<LoginHistoryModel>> searchLoginHistoryById(
       {required int personId}) async {
     final db = await initDB();
-    final res = await db.query(loginHistoryTable,
-        where: 'personId Like ?', whereArgs: [personId]);
+    final res = await db.query(
+      loginHistoryTable,
+      where: 'personId Like ?',
+      whereArgs: [personId],
+      orderBy: 'id DESC',
+    );
     return res.map((e) => LoginHistoryModel.fromMap(e)).toList();
   }
 
@@ -160,7 +169,7 @@ CREATE TABLE IF NOT EXISTS patientTable(
     final db = await initDB();
     final List<Map<String, Object?>> res = await db.query(
       patientTable,
-      orderBy: 'date DESC',
+      orderBy: 'id DESC',
     );
     return res.map((e) {
       return PatientModel.fromMap(e);
@@ -181,16 +190,20 @@ CREATE TABLE IF NOT EXISTS patientTable(
 // add doctor name in ref by to enable search in patient histoy page
   Future<List<PatientModel>> searchPatient({required String data}) async {
     final db = await initDB();
-    final List<Map<String, Object?>> result = await db.query(patientTable,
-        where:
-            'name LIKE ? OR type LIKE ? OR refById LIKE ? OR technician LIKE ?',
-        whereArgs: [
-          '%$data%',
-          '%$data%',
-          '%$data%',
-          '%$data%',
-        ],
-        orderBy: 'date DESC');
+    final List<Map<String, Object?>> result = await db.query(
+      patientTable,
+      where:
+          'name LIKE ? OR type LIKE ? OR refBy LIKE ? OR refById LIKE ? OR technician LIKE ? OR date LIKE ?',
+      whereArgs: [
+        '%$data%',
+        '%$data%',
+        '%$data%',
+        '%$data%',
+        '%$data%',
+        '%$data%',
+      ],
+      orderBy: 'id DESC',
+    );
     return result.map((e) {
       return PatientModel.fromMap(e);
     }).toList();
@@ -245,7 +258,12 @@ CREATE TABLE IF NOT EXISTS patientTable(
 
   Future<DoctorModel> searchDoctorById({required int id}) async {
     final db = await initDB();
-    final res = await db.query(doctorTable, where: 'id = ?', whereArgs: [id]);
+    final res = await db.query(
+      doctorTable,
+      where: 'id = ?',
+      whereArgs: [id],
+      orderBy: 'id DESC',
+    );
     return res.map((e) => DoctorModel.fromMap(e)).toList().first;
   }
 
@@ -294,8 +312,12 @@ CREATE TABLE IF NOT EXISTS patientTable(
     required String password,
   }) async {
     final db = await initDB();
-    var res = await db.query(adminTable,
-        where: 'name = ? AND password = ?', whereArgs: [name, password]);
+    var res = await db.query(
+      adminTable,
+      where: 'name = ? AND password = ?',
+      whereArgs: [name, password],
+      orderBy: 'id DESC',
+    );
     if (res.isNotEmpty) {
       return true;
     } else {
@@ -305,21 +327,30 @@ CREATE TABLE IF NOT EXISTS patientTable(
 
   Future<AdminModel?> getAdmin({required String name}) async {
     final db = await initDB();
-    var res = await db.query(adminTable, where: 'name = ?', whereArgs: [name]);
+    var res = await db.query(
+      adminTable,
+      where: 'name = ?',
+      whereArgs: [name],
+      orderBy: 'id DESC',
+    );
     return res.isNotEmpty ? AdminModel.fromMap(res.first) : null;
   }
 
   Future<List<AdminModel>> getAllAdminAccount() async {
     final db = await initDB();
-    final List<Map<String, Object?>> result =
-        await db.rawQuery('SELECT * FROM $adminTable');
+    final List<Map<String, Object?>> result = await db.query(
+      adminTable,
+      orderBy: 'id DESC',
+    );
     return result.map((e) => AdminModel.fromMap(e)).toList();
   }
 
   Future<int> getAdminAccountLength() async {
     final db = await initDB();
-    final List<Map<String, Object?>> result =
-        await db.rawQuery('SELECT * FROM $adminTable');
+    final List<Map<String, Object?>> result = await db.query(
+      adminTable,
+      orderBy: 'id DESC',
+    );
     return result.length;
   }
 
@@ -355,8 +386,12 @@ CREATE TABLE IF NOT EXISTS patientTable(
     required String password,
   }) async {
     final db = await initDB();
-    var res = await db.query(userTable,
-        where: 'name = ? AND password = ?', whereArgs: [name, password]);
+    var res = await db.query(
+      userTable,
+      where: 'name = ? AND password = ?',
+      whereArgs: [name, password],
+      orderBy: 'id DESC',
+    );
     if (res.isNotEmpty) {
       return true;
     } else {
@@ -366,21 +401,30 @@ CREATE TABLE IF NOT EXISTS patientTable(
 
   Future<UserModel?> getUser({required String name}) async {
     final db = await initDB();
-    var res = await db.query(userTable, where: 'name = ?', whereArgs: [name]);
+    var res = await db.query(
+      userTable,
+      where: 'name = ?',
+      whereArgs: [name],
+      orderBy: 'name ASC',
+    );
     return res.isNotEmpty ? UserModel.fromMap(res.first) : null;
   }
 
   Future<List<UserModel>> getAllUserAccount() async {
     final db = await initDB();
-    final List<Map<String, Object?>> result =
-        await db.rawQuery('SELECT * FROM $userTable');
+    final List<Map<String, Object?>> result = await db.query(
+      userTable,
+      orderBy: 'id DESC',
+    );
     return result.map((e) => UserModel.fromMap(e)).toList();
   }
 
   Future<int> getUserAccountLength() async {
     final db = await initDB();
-    final List<Map<String, Object?>> result =
-        await db.rawQuery('SELECT * FROM $userTable');
+    final List<Map<String, Object?>> result = await db.query(
+      userTable,
+      orderBy: 'id DESC',
+    );
     return result.length;
   }
 
@@ -391,6 +435,32 @@ CREATE TABLE IF NOT EXISTS patientTable(
     await db.rawDelete('DELETE FROM $userTable');
     await db.rawDelete('DELETE FROM $doctorTable');
     await db.rawDelete('DELETE FROM $patientTable');
-    await db.rawDelete('DELETE FROM $loginHistoryTable');
+    await db.rawDelete('DELETE FROM $loginHistoryTable').then((value) async {
+      await db.delete(
+        "SQLITE_SEQUENCE",
+        where: "NAME = ?",
+        whereArgs: [adminTable],
+      );
+      await db.delete(
+        "SQLITE_SEQUENCE",
+        where: "NAME = ?",
+        whereArgs: [userTable],
+      );
+      await db.delete(
+        "SQLITE_SEQUENCE",
+        where: "NAME = ?",
+        whereArgs: [doctorTable],
+      );
+      await db.delete(
+        "SQLITE_SEQUENCE",
+        where: "NAME = ?",
+        whereArgs: [patientTable],
+      );
+      await db.delete(
+        "SQLITE_SEQUENCE",
+        where: "NAME = ?",
+        whereArgs: [loginHistoryTable],
+      );
+    });
   }
 }

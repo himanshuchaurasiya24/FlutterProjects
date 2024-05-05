@@ -16,10 +16,11 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final DatabaseHelper database = DatabaseHelper();
   @override
   void initState() {
     isIntro();
-
+    database.initDB();
     super.initState();
   }
 
@@ -29,8 +30,6 @@ class _SplashScreenState extends State<SplashScreen> {
     bool? isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
     String? loggedInName = prefs.getString('loggedInName') ?? 'empty';
     String? logInType = prefs.getString('logInType') ?? 'Technician';
-    final DatabaseHelper database = DatabaseHelper();
-
     final adminActLength = await database.getAdminAccountLength();
     if (adminActLength == 0) {
       await prefs.setBool('isIntrodu', false);
@@ -80,6 +79,7 @@ class _SplashScreenState extends State<SplashScreen> {
               context,
               MaterialPageRoute(
                 builder: (context) {
+                  debugPrint(adminActLength.toString());
                   return const LoginScreen();
                 },
               ),
@@ -114,6 +114,7 @@ class _SplashScreenState extends State<SplashScreen> {
             children: [
               CircleAvatar(
                 radius: 300,
+                backgroundColor: Colors.transparent,
                 child: Image.asset('assets/app_icon.png'),
               ),
               Text(

@@ -74,11 +74,11 @@ class _AddDoctorState extends State<AddDoctor> {
           .updateDoctor(
         model: DoctorModel(
             id: widget.model!.id!,
-            name: docNameController.text,
+            name: docNameController.text.toUpperCase(),
             age: int.tryParse(docAgeController.text)!.toInt(),
             sex: docSexController.text,
             phone: docPhoneController.text,
-            address: docAddressController.text,
+            address: docAddressController.text.toUpperCase(),
             ultrasound:
                 int.tryParse(docUltraPercentageController.text)!.toInt(),
             pathology: int.tryParse(docPathPercentageController.text)!.toInt(),
@@ -92,11 +92,11 @@ class _AddDoctorState extends State<AddDoctor> {
       await databaseHelper
           .addDoctor(
         model: DoctorModel(
-            name: docNameController.text,
+            name: docNameController.text.toUpperCase(),
             age: int.tryParse(docAgeController.text)!.toInt(),
             sex: docSexController.text,
             phone: docPhoneController.text,
-            address: docAddressController.text,
+            address: docAddressController.text.toUpperCase(),
             ultrasound:
                 int.tryParse(docUltraPercentageController.text)!.toInt(),
             pathology: int.tryParse(docPathPercentageController.text)!.toInt(),
@@ -112,7 +112,6 @@ class _AddDoctorState extends State<AddDoctor> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: primaryColorLite,
       appBar: AppBar(
         title: Text(
             widget.isUpdate ? 'Update doctor details' : 'Enter doctor details'),
@@ -131,7 +130,6 @@ class _AddDoctorState extends State<AddDoctor> {
                     child: CustomTextField(
                       controller: docNameController,
                       hintText: 'Doctor Name',
-                      allCaps: true,
                     ),
                   ),
                   Gap(defaultSize),
@@ -147,16 +145,16 @@ class _AddDoctorState extends State<AddDoctor> {
                   Gap(defaultSize),
                   Expanded(
                       child: DropdownButtonFormField(
-                    borderRadius: BorderRadius.circular(defaultSize),
-                    dropdownColor: primaryColorLite,
+                    borderRadius: BorderRadius.circular(defaultBorderRadius),
+                    dropdownColor: primaryColorDark,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(
-                          defaultSize,
+                          defaultBorderRadius,
                         ),
                         borderSide: BorderSide.none,
                       ),
-                      fillColor: primaryColorLite,
+                      fillColor: primaryColorDark,
                       filled: true,
                     ),
                     value: widget.isUpdate ? widget.model!.sex : sexType.first,
@@ -261,7 +259,7 @@ class _AddDoctorState extends State<AddDoctor> {
                     child: const ContainerButton(
                         iconData: Icons.delete_outlined,
                         btnName: 'Delete doctor')),
-              )
+              ),
             ],
           ),
         ),

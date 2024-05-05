@@ -33,8 +33,8 @@ class _BillHistoryState extends State<BillHistory> {
 
   void getTechnicianInfo() async {
     final pref = await SharedPreferences.getInstance();
-    String loggedInAs = pref.getString('logInType') ?? 'user';
-    if (loggedInAs == 'admin') {
+    String loggedInAs = pref.getString('logInType') ?? 'Technician';
+    if (loggedInAs == 'Admin') {
       isAdminLogin = true;
     } else {
       isAdminLogin = false;
@@ -103,11 +103,14 @@ class _BillHistoryState extends State<BillHistory> {
                         trailing: snapshot.data![index].date,
                         subtitle: FutureBuilder(
                           future: databaseHelper.searchDoctorById(
-                              id: snapshot.data![index].id!),
+                              id: snapshot.data![index].refById),
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
                               return Text('Loading', style: patientHeaderSmall);
+                            }
+                            if (snapshot.hasError) {
+                              return Text(snapshot.error.toString());
                             }
                             return Text(
                               snapshot.data!.name,

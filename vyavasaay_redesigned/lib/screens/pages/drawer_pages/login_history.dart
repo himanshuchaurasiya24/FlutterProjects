@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:vyavasaay_redesigned/database/database_helper.dart';
 import 'package:vyavasaay_redesigned/utils/constants.dart';
 import 'package:vyavasaay_redesigned/widgets/custom_details_card.dart';
@@ -22,7 +23,13 @@ class _LoginHistoryState extends State<LoginHistory> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        Text(
+          'Login History',
+          style: appbar,
+        ),
+        Gap(defaultSize),
         Expanded(
           child: FutureBuilder(
             future: databaseHelper.getAllLoginHistory(),

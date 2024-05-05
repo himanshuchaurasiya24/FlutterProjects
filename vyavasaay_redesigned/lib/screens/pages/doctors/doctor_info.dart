@@ -163,10 +163,7 @@ class _DoctorInfoState extends State<DoctorInfo> {
                               ),
                             ),
                           ),
-                          Visibility(
-                            visible: isAdminLogin,
-                            child: Gap(defaultSize),
-                          ),
+                          Gap(defaultSize),
                         ],
                       );
                     },

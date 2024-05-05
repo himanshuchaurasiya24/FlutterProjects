@@ -15,7 +15,6 @@ class CustomTextField extends StatefulWidget {
     this.onChanged,
     this.valueLimit,
     this.suffixIconRequired = false,
-    this.allCaps = false,
   });
 
   final TextEditingController controller;
@@ -29,7 +28,6 @@ class CustomTextField extends StatefulWidget {
   final bool? readOnly;
   final int? maxLines;
   final int? valueLimit;
-  final bool? allCaps;
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
@@ -46,7 +44,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      cursorRadius: const Radius.circular(10.0),
+      cursorRadius: Radius.circular(defaultBorderRadius),
       cursorWidth: 3.0,
       onChanged: widget.onChanged,
       controller: widget.controller,
@@ -102,7 +100,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         fillColor: primaryColorDark,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(
-            defaultSize,
+            defaultBorderRadius,
           ),
           borderSide: BorderSide.none,
         ),

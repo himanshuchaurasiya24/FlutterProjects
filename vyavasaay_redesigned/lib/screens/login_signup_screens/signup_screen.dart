@@ -6,7 +6,7 @@ import 'package:vyavasaay_redesigned/model/admin_model.dart';
 import 'package:vyavasaay_redesigned/utils/constants.dart';
 import 'package:vyavasaay_redesigned/widgets/container_button.dart';
 import 'package:vyavasaay_redesigned/widgets/custom_textfield.dart';
-import 'package:vyavasaay_redesigned/widgets/default_container.dart';
+import 'package:vyavasaay_redesigned/widgets/update_screen_widget.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -75,7 +75,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: DefaultContainer(
+      body: UpdateScreenWidget(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -144,7 +144,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   await database
                                       .createAdminAccount(
                                         model: AdminModel(
-                                          name: nameController.text,
+                                          name:
+                                              nameController.text.toUpperCase(),
                                           phoneNumber: phoneController.text,
                                           password: passwordController.text,
                                         ),
@@ -157,7 +158,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                 context,
                                                 MaterialPageRoute(
                                                   builder: (context) {
-                                                    return const SignUpScreen();
+                                                    return const LoginScreen();
                                                   },
                                                 ),
                                               ),

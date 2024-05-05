@@ -16,8 +16,10 @@ class CustomDetailsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 0,
-      color: primaryColorLite,
+      clipBehavior: Clip.hardEdge,
       child: ExpansionTile(
+        backgroundColor: primaryColorLite,
+        collapsedBackgroundColor: primaryColorLite,
         childrenPadding: EdgeInsets.symmetric(horizontal: defaultSize),
         title: Text(title, style: patientHeader),
         subtitle: subtitle,

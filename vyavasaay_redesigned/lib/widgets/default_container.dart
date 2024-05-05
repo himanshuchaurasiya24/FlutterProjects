@@ -8,13 +8,11 @@ class DefaultContainer extends StatelessWidget {
     this.width,
     this.color,
     this.height,
-    this.boxShadow,
   });
   final Widget child;
   final double? width;
   final double? height;
   final Color? color;
-  final List<BoxShadow>? boxShadow;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -22,11 +20,10 @@ class DefaultContainer extends StatelessWidget {
       height: height ?? getDeviceHeight(context: context),
       width: width ?? getDeviceWidth(context: context),
       decoration: BoxDecoration(
-        color: color ?? primaryColorDark,
+        color: color ?? primaryColorLite,
         borderRadius: BorderRadius.circular(
-          defaultSize,
+          defaultBorderRadius,
         ),
-        boxShadow: boxShadow,
       ),
       child: child,
     );

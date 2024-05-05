@@ -5,6 +5,7 @@ import 'package:vyavasaay_redesigned/screens/pages/account_control/access_contro
 import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/account_details.dart';
 import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/dashboard.dart';
 import 'package:vyavasaay_redesigned/screens/pages/doctors/doctor_info.dart';
+import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/generate_incentive_page.dart';
 import 'package:vyavasaay_redesigned/screens/pages/patients/bill_history.dart';
 import 'package:vyavasaay_redesigned/screens/pages/patients/generate_report.dart';
 import 'package:vyavasaay_redesigned/screens/pages/drawer_pages/login_history.dart';
@@ -33,14 +34,14 @@ class MenuItems {
       child: const DoctorInfo(),
     ),
     MenuDetails(
+      title: 'Generate Incentive',
+      icon: Icons.currency_rupee_outlined,
+      child: const GenerateIncentive(),
+    ),
+    MenuDetails(
       title: 'Account Details',
       icon: Icons.account_circle_outlined,
       child: const AccountDetails(),
-    ),
-    MenuDetails(
-      title: 'About This App',
-      icon: Icons.info_outline,
-      child: const AboutThisApp(),
     ),
     MenuDetails(
       title: 'Access Control',
@@ -53,10 +54,15 @@ class MenuItems {
       child: const LoginHistory(),
     ),
     MenuDetails(
+      title: 'About This App',
+      icon: Icons.info_outline,
+      child: const AboutThisApp(),
+    ),
+    MenuDetails(
       title: 'Log Out',
       icon: Icons.logout_outlined,
-      child: Logout(),
-    )
+      child: const Logout(),
+    ),
   ];
   List<MenuDetails> usersMenuItems = [
     MenuDetails(
@@ -92,7 +98,7 @@ class MenuItems {
     MenuDetails(
       title: 'Log Out',
       icon: Icons.logout_outlined,
-      child: Logout(),
+      child: const Logout(),
     )
   ];
 }

@@ -11,6 +11,7 @@ class PatientModel {
   String remark;
   String technician;
   int refById;
+  String refBy;
   int totalAmount;
   int paidAmount;
   int discDoc;
@@ -27,6 +28,7 @@ class PatientModel {
     required this.remark,
     required this.technician,
     required this.refById,
+    required this.refBy,
     required this.totalAmount,
     required this.paidAmount,
     required this.discDoc,
@@ -45,6 +47,7 @@ class PatientModel {
     String? remark,
     String? technician,
     int? refById,
+    String? refBy,
     int? totalAmount,
     int? paidAmount,
     int? discDoc,
@@ -62,6 +65,7 @@ class PatientModel {
       remark: remark ?? this.remark,
       technician: technician ?? this.technician,
       refById: refById ?? this.refById,
+      refBy: refBy ?? this.refBy,
       totalAmount: totalAmount ?? this.totalAmount,
       paidAmount: paidAmount ?? this.paidAmount,
       discDoc: discDoc ?? this.discDoc,
@@ -74,7 +78,7 @@ class PatientModel {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
-      'name': name.toUpperCase(),
+      'name': name,
       'age': age,
       'sex': sex,
       'date': date,
@@ -82,6 +86,7 @@ class PatientModel {
       'remark': remark,
       'technician': technician,
       'refById': refById,
+      'refBy': refBy,
       'totalAmount': totalAmount,
       'paidAmount': paidAmount,
       'discDoc': discDoc,
@@ -102,6 +107,7 @@ class PatientModel {
       remark: map['remark'] as String,
       technician: map['technician'] as String,
       refById: map['refById'] as int,
+      refBy: map['refBy'] as String,
       totalAmount: map['totalAmount'] as int,
       paidAmount: map['paidAmount'] as int,
       discDoc: map['discDoc'] as int,
@@ -118,7 +124,7 @@ class PatientModel {
 
   @override
   String toString() {
-    return 'PatientModel(id: $id, name: $name, age: $age, sex: $sex, date: $date, type: $type, remark: $remark, technician: $technician, refById: $refById, totalAmount: $totalAmount, paidAmount: $paidAmount, discDoc: $discDoc, discCen: $discCen, incentive: $incentive, percent: $percent)';
+    return 'PatientModel(id: $id, name: $name, age: $age, sex: $sex, date: $date, type: $type, remark: $remark, technician: $technician, refById: $refById, refBy: $refBy, totalAmount: $totalAmount, paidAmount: $paidAmount, discDoc: $discDoc, discCen: $discCen, incentive: $incentive, percent: $percent)';
   }
 
   @override
@@ -134,6 +140,7 @@ class PatientModel {
         other.remark == remark &&
         other.technician == technician &&
         other.refById == refById &&
+        other.refBy == refBy &&
         other.totalAmount == totalAmount &&
         other.paidAmount == paidAmount &&
         other.discDoc == discDoc &&
@@ -153,6 +160,7 @@ class PatientModel {
         remark.hashCode ^
         technician.hashCode ^
         refById.hashCode ^
+        refBy.hashCode ^
         totalAmount.hashCode ^
         paidAmount.hashCode ^
         discDoc.hashCode ^

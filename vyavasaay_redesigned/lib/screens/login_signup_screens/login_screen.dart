@@ -162,12 +162,14 @@ class _LoginScreenState extends State<LoginScreen> {
                               isAdminLogin
                                   ? await database
                                       .authAdmin(
-                                          name: nameController.text,
+                                          name:
+                                              nameController.text.toUpperCase(),
                                           password: passwordController.text)
                                       .then((value) async {
                                       if (value == true) {
                                         final model = await database.getAdmin(
-                                            name: nameController.text);
+                                            name: nameController.text
+                                                .toUpperCase());
                                         final name = model!.name;
                                         final personalId = model.id;
                                         logIn(
@@ -205,12 +207,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                     })
                                   : await database
                                       .authUser(
-                                          name: nameController.text,
+                                          name:
+                                              nameController.text.toUpperCase(),
                                           password: passwordController.text)
                                       .then((value) async {
                                       if (value == true) {
                                         final model = await database.getUser(
-                                            name: nameController.text);
+                                            name: nameController.text
+                                                .toUpperCase());
                                         final name = model!.name;
                                         int personalId = model.id!;
                                         logIn(

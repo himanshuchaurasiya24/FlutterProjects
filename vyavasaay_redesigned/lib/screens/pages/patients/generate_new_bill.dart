@@ -62,9 +62,10 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
       total.text = widget.model!.totalAmount.toString();
       paid.text = widget.model!.paidAmount.toString();
       pName.text = widget.model!.name;
-      pName.text = widget.model!.name;
       pAge.text = widget.model!.age.toString();
       pSex.text = widget.model!.sex;
+      refBy.text = widget.model!.refBy;
+      refById.text = widget.model!.refById.toString();
       date.text = widget.model!.date;
       diagType.text = widget.model!.type;
     }
@@ -93,8 +94,9 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: primaryColorLite,
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const Text('Generate New Bill'),
+      ),
       body: UpdateScreenWidget(
         child: Form(
           key: formKey,
@@ -123,7 +125,7 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
                   Gap(defaultSize),
                   Expanded(
                     child: DropdownButtonFormField(
-                      dropdownColor: primaryColorLite,
+                      dropdownColor: primaryColorDark,
                       borderRadius: BorderRadius.circular(defaultSize),
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
@@ -132,7 +134,7 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
                           ),
                           borderSide: BorderSide.none,
                         ),
-                        fillColor: primaryColorLite,
+                        fillColor: primaryColorDark,
                         filled: true,
                       ),
                       value: widget.isUpdate == true
@@ -157,16 +159,16 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
                   Expanded(
                     flex: 1,
                     child: DropdownButtonFormField(
-                      dropdownColor: primaryColorLite,
+                      dropdownColor: primaryColorDark,
                       borderRadius: BorderRadius.circular(defaultSize),
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
-                            defaultSize,
+                            defaultBorderRadius,
                           ),
                           borderSide: BorderSide.none,
                         ),
-                        fillColor: primaryColorLite,
+                        fillColor: primaryColorDark,
                         filled: true,
                       ),
                       value: widget.isUpdate == true
@@ -310,7 +312,7 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
                           ? await databaseHelper
                               .addPatient(
                               model: PatientModel(
-                                name: pName.text,
+                                name: pName.text.toUpperCase(),
                                 age: int.parse(pAge.text),
                                 sex: pSex.text,
                                 date: date.text,
@@ -318,6 +320,7 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
                                 remark: remark.text,
                                 technician: technician.text,
                                 refById: int.parse(refById.text),
+                                refBy: refBy.text,
                                 totalAmount: int.parse(total.text),
                                 paidAmount: int.parse(paid.text),
                                 discDoc: int.parse(discDoc.text),
@@ -333,7 +336,8 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
                               .updatePatient(
                               model: PatientModel(
                                 id: widget.model!.id,
-                                name: pName.text,
+                                refBy: refBy.text,
+                                name: pName.text.toUpperCase(),
                                 age: int.parse(pAge.text),
                                 sex: pSex.text,
                                 date: date.text,
@@ -406,7 +410,7 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
       lastDate: DateTime(2100),
       initialDate: DateTime.now(),
     );
-    final parsedDate = DateFormat('MMMM y d');
+    final parsedDate = DateFormat('dd MMMM yyyy');
     final formatDate = parsedDate.format(rawDate!);
     setState(() {
       date.text = formatDate.toString();
