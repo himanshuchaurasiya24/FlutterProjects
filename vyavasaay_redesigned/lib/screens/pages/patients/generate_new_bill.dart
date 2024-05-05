@@ -93,7 +93,7 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: primaryColor,
+      backgroundColor: primaryColorLite,
       appBar: AppBar(),
       body: UpdateScreenWidget(
         child: Form(
@@ -123,7 +123,7 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
                   Gap(defaultSize),
                   Expanded(
                     child: DropdownButtonFormField(
-                      dropdownColor: primaryColor,
+                      dropdownColor: primaryColorLite,
                       borderRadius: BorderRadius.circular(defaultSize),
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
@@ -132,7 +132,7 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
                           ),
                           borderSide: BorderSide.none,
                         ),
-                        fillColor: primaryColor,
+                        fillColor: primaryColorLite,
                         filled: true,
                       ),
                       value: widget.isUpdate == true
@@ -157,7 +157,7 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
                   Expanded(
                     flex: 1,
                     child: DropdownButtonFormField(
-                      dropdownColor: primaryColor,
+                      dropdownColor: primaryColorLite,
                       borderRadius: BorderRadius.circular(defaultSize),
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
@@ -166,7 +166,7 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
                           ),
                           borderSide: BorderSide.none,
                         ),
-                        fillColor: primaryColor,
+                        fillColor: primaryColorLite,
                         filled: true,
                       ),
                       value: widget.isUpdate == true
@@ -208,7 +208,7 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
                       doctorSelector();
                     },
                     child: CircleAvatar(
-                      backgroundColor: primaryColor,
+                      backgroundColor: primaryColorLite,
                       maxRadius: 28,
                       minRadius: 20,
                       child: const Icon(
@@ -230,7 +230,7 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
                       datePicker();
                     },
                     child: CircleAvatar(
-                      backgroundColor: primaryColor,
+                      backgroundColor: primaryColorLite,
                       maxRadius: 28,
                       minRadius: 20,
                       child: const Icon(
@@ -420,7 +420,7 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
         return Dialog(
           child: Container(
             decoration: BoxDecoration(
-              color: primaryColor,
+              color: primaryColorLite,
               borderRadius: BorderRadius.circular(
                 defaultSize,
               ),
@@ -487,7 +487,7 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
                           },
                           child: Card(
                             elevation: 0,
-                            color: primaryCardColor,
+                            color: primaryColorLite,
                             child: Padding(
                               padding: const EdgeInsets.all(5),
                               child: Row(

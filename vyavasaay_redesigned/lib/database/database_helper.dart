@@ -178,11 +178,12 @@ CREATE TABLE IF NOT EXISTS patientTable(
     return res;
   }
 
+// add doctor name in ref by to enable search in patient histoy page
   Future<List<PatientModel>> searchPatient({required String data}) async {
     final db = await initDB();
     final List<Map<String, Object?>> result = await db.query(patientTable,
         where:
-            'name LIKE ? OR type LIKE ? OR refBy LIKE ? OR technician LIKE ?',
+            'name LIKE ? OR type LIKE ? OR refById LIKE ? OR technician LIKE ?',
         whereArgs: [
           '%$data%',
           '%$data%',

@@ -107,7 +107,6 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: primaryColorDark,
       body: Center(
         child: SingleChildScrollView(
           child: Column(
@@ -120,7 +119,6 @@ class _SplashScreenState extends State<SplashScreen> {
               Text(
                 'Vyavassay',
                 style: TextStyle(
-                  color: titleLargeTextColor,
                   fontSize: titleLargeTextSize,
                   fontWeight: FontWeight.bold,
                 ),

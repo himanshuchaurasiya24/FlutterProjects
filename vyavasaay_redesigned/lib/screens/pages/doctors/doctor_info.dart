@@ -35,8 +35,8 @@ class _DoctorInfoState extends State<DoctorInfo> {
 
   void getTechnicianInfo() async {
     final pref = await SharedPreferences.getInstance();
-    String loggedInAs = pref.getString('logInType') ?? 'user';
-    if (loggedInAs == 'admin') {
+    String loggedInAs = pref.getString('logInType') ?? 'Technician';
+    if (loggedInAs == 'Admin') {
       isAdminLogin = true;
     } else {
       isAdminLogin = false;

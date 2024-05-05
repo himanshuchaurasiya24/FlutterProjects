@@ -17,18 +17,18 @@ class ContainerButton extends StatefulWidget {
 }
 
 class _ContainerButtonState extends State<ContainerButton> {
-  Color containerColor = primaryColor;
+  Color containerColor = primaryColorDark;
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
       onEnter: (event) {
         setState(() {
-          containerColor = primaryColorDarker;
+          containerColor = btnColor;
         });
       },
       onExit: (event) {
         setState(() {
-          containerColor = primaryColor;
+          containerColor = primaryColorDark;
         });
       },
       child: DefaultContainer(

@@ -15,7 +15,7 @@ class UpdateScreenWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(
           defaultSize,
         ),
-        color: primaryColorDark,
+        color: primaryColorLite,
       ),
       child: child,
     );

@@ -10,7 +10,6 @@ class PatientModel {
   String type;
   String remark;
   String technician;
-
   int refById;
   int totalAmount;
   int paidAmount;

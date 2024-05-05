@@ -33,29 +33,40 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        dividerColor: Colors.transparent,
-        splashColor: Colors.transparent,
-        useMaterial3: true,
-        textTheme: TextTheme(
-          titleLarge: TextStyle(
-            color: titleLargeTextColor,
-            fontSize: 40,
-            fontWeight: FontWeight.bold,
+          dividerColor: Colors.transparent,
+          splashColor: Colors.transparent,
+          useMaterial3: true,
+          textTheme: const TextTheme(
+            titleLarge: TextStyle(
+              fontSize: 40,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
-        iconTheme: IconThemeData(
-          color: titleLargeTextColor,
-        ),
-        scaffoldBackgroundColor: primaryColorDark,
-        appBarTheme: AppBarTheme(
-          backgroundColor: primaryColor,
-          centerTitle: true,
-        ),
-        hintColor: primaryColor,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: primaryColor,
-        ).copyWith(error: titleLargeTextColor),
-      ),
+          scaffoldBackgroundColor: primaryColorDark,
+          floatingActionButtonTheme:
+              FloatingActionButtonThemeData(backgroundColor: btnColor),
+          appBarTheme: AppBarTheme(
+            backgroundColor: primaryColorLite,
+            centerTitle: true,
+          ),
+          textButtonTheme: TextButtonThemeData(
+            style: ButtonStyle(
+              overlayColor: MaterialStatePropertyAll(primaryColorDark),
+              foregroundColor: const MaterialStatePropertyAll(
+                Colors.black,
+              ),
+            ),
+          ),
+          checkboxTheme: CheckboxThemeData(
+            overlayColor: MaterialStatePropertyAll(primaryColorLite),
+            checkColor: MaterialStatePropertyAll(btnColor),
+            fillColor: MaterialStatePropertyAll(primaryColorDark),
+          ),
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: primaryColorLite,
+          ).copyWith(error: Colors.black),
+          textSelectionTheme: TextSelectionThemeData(
+              cursorColor: btnColor, selectionColor: btnColor)),
       home: const SplashScreen(),
     );
   }

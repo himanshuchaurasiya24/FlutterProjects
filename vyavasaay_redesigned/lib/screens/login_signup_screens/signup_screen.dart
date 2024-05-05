@@ -22,7 +22,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController confirmPasswordController =
       TextEditingController();
   final TextEditingController phoneController = TextEditingController();
-  Color containerColor = primaryColor;
+  Color containerColor = primaryColorLite;
   DatabaseHelper database = DatabaseHelper();
   late Future<List<AdminModel>> adminList;
   late int adminAccountLength;
@@ -43,10 +43,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
           left: defaultSize + 10,
           right: defaultSize - 10,
         ),
-        backgroundColor: primaryColor,
-        dividerColor: primaryColor,
+        backgroundColor: primaryColorLite,
+        dividerColor: primaryColorLite,
         contentTextStyle: TextStyle(
-          color: titleLargeTextColor,
           fontSize: defaultSize,
           fontWeight: FontWeight.w600,
         ),
@@ -63,7 +62,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
             icon: Text(
               'Okay',
               style: TextStyle(
-                color: titleLargeTextColor,
                 fontSize: defaultSize,
                 fontWeight: FontWeight.w600,
               ),
@@ -98,7 +96,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: titleLargeTextSize,
-                            color: titleLargeTextColor,
                           ),
                         ),
                         SizedBox(
@@ -186,10 +183,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   const Expanded(
                                     child: SizedBox(),
                                   ),
-                                  Text(
+                                  const Text(
                                     'Already have an account?',
                                     style: TextStyle(
-                                      color: titleLargeTextColor,
                                       fontSize: 20,
                                     ),
                                   ),
@@ -204,10 +200,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         ),
                                       );
                                     },
-                                    child: Text(
+                                    child: const Text(
                                       'Log in instead',
                                       style: TextStyle(
-                                        color: titleLargeTextColor,
                                         fontSize: 20,
                                       ),
                                     ),

@@ -16,7 +16,7 @@ class CustomDetailsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 0,
-      color: primaryCardColor,
+      color: primaryColorLite,
       child: ExpansionTile(
         childrenPadding: EdgeInsets.symmetric(horizontal: defaultSize),
         title: Text(title, style: patientHeader),

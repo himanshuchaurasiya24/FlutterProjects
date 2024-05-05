@@ -8,7 +8,7 @@ import 'package:vyavasaay_redesigned/screens/login_signup_screens/signup_screen.
 import 'package:vyavasaay_redesigned/utils/constants.dart';
 import 'package:vyavasaay_redesigned/widgets/container_button.dart';
 import 'package:vyavasaay_redesigned/widgets/custom_textfield.dart';
-import 'package:vyavasaay_redesigned/widgets/default_container.dart';
+import 'package:vyavasaay_redesigned/widgets/update_screen_widget.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -22,7 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   DatabaseHelper database = DatabaseHelper();
-  Color containerColor = primaryColor;
+  Color containerColor = primaryColorLite;
   bool isAdminLogin = false;
   @override
   void initState() {
@@ -32,16 +32,18 @@ class _LoginScreenState extends State<LoginScreen> {
   void showBanner(BuildContext context) {
     ScaffoldMessenger.of(context).showMaterialBanner(
       MaterialBanner(
-        backgroundColor: primaryColor,
-        dividerColor: primaryColor,
+        backgroundColor: primaryColorDark,
+        dividerColor: primaryColorDark,
         contentTextStyle: TextStyle(
-          color: titleLargeTextColor,
           fontSize: defaultSize,
           fontWeight: FontWeight.w600,
         ),
         forceActionsBelow: false,
         overflowAlignment: OverflowBarAlignment.end,
-        content: const Text('No Account Found.'),
+        content: const Text(
+          'No Account Found.',
+          style: TextStyle(color: Colors.black),
+        ),
         actions: [
           IconButton(
             onPressed: () {
@@ -50,7 +52,6 @@ class _LoginScreenState extends State<LoginScreen> {
             icon: Text(
               'Okay',
               style: TextStyle(
-                color: titleLargeTextColor,
                 fontSize: defaultSize,
                 fontWeight: FontWeight.w600,
               ),
@@ -75,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: DefaultContainer(
+      body: UpdateScreenWidget(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -97,7 +98,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: titleLargeTextSize,
-                            color: titleLargeTextColor,
                           ),
                         ),
                         SizedBox(
@@ -122,7 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           height: 58,
                           width: getDeviceWidth(context: context) * 0.2,
                           decoration: BoxDecoration(
-                            color: primaryColor,
+                            color: primaryColorDark,
                             borderRadius: BorderRadius.circular(
                               defaultSize,
                             ),
@@ -134,8 +134,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                 width: defaultSize / 2,
                               ),
                               Checkbox.adaptive(
-                                hoverColor: primaryColorDarker,
-                                activeColor: titleLargeTextColor,
                                 value: isAdminLogin,
                                 onChanged: (value) {
                                   setState(() {
@@ -146,10 +144,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               SizedBox(
                                 width: defaultSize,
                               ),
-                              Text(
+                              const Text(
                                 'Admin Login',
                                 style: TextStyle(
-                                  color: titleLargeTextColor,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -265,10 +262,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                   const Expanded(
                                     child: SizedBox(),
                                   ),
-                                  Text(
+                                  const Text(
                                     'Don\'t have an account?',
                                     style: TextStyle(
-                                      color: titleLargeTextColor,
                                       fontSize: 20,
                                     ),
                                   ),
@@ -283,10 +279,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                         ),
                                       );
                                     },
-                                    child: Text(
+                                    child: const Text(
                                       'Sign up instead',
                                       style: TextStyle(
-                                        color: titleLargeTextColor,
                                         fontSize: 20,
                                       ),
                                     ),

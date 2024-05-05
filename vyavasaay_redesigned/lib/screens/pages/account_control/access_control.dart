@@ -49,12 +49,7 @@ class _AccessControlState extends State<AccessControl> {
           children: [
             Expanded(
               child: Container(
-                margin: EdgeInsets.all(defaultSize),
                 padding: EdgeInsets.all(defaultSize),
-                decoration: BoxDecoration(
-                  color: primaryCardColor,
-                  borderRadius: BorderRadius.circular(defaultSize),
-                ),
                 child: Column(
                   children: [
                     Text(
@@ -94,7 +89,7 @@ class _AccessControlState extends State<AccessControl> {
                             itemCount: snapshot.data!.length,
                             itemBuilder: (context, index) {
                               return Card(
-                                color: primaryColor,
+                                color: primaryColorLite,
                                 elevation: 0,
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(
@@ -228,12 +223,7 @@ class _AccessControlState extends State<AccessControl> {
             ),
             Expanded(
                 child: Container(
-              margin: EdgeInsets.all(defaultSize),
               padding: EdgeInsets.all(defaultSize),
-              decoration: BoxDecoration(
-                color: primaryCardColor,
-                borderRadius: BorderRadius.circular(defaultSize),
-              ),
               child: Column(
                 children: [
                   Text(
@@ -273,7 +263,7 @@ class _AccessControlState extends State<AccessControl> {
                           itemCount: snapshot.data!.length,
                           itemBuilder: (context, index) {
                             return Card(
-                              color: primaryColor,
+                              color: primaryColorLite,
                               elevation: 0,
                               child: Padding(
                                 padding: EdgeInsets.symmetric(

@@ -112,7 +112,7 @@ class _AddDoctorState extends State<AddDoctor> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: primaryColor,
+      backgroundColor: primaryColorLite,
       appBar: AppBar(
         title: Text(
             widget.isUpdate ? 'Update doctor details' : 'Enter doctor details'),
@@ -148,7 +148,7 @@ class _AddDoctorState extends State<AddDoctor> {
                   Expanded(
                       child: DropdownButtonFormField(
                     borderRadius: BorderRadius.circular(defaultSize),
-                    dropdownColor: primaryColor,
+                    dropdownColor: primaryColorLite,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(
@@ -156,7 +156,7 @@ class _AddDoctorState extends State<AddDoctor> {
                         ),
                         borderSide: BorderSide.none,
                       ),
-                      fillColor: primaryColor,
+                      fillColor: primaryColorLite,
                       filled: true,
                     ),
                     value: widget.isUpdate ? widget.model!.sex : sexType.first,

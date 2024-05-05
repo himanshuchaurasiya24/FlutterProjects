@@ -46,7 +46,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      cursorColor: primaryColorDark,
       cursorRadius: const Radius.circular(10.0),
       cursorWidth: 3.0,
       onChanged: widget.onChanged,
@@ -55,9 +54,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       maxLines: widget.maxLines ?? 1,
       obscureText: isObscure,
       readOnly: widget.readOnly ?? false,
-      textCapitalization: TextCapitalization.characters,
-      style: TextStyle(
-        color: titleLargeTextColor,
+      style: const TextStyle(
         fontWeight: FontWeight.w600,
       ),
       validator: (value) {
@@ -101,10 +98,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 ),
               )
             : null,
-        hintStyle: TextStyle(
-          color: titleLargeTextColor,
-        ),
-        fillColor: primaryColor,
+        hoverColor: primaryColorDark,
+        fillColor: primaryColorDark,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(
             defaultSize,

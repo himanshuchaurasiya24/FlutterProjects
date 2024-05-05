@@ -27,17 +27,15 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               children: [
                 widget.logInType == 'Admin'
-                    ? Center(
+                    ? const Center(
                         child: Icon(
                           Icons.admin_panel_settings_outlined,
-                          color: titleLargeTextColor,
                           size: 200,
                         ),
                       )
-                    : Center(
+                    : const Center(
                         child: Icon(
                           Icons.person_outlined,
-                          color: titleLargeTextColor,
                           size: 200,
                         ),
                       ),
@@ -46,7 +44,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       ? '${widget.name}\n(Admin)'
                       : '${widget.name}\n(Technician)',
                   style: TextStyle(
-                    color: titleLargeTextColor,
                     fontSize: defaultSize,
                     fontWeight: FontWeight.bold,
                   ),
@@ -65,9 +62,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           right: 3,
                         ),
                         decoration: BoxDecoration(
-                          color: isSelected ? blackTile : primaryColorDark,
+                          color: isSelected ? btnColor : primaryColorDark,
                           borderRadius: BorderRadius.circular(
-                            defaultSize - 10,
+                            10,
                           ),
                         ),
                         child: ListTile(
@@ -80,18 +77,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             widget.logInType == 'Admin'
                                 ? adminMenuItems[index].icon
                                 : userMenuItems[index].icon,
-                            color: currentIndex == index
-                                ? whitePrimary
-                                : titleLargeTextColor,
                           ),
                           title: Text(
                             widget.logInType == 'Admin'
                                 ? adminMenuItems[index].title
                                 : userMenuItems[index].title,
-                            style: TextStyle(
-                              color: currentIndex == index
-                                  ? whitePrimary
-                                  : titleLargeTextColor,
+                            style: const TextStyle(
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -145,10 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
         3,
       ),
       decoration: BoxDecoration(
-        color: primaryColor,
-        borderRadius: BorderRadius.circular(
-          defaultSize,
-        ),
+        color: primaryColorDark,
       ),
       child: child,
     );

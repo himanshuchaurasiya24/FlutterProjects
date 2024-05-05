@@ -23,7 +23,6 @@ class _LoginHistoryState extends State<LoginHistory> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const TextField(),
         Expanded(
           child: FutureBuilder(
             future: databaseHelper.getAllLoginHistory(),

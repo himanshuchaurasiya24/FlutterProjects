@@ -35,7 +35,7 @@ class _CreateAccountState extends State<CreateAccount> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: primaryColor,
+      backgroundColor: primaryColorLite,
       appBar: AppBar(
         title: const Text('Create Account'),
       ),
@@ -57,7 +57,7 @@ class _CreateAccountState extends State<CreateAccount> {
                       height: 58,
                       width: getDeviceWidth(context: context) * 0.2,
                       decoration: BoxDecoration(
-                        color: primaryColor,
+                        color: primaryColorLite,
                         borderRadius: BorderRadius.circular(
                           defaultSize,
                         ),
@@ -69,8 +69,6 @@ class _CreateAccountState extends State<CreateAccount> {
                             width: defaultSize / 2,
                           ),
                           Checkbox.adaptive(
-                            hoverColor: primaryColorDarker,
-                            activeColor: titleLargeTextColor,
                             value: isAdminAccount,
                             onChanged: (value) {
                               setState(() {
@@ -81,10 +79,9 @@ class _CreateAccountState extends State<CreateAccount> {
                           SizedBox(
                             width: defaultSize,
                           ),
-                          Text(
+                          const Text(
                             'Create as Admin Account',
                             style: TextStyle(
-                              color: titleLargeTextColor,
                               fontWeight: FontWeight.w600,
                             ),
                           ),

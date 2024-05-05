@@ -44,7 +44,7 @@ class _ChangeAccountDetailsState extends State<ChangeAccountDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: primaryColor,
+      backgroundColor: primaryColorLite,
       appBar: AppBar(
         title: const Text('Update Details'),
       ),

@@ -12,11 +12,10 @@ class CustomFloatingActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
-      backgroundColor: primaryColorDark,
       onPressed: onTap,
       label: Text(
         title,
-        style: patientHeader.copyWith(color: titleLargeTextColor),
+        style: patientHeader,
       ),
     );
   }

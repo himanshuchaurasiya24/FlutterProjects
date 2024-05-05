@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 
-Color primaryColor = Colors.red[200]!;
-Color primaryCardColor = const Color.fromARGB(255, 239, 132, 132);
+// Color primaryColor = Colors.red[200]!;
+Color primaryColorLite = const Color(0xfff0f2f5);
+// Color primaryColor = const Color(0xffb1b1b1);
+// Color primaryCardColor = Colors.red[400]!;
 
-Color primaryColorDark = Colors.red[300]!;
-Color primaryColorDarker = Colors.red[400]!;
+// Color primaryColorDark = Colors.red[300]!;
+Color primaryColorDark = const Color.fromARGB(255, 230, 231, 232);
+Color btnColor = const Color(0xffff725e);
+// Color primaryColorDarker = Colors.red[400]!;
+// Color primaryColorDarker = Colors.red[400]!;
 double defaultSize = 20;
-Color whitePrimary = Colors.white70;
+// Color whitePrimary = Colors.white70;
 double titleLargeTextSize = 50;
-Color titleLargeTextColor = Colors.black87;
 Color blackTile = Colors.black.withOpacity(0.7);
 TextStyle patientHeader = const TextStyle(
   fontSize: 28,
