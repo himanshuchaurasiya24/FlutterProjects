@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vyavasaay_redesigned/database/database_helper.dart';
+import 'package:vyavasaay_redesigned/model/user_model.dart';
 import 'package:vyavasaay_redesigned/screens/login_signup_screens/login_screen.dart';
-import 'package:vyavasaay_redesigned/model/admin_model.dart';
-
 import 'package:vyavasaay_redesigned/utils/constants.dart';
 import 'package:vyavasaay_redesigned/widgets/container_button.dart';
 import 'package:vyavasaay_redesigned/widgets/custom_textfield.dart';
@@ -19,18 +20,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController accountTypeController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
   final TextEditingController phoneController = TextEditingController();
+  final TextEditingController centerNameController = TextEditingController();
   Color containerColor = primaryColorLite;
   DatabaseHelper database = DatabaseHelper();
-  late Future<List<AdminModel>> adminList;
-  late int adminAccountLength;
+  List<String> accountType = ['Technician', 'Admin'];
+  int adminAccountLength = 10;
+  void setCenterName() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('centerName', centerNameController.text.toUpperCase());
+  }
+
   @override
   void initState() {
-    adminList = database.getAllAdminAccount();
+    accountTypeController.text = accountType.first;
     database.initDB().whenComplete(() async {
-      adminList = database.getAllAdminAccount();
       adminAccountLength = await database.getAdminAccountLength();
     });
     super.initState();
@@ -98,81 +105,126 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             fontSize: titleLargeTextSize,
                           ),
                         ),
-                        SizedBox(
-                          height: defaultSize,
-                        ),
+                        Gap(defaultSize),
                         CustomTextField(
                           controller: nameController,
                           hintText: 'Name',
                         ),
-                        SizedBox(
-                          height: defaultSize,
+                        Gap(defaultSize),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: CustomTextField(
+                                controller: centerNameController,
+                                hintText: 'Center Name',
+                              ),
+                            ),
+                            Gap(defaultSize),
+                            Expanded(
+                              child: DropdownButtonFormField(
+                                borderRadius:
+                                    BorderRadius.circular(defaultBorderRadius),
+                                dropdownColor: primaryColorDark,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(
+                                      defaultBorderRadius,
+                                    ),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                  fillColor: primaryColorDark,
+                                  filled: true,
+                                ),
+                                value: accountType.first,
+                                items: accountType.map((String value) {
+                                  return DropdownMenuItem(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    accountTypeController.text = value!;
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
                         ),
-                        CustomTextField(
-                          controller: passwordController,
-                          isObscure: true,
-                          hintText: 'Password',
+                        Gap(defaultSize),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: CustomTextField(
+                                controller: passwordController,
+                                isObscure: true,
+                                hintText: 'Password',
+                              ),
+                            ),
+                            Gap(defaultSize),
+                            Expanded(
+                              child: CustomTextField(
+                                controller: confirmPasswordController,
+                                isObscure: true,
+                                isConfirm: true,
+                                passwordController: passwordController,
+                                hintText: 'Confirm Password',
+                              ),
+                            ),
+                          ],
                         ),
-                        SizedBox(
-                          height: defaultSize,
-                        ),
-                        CustomTextField(
-                          controller: confirmPasswordController,
-                          isObscure: true,
-                          isConfirm: true,
-                          passwordController: passwordController,
-                          hintText: 'Confirm Password',
-                        ),
-                        SizedBox(
-                          height: defaultSize,
-                        ),
+                        Gap(defaultSize),
                         CustomTextField(
                           controller: phoneController,
                           keyboardType: TextInputType.number,
                           hintText: 'Phone Number',
                         ),
-                        SizedBox(
-                          height: defaultSize,
-                        ),
+                        Gap(defaultSize),
                         GestureDetector(
-                            onTap: () async {
-                              if (_formKey.currentState!.validate()) {
-                                if (adminAccountLength > 0) {
-                                  showBanner(context);
-                                  return;
-                                } else {
-                                  await database
-                                      .createAdminAccount(
-                                        model: AdminModel(
-                                          name:
-                                              nameController.text.toUpperCase(),
-                                          phoneNumber: phoneController.text,
-                                          password: passwordController.text,
-                                        ),
-                                      )
-                                      .then(
-                                        (value) => {
-                                          if (value != 0)
-                                            {
-                                              Navigator.pushReplacement(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) {
-                                                    return const LoginScreen();
-                                                  },
-                                                ),
+                          onTap: () async {
+                            if (_formKey.currentState!.validate()) {
+                              ScaffoldMessenger.of(context)
+                                  .clearMaterialBanners();
+                              if (adminAccountLength > 0) {
+                                showBanner(context);
+                                return;
+                              } else {
+                                await database
+                                    .createAccount(
+                                      model: UserModel(
+                                        name: nameController.text.toUpperCase(),
+                                        phoneNumber: phoneController.text,
+                                        password: passwordController.text,
+                                        accountType: accountTypeController.text,
+                                      ),
+                                    )
+                                    .then(
+                                      (value) => {
+                                        if (value != 0)
+                                          {
+                                            setCenterName(),
+                                            Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) {
+                                                  return const LoginScreen();
+                                                },
                                               ),
-                                            }
-                                          else
-                                            {showBanner(context)}
-                                        },
-                                      );
-                                }
+                                            ),
+                                          }
+                                        else
+                                          {
+                                            showBanner(context),
+                                          }
+                                      },
+                                    );
                               }
-                            },
-                            child: const ContainerButton(
-                                iconData: Icons.check_circle_outline_outlined,
-                                btnName: 'Sign up')),
+                            }
+                          },
+                          child: const ContainerButton(
+                              iconData: Icons.check_circle_outline_outlined,
+                              btnName: 'Sign up'),
+                        ),
                         SizedBox(
                           height: defaultSize,
                         ),
@@ -192,6 +244,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   ),
                                   TextButton(
                                     onPressed: () {
+                                      ScaffoldMessenger.of(context)
+                                          .clearMaterialBanners();
                                       Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(

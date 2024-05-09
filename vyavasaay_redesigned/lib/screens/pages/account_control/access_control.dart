@@ -26,6 +26,7 @@ class _AccessControlState extends State<AccessControl> {
     var adminAccountLength = await databaseHelper.getAdminAccountLength();
     if (adminAccountLength < 1) {
       await databaseHelper.deleteEverything();
+      if (!mounted) return 0;
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -35,7 +36,9 @@ class _AccessControlState extends State<AccessControl> {
         ),
       );
     } else {
-      Navigator.pop(context);
+      if (mounted) {
+        Navigator.pop(context);
+      }
     }
     return adminAccountLength;
   }
@@ -46,11 +49,6 @@ class _AccessControlState extends State<AccessControl> {
       children: [
         Column(
           children: [
-            Text(
-              'Access Control',
-              style: appbar,
-            ),
-            Gap(defaultSize),
             Expanded(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -136,7 +134,7 @@ class _AccessControlState extends State<AccessControl> {
                                                       MaterialPageRoute(
                                                         builder: (context) {
                                                           return ChangeAccountDetails(
-                                                            adminModel: snapshot
+                                                            userModel: snapshot
                                                                 .data![index],
                                                           );
                                                         },
@@ -163,8 +161,8 @@ class _AccessControlState extends State<AccessControl> {
                                                               onPressed:
                                                                   () async {
                                                                 await databaseHelper
-                                                                    .deleteAdmin(
-                                                                        adminId: snapshot
+                                                                    .deleteAccount(
+                                                                        userId: snapshot
                                                                             .data![
                                                                                 index]
                                                                             .id!)
@@ -245,7 +243,7 @@ class _AccessControlState extends State<AccessControl> {
                         Gap(defaultSize),
                         Expanded(
                           child: FutureBuilder(
-                            future: databaseHelper.getAllUserAccount(),
+                            future: databaseHelper.getAllTechnicianAccount(),
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
@@ -340,7 +338,7 @@ class _AccessControlState extends State<AccessControl> {
                                                             onPressed:
                                                                 () async {
                                                               await databaseHelper
-                                                                  .deleteUser(
+                                                                  .deleteAccount(
                                                                       userId: snapshot
                                                                           .data![
                                                                               index]

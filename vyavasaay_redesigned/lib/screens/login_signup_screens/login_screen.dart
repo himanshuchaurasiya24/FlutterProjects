@@ -21,11 +21,14 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController loginTypeController = TextEditingController();
   DatabaseHelper database = DatabaseHelper();
+  List<String> loginType = ['Technician', 'Admin'];
   Color containerColor = primaryColorLite;
-  bool isAdminLogin = false;
+  String centerName = '';
   @override
   void initState() {
+    loginTypeController.text = loginType.first;
     super.initState();
   }
 
@@ -64,13 +67,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void logIn(
       {required String name,
-      required String type,
+      required String loginType,
       required int personId}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('isLoggedIn', true);
-    prefs.setString('loggedInName', name);
-    prefs.setString('logInType', type);
-    prefs.setInt('personId', personId);
+    prefs.setString('logInType', loginType);
+    prefs.setInt('loggedInId', personId);
+    centerName = prefs.getString('centerName') ?? '';
   }
 
   @override
@@ -118,40 +121,32 @@ class _LoginScreenState extends State<LoginScreen> {
                         SizedBox(
                           height: defaultSize,
                         ),
-                        Container(
-                          height: 58,
-                          width: getDeviceWidth(context: context) * 0.2,
-                          decoration: BoxDecoration(
-                            color: primaryColorDark,
-                            borderRadius: BorderRadius.circular(
-                              defaultSize,
+                        DropdownButtonFormField(
+                          borderRadius:
+                              BorderRadius.circular(defaultBorderRadius),
+                          dropdownColor: primaryColorDark,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(
+                                defaultBorderRadius,
+                              ),
+                              borderSide: BorderSide.none,
                             ),
+                            fillColor: primaryColorDark,
+                            filled: true,
                           ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                width: defaultSize / 2,
-                              ),
-                              Checkbox.adaptive(
-                                value: isAdminLogin,
-                                onChanged: (value) {
-                                  setState(() {
-                                    isAdminLogin = !isAdminLogin;
-                                  });
-                                },
-                              ),
-                              SizedBox(
-                                width: defaultSize,
-                              ),
-                              const Text(
-                                'Admin Login',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ],
-                          ),
+                          value: loginType.first,
+                          items: loginType.map((String value) {
+                            return DropdownMenuItem(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              loginTypeController.text = value!;
+                            });
+                          },
                         ),
                         SizedBox(
                           height: defaultSize,
@@ -159,97 +154,56 @@ class _LoginScreenState extends State<LoginScreen> {
                         InkWell(
                           onTap: () async {
                             if (_formKey.currentState!.validate()) {
-                              isAdminLogin
-                                  ? await database
-                                      .authAdmin(
-                                          name:
-                                              nameController.text.toUpperCase(),
-                                          password: passwordController.text)
-                                      .then((value) async {
-                                      if (value == true) {
-                                        final model = await database.getAdmin(
-                                            name: nameController.text
-                                                .toUpperCase());
-                                        final name = model!.name;
-                                        final personalId = model.id;
-                                        logIn(
-                                            name: name,
-                                            type: 'Admin',
-                                            personId: personalId!);
-                                        await database
-                                            .addToLoginHistory(
-                                              model: LoginHistoryModel(
-                                                personId: personalId,
-                                                name: name,
-                                                loginTime: DateFormat(
-                                                        'dd MMMM yyyy hh:mm:s a')
-                                                    .format(DateTime.now()),
-                                                logoutTime:
-                                                    'Currently logged in',
-                                                type: 'Admin',
-                                              ),
-                                            )
-                                            .then((value) =>
-                                                Navigator.pushReplacement(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) {
-                                                      return HomeScreen(
-                                                        name: name,
-                                                        logInType: 'Admin',
-                                                      );
-                                                    },
-                                                  ),
-                                                ));
-                                      } else {
-                                        showBanner(context);
-                                      }
-                                    })
-                                  : await database
-                                      .authUser(
-                                          name:
-                                              nameController.text.toUpperCase(),
-                                          password: passwordController.text)
-                                      .then((value) async {
-                                      if (value == true) {
-                                        final model = await database.getUser(
-                                            name: nameController.text
-                                                .toUpperCase());
-                                        final name = model!.name;
-                                        int personalId = model.id!;
-                                        logIn(
-                                            name: name,
-                                            type: 'Technician',
-                                            personId: personalId);
-                                        await database
-                                            .addToLoginHistory(
-                                              model: LoginHistoryModel(
-                                                personId: personalId,
-                                                name: name,
-                                                loginTime: DateFormat(
-                                                        'dd MMMM yyyy hh:mm:s a')
-                                                    .format(DateTime.now()),
-                                                logoutTime:
-                                                    'Currently logged in',
-                                                type: 'Technician',
-                                              ),
-                                            )
-                                            .then((value) =>
-                                                Navigator.pushReplacement(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) {
-                                                      return HomeScreen(
-                                                        name: name,
-                                                        logInType: 'Technician',
-                                                      );
-                                                    },
-                                                  ),
-                                                ));
-                                      } else {
-                                        showBanner(context);
-                                      }
-                                    });
+                              ScaffoldMessenger.of(context)
+                                  .clearMaterialBanners();
+                              await database
+                                  .authAccount(
+                                name: nameController.text.toUpperCase(),
+                                password: passwordController.text,
+                                loginType: loginTypeController.text,
+                              )
+                                  .then((value) async {
+                                if (value == true) {
+                                  final model = await database.getAccount(
+                                    name: nameController.text.toUpperCase(),
+                                  );
+                                  final name = model!.name;
+                                  final personId = model.id!;
+                                  final loginType = model.accountType;
+                                  logIn(
+                                    name: name,
+                                    loginType: loginType,
+                                    personId: personId,
+                                  );
+                                  await database
+                                      .addToLoginHistory(
+                                        model: LoginHistoryModel(
+                                          personId: personId,
+                                          name: name,
+                                          loginTime: DateFormat(
+                                                  'dd MMMM yyyy hh:mm:s a')
+                                              .format(DateTime.now()),
+                                          logoutTime: 'Currently logged in',
+                                          type: loginType,
+                                        ),
+                                      )
+                                      .then(
+                                          (value) => Navigator.pushReplacement(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) {
+                                                    return HomeScreen(
+                                                      name: name,
+                                                      logInType: loginType,
+                                                      centerName: centerName,
+                                                    );
+                                                  },
+                                                ),
+                                              ));
+                                } else {
+                                  showBanner(context);
+                                }
+                              });
                             }
                           },
                           child: const ContainerButton(
@@ -274,6 +228,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                   TextButton(
                                     onPressed: () {
+                                      ScaffoldMessenger.of(context)
+                                          .clearMaterialBanners();
                                       Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(

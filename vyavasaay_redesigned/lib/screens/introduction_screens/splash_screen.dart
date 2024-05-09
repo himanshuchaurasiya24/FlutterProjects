@@ -17,6 +17,9 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   final DatabaseHelper database = DatabaseHelper();
+  String centerName = '';
+  String loggedInName = 'null';
+
   @override
   void initState() {
     isIntro();
@@ -24,12 +27,21 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   void isIntro() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool? isIntro = prefs.getBool('isIntrodu') ?? false;
     bool? isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
-    String? loggedInName = prefs.getString('loggedInName') ?? 'empty';
+    int? loggedInId = prefs.getInt('loggedInId') ?? 0;
     String? logInType = prefs.getString('logInType') ?? 'Technician';
+    String centerName = prefs.getString('centerName') ?? '';
+    loggedInName = loggedInId == 0
+        ? 'null'
+        : await database.getAccountName(id: loggedInId);
     final adminActLength = await database.getAdminAccountLength();
     if (adminActLength == 0) {
       await prefs.setBool('isIntrodu', false);
@@ -47,14 +59,17 @@ class _SplashScreenState extends State<SplashScreen> {
       return;
     }
     if (isIntro) {
-      if (isLoggedIn) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              isLoggedIn.toString() + loggedInName,
+      if (isLoggedIn && loggedInName != 'null') {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                isLoggedIn.toString() + loggedInId.toString() + loggedInName,
+              ),
             ),
-          ),
-        );
+          );
+        }
+
         Timer(
           const Duration(seconds: 1),
           () {
@@ -63,6 +78,7 @@ class _SplashScreenState extends State<SplashScreen> {
               MaterialPageRoute(
                 builder: (context) {
                   return HomeScreen(
+                    centerName: centerName,
                     name: loggedInName,
                     logInType: logInType,
                   );
@@ -118,7 +134,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 child: Image.asset('assets/app_icon.png'),
               ),
               Text(
-                'Vyavassay',
+                'Vyavasaay',
                 style: TextStyle(
                   fontSize: titleLargeTextSize,
                   fontWeight: FontWeight.bold,

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:vyavasaay_redesigned/database/database_helper.dart';
-import 'package:vyavasaay_redesigned/model/admin_model.dart';
 import 'package:vyavasaay_redesigned/model/user_model.dart';
 import 'package:vyavasaay_redesigned/utils/constants.dart';
 import 'package:vyavasaay_redesigned/widgets/container_button.dart';
@@ -23,6 +22,8 @@ class _CreateAccountState extends State<CreateAccount> {
   final password = TextEditingController();
 
   final cPassword = TextEditingController();
+  final accountType = TextEditingController();
+  List<String> accountTypeList = ['Technician', 'Admin'];
   bool isAdminAccount = false;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final DatabaseHelper databaseHelper = DatabaseHelper();
@@ -53,39 +54,42 @@ class _CreateAccountState extends State<CreateAccount> {
                       ),
                     ),
                     Gap(defaultSize),
-                    Container(
-                      height: 58,
-                      width: getDeviceWidth(context: context) * 0.2,
-                      decoration: BoxDecoration(
-                        color: primaryColorLite,
-                        borderRadius: BorderRadius.circular(
-                          defaultSize,
-                        ),
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            width: defaultSize / 2,
-                          ),
-                          Checkbox.adaptive(
-                            value: isAdminAccount,
-                            onChanged: (value) {
-                              setState(() {
-                                isAdminAccount = !isAdminAccount;
-                              });
-                            },
-                          ),
-                          SizedBox(
-                            width: defaultSize,
-                          ),
-                          const Text(
-                            'Create as Admin Account',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
+                    Expanded(
+                      child: DropdownButtonFormField(
+                        borderRadius:
+                            BorderRadius.circular(defaultBorderRadius),
+                        dropdownColor: primaryColorDark,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(
+                              defaultBorderRadius,
                             ),
+                            borderSide: BorderSide.none,
                           ),
-                        ],
+                          fillColor: primaryColorDark,
+                          filled: true,
+                        ),
+                        value: accountTypeList.first,
+                        items: accountTypeList.map((String value) {
+                          return DropdownMenuItem(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            accountType.text = value!;
+                          });
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      width: defaultSize,
+                    ),
+                    const Text(
+                      'Create as Admin Account',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ],
@@ -113,34 +117,14 @@ class _CreateAccountState extends State<CreateAccount> {
                 GestureDetector(
                   onTap: () async {
                     if (formKey.currentState!.validate()) {
-                      if (isAdminAccount) {
+                      {
                         await databaseHelper
-                            .createAdminAccount(
-                          model: AdminModel(
-                            name: name.text.toUpperCase(),
-                            phoneNumber: phone.text,
-                            password: password.text,
-                          ),
-                        )
-                            .then((value) {
-                          Navigator.pop(context, value);
-                        }).onError((error, stackTrace) {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                content: Text(error.toString()),
-                              );
-                            },
-                          );
-                        });
-                      } else {
-                        await databaseHelper
-                            .createUserAccount(
+                            .createAccount(
                           model: UserModel(
                             name: name.text.toUpperCase(),
                             phoneNumber: phone.text,
                             password: password.text,
+                            accountType: accountType.text,
                           ),
                         )
                             .then((value) {

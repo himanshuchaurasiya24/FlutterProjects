@@ -40,7 +40,7 @@ class _LogoutState extends State<Logout> {
   void logOut(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('isLoggedIn', false);
-    final loginPersonId = prefs.getInt('personId');
+    final loginPersonId = prefs.getInt('loggedInId');
     final model = await databaseHelper.getLoginInfo(personId: loginPersonId!);
     await databaseHelper
         .updateStatusOfLogin(

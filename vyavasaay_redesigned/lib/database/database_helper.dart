@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
-import 'package:vyavasaay_redesigned/model/admin_model.dart';
 import 'package:vyavasaay_redesigned/model/doctor_model.dart';
 import 'package:vyavasaay_redesigned/model/login_history_model.dart';
 import 'package:vyavasaay_redesigned/model/patient_model.dart';
@@ -14,7 +13,6 @@ Database? _database;
 
 class DatabaseHelper {
   final databaseName = 'abcd.db';
-  String adminTable = 'adminTable';
   String userTable = 'userTable';
   String doctorTable = 'doctorTable';
   String patientTable = 'patientTable';
@@ -32,15 +30,11 @@ CREATE TABLE IF NOT EXISTS loginHistory(
   String userQuery = '''CREATE TABLE IF NOT EXISTS userTable(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT UNIQUE,
+    accountType TEXT,
     phoneNumber TEXT,
     password TEXT
   )''';
-  String adminQuery = '''CREATE TABLE IF NOT EXISTS adminTable(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT UNIQUE,
-    phoneNumber TEXT,
-    password TEXT
-  )''';
+
   String doctorQuery = '''
 CREATE TABLE IF NOT EXISTS doctorTable(
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -100,7 +94,6 @@ CREATE TABLE IF NOT EXISTS patientTable(
       version: 1,
       onCreate: (db, version) async {
         await db.execute(doctorQuery);
-        await db.execute(adminQuery);
         await db.execute(userQuery);
         await db.execute(patientQuery);
         await db.execute(loginHistoryQuery);
@@ -278,91 +271,43 @@ CREATE TABLE IF NOT EXISTS patientTable(
     }).toList();
   }
 
-// admin
-  Future<int> createAdminAccount({required AdminModel model}) async {
-    final db = await initDB();
-
-    final value = await db.insert(
-      adminTable,
-      model.toMap(),
-    );
-    return value;
-  }
-
-  Future<int> deleteAdmin({required int adminId}) async {
-    final db = await initDB();
-    final res =
-        await db.delete(adminTable, where: 'id = ?', whereArgs: [adminId]);
-    return res;
-  }
-
-  Future<int> updateAdmin({required AdminModel model}) async {
-    final db = await initDB();
-    final res = await db.update(
-      adminTable,
-      model.toMap(),
-      where: 'id = ?',
-      whereArgs: [model.id],
-    );
-    return res;
-  }
-
-  Future<bool> authAdmin({
-    required String name,
-    required String password,
-  }) async {
-    final db = await initDB();
-    var res = await db.query(
-      adminTable,
-      where: 'name = ? AND password = ?',
-      whereArgs: [name, password],
-      orderBy: 'id DESC',
-    );
-    if (res.isNotEmpty) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  Future<AdminModel?> getAdmin({required String name}) async {
-    final db = await initDB();
-    var res = await db.query(
-      adminTable,
-      where: 'name = ?',
-      whereArgs: [name],
-      orderBy: 'id DESC',
-    );
-    return res.isNotEmpty ? AdminModel.fromMap(res.first) : null;
-  }
-
-  Future<List<AdminModel>> getAllAdminAccount() async {
-    final db = await initDB();
-    final List<Map<String, Object?>> result = await db.query(
-      adminTable,
-      orderBy: 'id DESC',
-    );
-    return result.map((e) => AdminModel.fromMap(e)).toList();
-  }
-
-  Future<int> getAdminAccountLength() async {
-    final db = await initDB();
-    final List<Map<String, Object?>> result = await db.query(
-      adminTable,
-      orderBy: 'id DESC',
-    );
-    return result.length;
-  }
-
 // User
-  Future<int> deleteUser({required int userId}) async {
+  Future<int> deleteAccount({required int userId}) async {
     final db = await initDB();
     final res =
         await db.delete(userTable, where: 'id = ?', whereArgs: [userId]);
     return res;
   }
 
-  Future<int> createUserAccount({required UserModel model}) async {
+  Future<String> getAccountName({required int id}) async {
+    final db = await initDB();
+    final res = await db.query(userTable,
+        where: 'id = ?', whereArgs: [id], orderBy: 'id ASC');
+    return res.map((e) => UserModel.fromMap(e)).toList().first.name;
+  }
+
+  Future<List<UserModel>> getAllAdminAccount() async {
+    final db = await initDB();
+    final res = await db
+        .query(userTable, where: 'accountType = ?', whereArgs: ['Admin']);
+    return res.map((e) => UserModel.fromMap(e)).toList();
+  }
+
+  Future<List<UserModel>> getAllTechnicianAccount() async {
+    final db = await initDB();
+    final res = await db
+        .query(userTable, where: 'accountType = ?', whereArgs: ['Technician']);
+    return res.map((e) => UserModel.fromMap(e)).toList();
+  }
+
+  Future<int> getAdminAccountLength() async {
+    final db = await initDB();
+    final res = await db
+        .query(userTable, where: 'accountType = ?', whereArgs: ['Admin']);
+    return res.map((e) => UserModel.fromMap(e)).toList().length;
+  }
+
+  Future<int> createAccount({required UserModel model}) async {
     final db = await initDB();
     final res = await db.insert(
       userTable,
@@ -371,7 +316,7 @@ CREATE TABLE IF NOT EXISTS patientTable(
     return res;
   }
 
-  Future<int> updateUser({required UserModel model}) async {
+  Future<int> updateAccount({required UserModel model}) async {
     final db = await initDB();
     return await db.update(
       userTable,
@@ -381,15 +326,16 @@ CREATE TABLE IF NOT EXISTS patientTable(
     );
   }
 
-  Future<bool> authUser({
+  Future<bool> authAccount({
     required String name,
     required String password,
+    required String loginType,
   }) async {
     final db = await initDB();
     var res = await db.query(
       userTable,
-      where: 'name = ? AND password = ?',
-      whereArgs: [name, password],
+      where: 'name = ? AND password = ? AND accountType = ?',
+      whereArgs: [name, password, loginType],
       orderBy: 'id DESC',
     );
     if (res.isNotEmpty) {
@@ -399,7 +345,7 @@ CREATE TABLE IF NOT EXISTS patientTable(
     }
   }
 
-  Future<UserModel?> getUser({required String name}) async {
+  Future<UserModel?> getAccount({required String name}) async {
     final db = await initDB();
     var res = await db.query(
       userTable,
@@ -410,7 +356,7 @@ CREATE TABLE IF NOT EXISTS patientTable(
     return res.isNotEmpty ? UserModel.fromMap(res.first) : null;
   }
 
-  Future<List<UserModel>> getAllUserAccount() async {
+  Future<List<UserModel>> getAllAccount() async {
     final db = await initDB();
     final List<Map<String, Object?>> result = await db.query(
       userTable,
@@ -419,28 +365,13 @@ CREATE TABLE IF NOT EXISTS patientTable(
     return result.map((e) => UserModel.fromMap(e)).toList();
   }
 
-  Future<int> getUserAccountLength() async {
-    final db = await initDB();
-    final List<Map<String, Object?>> result = await db.query(
-      userTable,
-      orderBy: 'id DESC',
-    );
-    return result.length;
-  }
-
 // Delete Everything
   Future<void> deleteEverything() async {
     final db = await initDB();
-    await db.rawDelete('DELETE FROM $adminTable');
     await db.rawDelete('DELETE FROM $userTable');
     await db.rawDelete('DELETE FROM $doctorTable');
     await db.rawDelete('DELETE FROM $patientTable');
     await db.rawDelete('DELETE FROM $loginHistoryTable').then((value) async {
-      await db.delete(
-        "SQLITE_SEQUENCE",
-        where: "NAME = ?",
-        whereArgs: [adminTable],
-      );
       await db.delete(
         "SQLITE_SEQUENCE",
         where: "NAME = ?",

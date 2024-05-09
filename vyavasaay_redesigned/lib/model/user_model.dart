@@ -5,11 +5,13 @@ class UserModel {
   int? id;
   String name;
   String phoneNumber;
+  String accountType;
   String password;
   UserModel({
     this.id,
     required this.name,
     required this.phoneNumber,
+    required this.accountType,
     required this.password,
   });
 
@@ -17,12 +19,14 @@ class UserModel {
     int? id,
     String? name,
     String? phoneNumber,
+    String? accountType,
     String? password,
   }) {
     return UserModel(
       id: id ?? this.id,
       name: name ?? this.name,
       phoneNumber: phoneNumber ?? this.phoneNumber,
+      accountType: accountType ?? this.accountType,
       password: password ?? this.password,
     );
   }
@@ -32,6 +36,7 @@ class UserModel {
       'id': id,
       'name': name,
       'phoneNumber': phoneNumber,
+      'accountType': accountType,
       'password': password,
     };
   }
@@ -41,6 +46,7 @@ class UserModel {
       id: map['id'] != null ? map['id'] as int : null,
       name: map['name'] as String,
       phoneNumber: map['phoneNumber'] as String,
+      accountType: map['accountType'] as String,
       password: map['password'] as String,
     );
   }
@@ -52,7 +58,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(id: $id, name: $name, phoneNumber: $phoneNumber, password: $password)';
+    return 'UserModel(id: $id, name: $name, phoneNumber: $phoneNumber, accountType: $accountType, password: $password)';
   }
 
   @override
@@ -62,6 +68,7 @@ class UserModel {
     return other.id == id &&
         other.name == name &&
         other.phoneNumber == phoneNumber &&
+        other.accountType == accountType &&
         other.password == password;
   }
 
@@ -70,6 +77,7 @@ class UserModel {
     return id.hashCode ^
         name.hashCode ^
         phoneNumber.hashCode ^
+        accountType.hashCode ^
         password.hashCode;
   }
 }
