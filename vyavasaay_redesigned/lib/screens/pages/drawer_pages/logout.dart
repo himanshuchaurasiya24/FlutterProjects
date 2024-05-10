@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vyavasaay_redesigned/database/database_helper.dart';
-import 'package:vyavasaay_redesigned/model/login_history_model.dart';
 import 'package:vyavasaay_redesigned/screens/introduction_screens/splash_screen.dart';
 import 'package:vyavasaay_redesigned/utils/constants.dart';
 
@@ -41,15 +40,11 @@ class _LogoutState extends State<Logout> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('isLoggedIn', false);
     final loginPersonId = prefs.getInt('loggedInId');
+    debugPrint('${loginPersonId}logout');
     final model = await databaseHelper.getLoginInfo(personId: loginPersonId!);
     await databaseHelper
         .updateStatusOfLogin(
-          model: LoginHistoryModel(
-            id: model.id,
-            personId: model.personId,
-            name: model.name,
-            type: model.type,
-            loginTime: model.loginTime,
+          model: model.copyWith(
             logoutTime:
                 DateFormat('dd MMMM yyyy hh:mm:ss a').format(DateTime.now()),
           ),

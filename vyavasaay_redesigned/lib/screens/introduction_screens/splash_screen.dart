@@ -37,15 +37,16 @@ class _SplashScreenState extends State<SplashScreen> {
     bool? isIntro = prefs.getBool('isIntrodu') ?? false;
     bool? isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
     int? loggedInId = prefs.getInt('loggedInId') ?? 0;
+    debugPrint('${loggedInId}splash id');
     String? logInType = prefs.getString('logInType') ?? 'Technician';
     String centerName = prefs.getString('centerName') ?? '';
     loggedInName = loggedInId == 0
         ? 'null'
         : await database.getAccountName(id: loggedInId);
+    debugPrint(loggedInName);
     final adminActLength = await database.getAdminAccountLength();
     if (adminActLength == 0) {
-      await prefs.setBool('isIntrodu', false);
-      await prefs.setBool('isLoggedIn', false).then((value) {
+      await prefs.clear().then((value) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(

@@ -25,16 +25,16 @@ class _AccessControlState extends State<AccessControl> {
   Future<int> checkAdminExists() async {
     var adminAccountLength = await databaseHelper.getAdminAccountLength();
     if (adminAccountLength < 1) {
-      await databaseHelper.deleteEverything();
-      if (!mounted) return 0;
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) {
-            return const SplashScreen();
-          },
-        ),
-      );
+      await databaseHelper.deleteEverything().then((value) {
+        return Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return const SplashScreen();
+            },
+          ),
+        );
+      });
     } else {
       if (mounted) {
         Navigator.pop(context);

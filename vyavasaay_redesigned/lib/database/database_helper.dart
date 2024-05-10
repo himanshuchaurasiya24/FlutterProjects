@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
@@ -283,6 +284,7 @@ CREATE TABLE IF NOT EXISTS patientTable(
     final db = await initDB();
     final res = await db.query(userTable,
         where: 'id = ?', whereArgs: [id], orderBy: 'id ASC');
+    debugPrint(res.map((e) => UserModel.fromMap(e)).toList().first.name);
     return res.map((e) => UserModel.fromMap(e)).toList().first.name;
   }
 
@@ -391,7 +393,11 @@ CREATE TABLE IF NOT EXISTS patientTable(
         "SQLITE_SEQUENCE",
         where: "NAME = ?",
         whereArgs: [loginHistoryTable],
-      );
+      ).then((value) async {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+
+        prefs.setInt('loggedInId', 0);
+      });
     });
   }
 }
