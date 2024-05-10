@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS patientTable(
   date TEXT,
   type TEXT,
   remark TEXT,
-  technician TEXT,
+  technician INTEGER,
   totalAmount INTEGER,
   paidAmount INTEGER,
   discDoc INTEGER,

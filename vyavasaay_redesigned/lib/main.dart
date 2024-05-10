@@ -33,6 +33,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+          primaryColor: btnColor,
           dividerColor: Colors.transparent,
           splashColor: Colors.transparent,
           useMaterial3: true,

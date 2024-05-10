@@ -73,8 +73,11 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
 
   void getTechnicianInfo() async {
     final pref = await SharedPreferences.getInstance();
-    technician.text =
-        widget.model?.technician ?? pref.getString('loggedInName') ?? '';
+    technician.text = (widget.isUpdate!
+            ? widget.model?.technician.toString()
+            : pref.getInt('loggedInId').toString()) ??
+        0.toString();
+    debugPrint('${technician.text}bill');
   }
 
   final DatabaseHelper databaseHelper = DatabaseHelper();
@@ -90,7 +93,7 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
     'Female',
     'Others',
   ];
-  int maxDisount = 600;
+  int maxDisount = 5000;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -318,7 +321,7 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
                                 date: date.text,
                                 type: diagType.text,
                                 remark: remark.text,
-                                technician: technician.text,
+                                technician: int.tryParse(technician.text) ?? 0,
                                 refById: int.parse(refById.text),
                                 refBy: refBy.text,
                                 totalAmount: int.parse(total.text),
@@ -343,7 +346,9 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
                                 date: date.text,
                                 type: diagType.text,
                                 remark: remark.text,
-                                technician: technician.text,
+                                technician: int.tryParse(
+                                        widget.model!.technician.toString()) ??
+                                    0,
                                 refById: int.parse(refById.text),
                                 totalAmount: int.parse(total.text),
                                 paidAmount: int.parse(paid.text),
@@ -409,6 +414,16 @@ class _GenerateNewBillState extends State<GenerateNewBill> {
       firstDate: DateTime(2024),
       lastDate: DateTime(2100),
       initialDate: DateTime.now(),
+      builder: (context, child) {
+        return Theme(
+            data: ThemeData().copyWith(
+              colorScheme: ColorScheme.light(
+                primary: btnColor,
+                onBackground: primaryColorLite,
+              ),
+            ),
+            child: child!);
+      },
     );
     final parsedDate = DateFormat('dd MMMM yyyy');
     final formatDate = parsedDate.format(rawDate!);

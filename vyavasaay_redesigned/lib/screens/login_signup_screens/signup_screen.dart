@@ -27,7 +27,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController centerNameController = TextEditingController();
   Color containerColor = primaryColorLite;
   DatabaseHelper database = DatabaseHelper();
-  List<String> accountType = ['Technician', 'Admin'];
+  List<String> accountType = ['Admin'];
   int adminAccountLength = 10;
   void setCenterName() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -50,8 +50,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
           left: defaultSize + 10,
           right: defaultSize - 10,
         ),
-        backgroundColor: primaryColorLite,
-        dividerColor: primaryColorLite,
+        backgroundColor: primaryColorDark,
+        dividerColor: primaryColorDark,
         contentTextStyle: TextStyle(
           fontSize: defaultSize,
           fontWeight: FontWeight.w600,
@@ -60,6 +60,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
         overflowAlignment: OverflowBarAlignment.end,
         content: const Text(
           'An Admin Account is Already Created.\nContact Admin For Your Account Creation.',
+          style: TextStyle(
+            color: Colors.black,
+          ),
         ),
         actions: [
           IconButton(

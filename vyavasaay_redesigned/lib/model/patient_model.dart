@@ -9,7 +9,7 @@ class PatientModel {
   String date;
   String type;
   String remark;
-  String technician;
+  int technician;
   int refById;
   String refBy;
   int totalAmount;
@@ -45,7 +45,7 @@ class PatientModel {
     String? date,
     String? type,
     String? remark,
-    String? technician,
+    int? technician,
     int? refById,
     String? refBy,
     int? totalAmount,
@@ -105,7 +105,7 @@ class PatientModel {
       date: map['date'] as String,
       type: map['type'] as String,
       remark: map['remark'] as String,
-      technician: map['technician'] as String,
+      technician: map['technician'] as int,
       refById: map['refById'] as int,
       refBy: map['refBy'] as String,
       totalAmount: map['totalAmount'] as int,

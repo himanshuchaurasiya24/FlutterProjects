@@ -73,6 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
     prefs.setBool('isLoggedIn', true);
     prefs.setString('logInType', loginType);
     prefs.setInt('loggedInId', personId);
+    debugPrint('${prefs.getInt('loggedInId')}login screen');
     centerName = prefs.getString('centerName') ?? '';
   }
 
@@ -181,7 +182,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           personId: personId,
                                           name: name,
                                           loginTime: DateFormat(
-                                                  'dd MMMM yyyy hh:mm:s a')
+                                                  'dd MMMM yyyy hh:mm:ss a')
                                               .format(DateTime.now()),
                                           logoutTime: 'Currently logged in',
                                           type: loginType,

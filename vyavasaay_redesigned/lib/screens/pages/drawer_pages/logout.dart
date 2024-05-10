@@ -51,7 +51,7 @@ class _LogoutState extends State<Logout> {
             type: model.type,
             loginTime: model.loginTime,
             logoutTime:
-                DateFormat('dd MMMM yyyy hh:mm:s a').format(DateTime.now()),
+                DateFormat('dd MMMM yyyy hh:mm:ss a').format(DateTime.now()),
           ),
         )
         .then((value) => navigate(context));

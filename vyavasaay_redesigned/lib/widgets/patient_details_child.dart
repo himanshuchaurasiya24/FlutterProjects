@@ -5,12 +5,12 @@ class PatientDetailsChild extends StatelessWidget {
   const PatientDetailsChild({
     super.key,
     required this.heading,
-    required this.value,
+    this.value,
     this.isWidgetInValue = false,
     this.valueWidget,
   });
   final String heading;
-  final String value;
+  final String? value;
   final bool? isWidgetInValue;
   final Widget? valueWidget;
 
@@ -25,7 +25,7 @@ class PatientDetailsChild extends StatelessWidget {
         isWidgetInValue!
             ? valueWidget!
             : Text(
-                value,
+                value ?? '',
                 style: patientHeaderSmall,
               ),
       ],
