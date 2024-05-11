@@ -396,7 +396,7 @@ CREATE TABLE IF NOT EXISTS patientTable(
       ).then((value) async {
         SharedPreferences prefs = await SharedPreferences.getInstance();
 
-        prefs.clear();
+        prefs.setInt('loggedInId', 0);
       });
     });
   }
