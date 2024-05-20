@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:vyavasaay_mobile/screens/home_screen.dart';
+// write a code to add two numbers.
 
 void main() {
   if (Platform.isWindows) {
