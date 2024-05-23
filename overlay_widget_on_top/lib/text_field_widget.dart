@@ -15,6 +15,9 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => _showOverLay(),
+    );
     focusNode.addListener(() {
       if (focusNode.hasFocus) {
         _showOverLay();
@@ -22,9 +25,6 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
         hideOverLay();
       }
     });
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) => _showOverLay(),
-    );
   }
 
   void _showOverLay() {

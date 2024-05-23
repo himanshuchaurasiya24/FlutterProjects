@@ -42,7 +42,7 @@ class _HomeState extends State<Home> {
           const SizedBox(
             height: 20,
           ),
-          TextFieldWidget(),
+          const TextFieldWidget(),
           const SizedBox(
             height: 20,
           ),
