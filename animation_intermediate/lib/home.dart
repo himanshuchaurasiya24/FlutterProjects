@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -57,9 +58,15 @@ class HalfCircleClipper extends CustomClipper<Path> {
   }
 }
 
-class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
+extension on VoidCallback {
+  Future<void> delayed(Duration duration) => Future.delayed(duration, this);
+}
+
+class _HomeState extends State<Home> with TickerProviderStateMixin {
   late AnimationController counterClockwiseController;
+  late AnimationController flipAnimationController;
   late Animation<double> counterClockwiseAnimation;
+  late Animation<double> flipAnimationAnimation;
 
   @override
   void initState() {
@@ -68,6 +75,21 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       vsync: this,
       duration: const Duration(
         milliseconds: 1000,
+      ),
+    );
+    flipAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(
+        milliseconds: 1000,
+      ),
+    );
+    flipAnimationAnimation = Tween<double>(
+      begin: 0,
+      end: pi,
+    ).animate(
+      CurvedAnimation(
+        parent: flipAnimationController,
+        curve: Curves.bounceOut,
       ),
     );
     counterClockwiseAnimation = Tween<double>(
@@ -79,21 +101,54 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         curve: Curves.bounceOut,
       ),
     );
-    // counterClockwiseController.forward();
+    flipAnimationController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        counterClockwiseAnimation = Tween<double>(
+          begin: counterClockwiseAnimation.value,
+          end: counterClockwiseAnimation.value + -(pi / 2),
+        ).animate(
+          CurvedAnimation(
+            parent: counterClockwiseController,
+            curve: Curves.bounceOut,
+          ),
+        );
+        counterClockwiseController
+          ..reset()
+          ..forward();
+      }
+    });
+    counterClockwiseController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        flipAnimationAnimation = Tween<double>(
+                begin: flipAnimationAnimation.value,
+                end: flipAnimationAnimation.value + pi)
+            .animate(
+          CurvedAnimation(
+            parent: flipAnimationController,
+            curve: Curves.bounceOut,
+          ),
+        );
+        flipAnimationController
+          ..reset()
+          ..forward();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    counterClockwiseController.dispose();
+    flipAnimationController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    Future.delayed(
-      const Duration(
-        seconds: 1,
-      ),
-      () {
-        counterClockwiseController
-          ..reset()
-          ..forward();
-      },
-    );
+    counterClockwiseController
+      ..reset()
+      ..forward.delayed(
+        const Duration(seconds: 1),
+      );
     return Scaffold(
       body: Center(
         child: Row(
@@ -108,25 +163,45 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     ..rotateZ(counterClockwiseAnimation.value),
                   child: Row(
                     children: [
-                      ClipPath(
-                        clipper: const HalfCircleClipper(
-                          circleSide: CircleSide.left,
-                        ),
-                        child: Container(
-                          color: Colors.blue,
-                          width: 200,
-                          height: 200,
-                        ),
+                      AnimatedBuilder(
+                        animation: flipAnimationAnimation,
+                        builder: (context, child) {
+                          return Transform(
+                            alignment: Alignment.centerRight,
+                            transform: Matrix4.identity()
+                              ..rotateY(flipAnimationAnimation.value),
+                            child: ClipPath(
+                              clipper: const HalfCircleClipper(
+                                circleSide: CircleSide.left,
+                              ),
+                              child: Container(
+                                color: Colors.blue,
+                                width: 200,
+                                height: 200,
+                              ),
+                            ),
+                          );
+                        },
                       ),
-                      ClipPath(
-                        clipper: const HalfCircleClipper(
-                          circleSide: CircleSide.right,
-                        ),
-                        child: Container(
-                          color: Colors.yellow,
-                          width: 200,
-                          height: 200,
-                        ),
+                      AnimatedBuilder(
+                        animation: flipAnimationAnimation,
+                        builder: (context, child) {
+                          return Transform(
+                            alignment: Alignment.centerLeft,
+                            transform: Matrix4.identity()
+                              ..rotateY(flipAnimationAnimation.value),
+                            child: ClipPath(
+                              clipper: const HalfCircleClipper(
+                                circleSide: CircleSide.right,
+                              ),
+                              child: Container(
+                                color: Colors.yellow,
+                                width: 200,
+                                height: 200,
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),

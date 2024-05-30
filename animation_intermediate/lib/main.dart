@@ -1,7 +1,6 @@
 import 'package:animation_intermediate/home.dart';
 import 'package:flutter/material.dart';
 
-// vid on 49:00
 void main() {
   runApp(const MyApp());
 }
