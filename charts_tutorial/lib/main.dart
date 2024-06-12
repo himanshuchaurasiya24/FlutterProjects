@@ -1,4 +1,4 @@
-import 'package:charts_tutorial/chart_tutorial.dart';
+import 'package:charts_tutorial/line_chart.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const ChartTutorial(),
+      home: const LineChart(),
     );
   }
 }
