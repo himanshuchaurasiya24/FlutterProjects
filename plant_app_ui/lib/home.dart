@@ -172,12 +172,11 @@ class _HomePageState extends State<HomePage> {
                                 )
                               ],
                             ),
-                            Positioned(
-                                right: 50,
-                                left: 50,
+                            Hero(
+                                tag: planets[index].id,
                                 child: Image.asset(planets[index].iconImage)),
                             Positioned(
-                              right: 100,
+                              right: 40,
                               bottom: 160,
                               child: Text(
                                 planets[index].id.toString(),
